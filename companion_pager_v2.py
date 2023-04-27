@@ -6,7 +6,7 @@
 import copy
 import json
 import logging
-from logging.handlers import SysLogHandler
+# from logging.handlers import SysLogHandler
 
 
 PAPERTRAIL_HOST = "logs5.papertrailapp.com"
@@ -37,11 +37,7 @@ logger.addHandler(localHandler)
 # logging.debug(' Start of program')
 
 
-def dictDeepCopy(dictToCopyFrom: dict,
-                 dictToCopyTo: dict,
-                 numOfCopies: int,
-                 startIndex: int
-                 ):
+def dictDeepCopy(dictToCopyFrom: dict, dictToCopyTo: dict, numOfCopies: int, startIndex: int):
     for i, (key, value) in enumerate(dictToCopyTo.items()):
         if i == numOfCopies + startIndex:
             break
@@ -49,12 +45,8 @@ def dictDeepCopy(dictToCopyFrom: dict,
             dictToCopyTo[key] = copy.deepcopy(dictToCopyFrom)
 
 
-def buttonTitleUpdate(pageDict: dict,
-                      numOfIterations: int,
-                      startIndex: int,
-                      buttonTitle: int or str = 1
-                      ):
-    for i, (key, value) in enumerate(p1Buttons.items()):
+def buttonTitleUpdate(pageDict: dict, numOfIterations: int, startIndex: int, buttonTitle: int or str = 1):
+    for i, (key, value) in enumerate(pageDict.items()):
         if i == numOfIterations + startIndex:
             break
         if i >= startIndex:
@@ -64,9 +56,32 @@ def buttonTitleUpdate(pageDict: dict,
                 buttonTitle = int(buttonTitle)
                 buttonTitle += 1
                 buttonTitle = str(buttonTitle)
-            except:
+            except ValueError:
                 logger.info('Unable to increment the button title becuase it is not an int.')
-        
+
+
+# TODO: update function to add button index (which will match the title not the companion button index)
+def buttonActionUpdate(pageDict: dict, numOfIterations: int, startIndex: int, scriptCue: int):
+    '''
+    Updates the actions of multiple buttons and iterates up the RegisterID to match the appropriate
+    button number.
+
+    :pageDict: The dict of the page to update buttons on.
+    :numOfIterations: The number of buttons to update. 
+    :startIndex: The index of the button to start on. This allows updating only a few buttons on the page.
+    :scriptCue: The scriptCue to put in each preset. 1=Program 0=Preview
+    '''
+    for i, (key, value) in enumerate(pageDict.items()):
+        if i == numOfIterations + int(startIndex):
+            break
+        if i >= int(startIndex):
+            for i in pageDict[key]:
+                i['options']['sidx'] = startIndex
+                i['options']['cidx'] = str(scriptCue)
+            sID = int(startIndex)
+            sID += 1
+            startIndex = str(sID)
+
 
 
 logger.info(' ***** Start of program ***** ')
@@ -122,6 +137,10 @@ dictDeepCopy(actionOrigPgm, p1Actions, 4, 16)
 dictDeepCopy(actionOrigPst, p1Actions, 4, 24)
 
 # update button actions
+buttonActionUpdate(p1Actions, 7, 0, 1) # Script Cue at 1 for PGM
+buttonActionUpdate(p1Actions, 7, 0, 0) # Script Cue at 0 for PVW
+buttonActionUpdate(p1Actions, 4, 16, 1) # Script Cue at 1 for PGM
+buttonActionUpdate(p1Actions, 4, 24, 0) # Script Cue at 0 for PVW
 
 
 # jsonActions = json.dumps(p1Actions, indent=4)
@@ -181,9 +200,7 @@ dictDeepCopy(actionOrigPst, p1Actions, 4, 24)
 # print(type(newDict))
 
 
-
 newJSON = json.dumps(fullConfigDict)
-
 
 # writes to new file
 with open(write_config_file, 'w') as newF:
