@@ -19,6 +19,7 @@ venv/
 
 # Ignore local files
 ignore_*
+.vscode
 
 # Ignore archive folder
 archive
