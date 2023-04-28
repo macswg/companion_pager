@@ -83,6 +83,16 @@ def buttonActionUpdate(pageDict: dict, numOfIterations: int, startIndex: int, sc
             scriptIdStart = str(strtIdx)
 
 
+def updatePageTitle(fullDict: dict, pageNum: str, pageTitle: str):
+    '''
+    Updates the page title of the designated button page.
+
+    :fullDict: The base-level dict of the config (the full config dict)
+    :pageNum: The page to update. Needs to be a string e.g. '1'.
+    :pageTitle: The string of the new page title.
+    '''
+    fullDict['page'][pageNum]['name'] = pageTitle
+
 
 logger.info(' ***** Start of program ***** ')
 
@@ -106,31 +116,46 @@ p1Buttons = fullConfigDict['config']['1']
 configOrigPgm = fullConfigDict['config']['1']['1']
 configOrigPst = fullConfigDict['config']['1']['9']
 
-# TODO: create variables to easily update indexes and copy numbers
-
 #
 #
 # variables to update to make the script easier to change
-#
-# button to start with
-# strtButton = 
-# number of copies to make
-# numOfButtons = 
+updatePageTitle(fullConfigDict, '1', 'Core Presets (2)')
+
+sBtnR1 = 0  # button start index on row 1; norm=0
+sBtnR2 = 8  # button start index on row 2; norm=8
+sBtnR3 = 16  # button start index on row 3; norm=16
+sBtnR4 = 24  # button start index on row 4; norm=24
+
+nBtsR1 = 8  # number of copies to make on row 1; norm=8
+nBtsR2 = 8  # number of copies to make on row 2; norm=8
+nBtsR3 = 4  # number of copies to make on row 3; norm=4
+nBtsR4 = 4  # number of copies to make on row 4; norm=4
+
+sIndxR1 = 0  # script ID start number on row 1; norm=0
+sIndxR2 = 0  # script ID start number on row 2; norm=0
+sIndxR3 = 8  # script ID start number on row 3; norm=8
+sIndxR4 = 8  # script ID start number on row 4; norm=8
+
+bTtlsR1 = 1  # button title (if using numbers) to start with on row 1; norm=1
+bTtlsR2 = 1  # button title (if using numbers) to start with on row 2: norm=1
+bTtlsR3 = 9  # button title (if using numbers) to start with on row 3; norm=R1+9
+bTtlsR4 = 9  # button title (if using numbers) to start with on row 4; norm=R1+9
 #
 #
 
-# make deep copy of dict of button '1' to subsequent buttons
-dictDeepCopy(configOrigPgm, p1Buttons, 7, 1)
-dictDeepCopy(configOrigPst, p1Buttons, 7, 9)
-dictDeepCopy(configOrigPgm, p1Buttons, 4, 16)
-dictDeepCopy(configOrigPst, p1Buttons, 4, 24)
+# deep copy action dicts from first in example file to to other buttons
+dictDeepCopy(configOrigPgm, p1Buttons, nBtsR1, sBtnR1)
+dictDeepCopy(configOrigPst, p1Buttons, nBtsR2, sBtnR2)
+dictDeepCopy(configOrigPgm, p1Buttons, nBtsR3, sBtnR3)
+dictDeepCopy(configOrigPst, p1Buttons, nBtsR4, sBtnR4)
 
 # update button titles
-buttonTitleUpdate(p1Buttons, 8, 0, 1)
-buttonTitleUpdate(p1Buttons, 8, 8, 1)
-buttonTitleUpdate(p1Buttons, 4, 16, 9)
-buttonTitleUpdate(p1Buttons, 4, 24, 9)
+buttonTitleUpdate(p1Buttons, nBtsR1, sBtnR1, bTtlsR1)
+buttonTitleUpdate(p1Buttons, nBtsR2, sBtnR2, bTtlsR2)
+buttonTitleUpdate(p1Buttons, nBtsR3, sBtnR3, bTtlsR3)
+buttonTitleUpdate(p1Buttons, nBtsR4, sBtnR4, bTtlsR4)
 
+#
 # actions
 #
 # dict of page 1 actions
@@ -140,17 +165,17 @@ p1Actions = fullConfigDict['actions']['1']
 actionOrigPgm = p1Actions['1']
 actionOrigPst = p1Actions['9']
 
-# deep copy action dicts from first button to other buttons
-dictDeepCopy(actionOrigPgm, p1Actions, 7, 1)
-dictDeepCopy(actionOrigPst, p1Actions, 7, 9)
-dictDeepCopy(actionOrigPgm, p1Actions, 4, 16)
-dictDeepCopy(actionOrigPst, p1Actions, 4, 24)
+# deep copy action dicts from first in example file to to other buttons
+dictDeepCopy(actionOrigPgm, p1Actions, nBtsR1, sBtnR1)
+dictDeepCopy(actionOrigPst, p1Actions, nBtsR2, sBtnR2)
+dictDeepCopy(actionOrigPgm, p1Actions, nBtsR3, sBtnR3)
+dictDeepCopy(actionOrigPst, p1Actions, nBtsR4, sBtnR4)
 
 # update button actions
-buttonActionUpdate(p1Actions, 8, 0, 0, 1)  # Script Cue at 1 for PGM
-buttonActionUpdate(p1Actions, 8, 8, 0, 0)  # Script Cue at 0 for PVW
-buttonActionUpdate(p1Actions, 4, 16, 8, 1)  # Script Cue at 1 for PGM
-buttonActionUpdate(p1Actions, 4, 24, 8, 0)  # Script Cue at 0 for PVW
+buttonActionUpdate(p1Actions, nBtsR1, sBtnR1, sIndxR1, 1)  # Script Cue at 1 for PGM
+buttonActionUpdate(p1Actions, nBtsR2, sBtnR2, sIndxR2, 0)  # Script Cue at 0 for PVW
+buttonActionUpdate(p1Actions, nBtsR3, sBtnR3, sIndxR3, 1)  # Script Cue at 1 for PGM
+buttonActionUpdate(p1Actions, nBtsR4, sBtnR4, sIndxR4, 0)  # Script Cue at 0 for PVW
 
 #
 # create JSON from dict
