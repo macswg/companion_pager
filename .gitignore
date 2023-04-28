@@ -29,6 +29,9 @@ python_nav_updated.companionconfig
 archive
 "example config files for ref"/archive
 
+# Ignore scratch folder
+scratch
+
 # Ignore client secrets
 client_secret/
 
