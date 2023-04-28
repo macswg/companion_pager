@@ -25,8 +25,12 @@ ignore_*
 python_updated.companionconfig
 python_nav_updated.companionconfig
 
-# Ignore archive folder
+# Ignore archive folders
 archive
+"example config files for ref"/archive
+
+# Ignore client secrets
+client_secret/
 
 # Ignore cache files
 __*

@@ -68,4 +68,4 @@ with open(write_config_file, 'w') as newF:
     newF.write(newJSON)
 
 
-logging.debug('***** LAST LINE *****')
+logging.debug('***** LAST LINE *****\n')
