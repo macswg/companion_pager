@@ -1,9 +1,13 @@
 #! python3
 # spyder_query_scratch.py
 
+# Python script to read Spyder presets from an X80 and add the preset IDs and names to Google Sheet
+
 # import binascii
 import socket
+import pygsheets
 import logging
+from logging.handlers import SysLogHandler
 
 PAPERTRAIL_HOST = "logs5.papertrailapp.com"
 PAPERTRAIL_PORT = 54000
@@ -11,21 +15,21 @@ APP_NAME = "spyder_query_presets.py"
 
 # creates logger and sets logger level
 logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 # creates handler for online logging and sets handler format
-# pTrlHandler = SysLogHandler(address=(PAPERTRAIL_HOST, PAPERTRAIL_PORT))
+pTrlHandler = SysLogHandler(address=(PAPERTRAIL_HOST, PAPERTRAIL_PORT))
 format = f'{APP_NAME}: %(message)s'
 formatter = logging.Formatter(format)
-# pTrlHandler.setFormatter(formatter)
+pTrlHandler.setFormatter(formatter)
 
 # creates handler for local logging and sets handler format
 localHandler = logging.FileHandler(filename='logs/py_packet_senders_Log.txt')
-# formatLocal = '%(asctime)s - %(levelname)s - %(message)s'
-# formatterLocal = logging.Formatter(formatLocal)
-localHandler.setFormatter(formatter)
+formatLocal = '%(asctime)s - %(levelname)s - %(message)s'
+formatterLocal = logging.Formatter(formatLocal)
+localHandler.setFormatter(formatterLocal)
 
-# logger.addHandler(pTrlHandler)
+logger.addHandler(pTrlHandler)
 logger.addHandler(localHandler)
 
 # disables logging when uncommented
@@ -76,17 +80,23 @@ def replace_space(strings: list[str]) -> list[str]:
     return new_strings
 
 
-logger.debug('***** Start of program ***** ')
+logger.info('***** Start of program ***** ')
+
+gc = pygsheets.authorize(service_file='client_secret/credentials-sheets-service-acct.json')
+sht = gc.open('PY test 101')
+wks = sht.worksheet_by_title('SpyderPresets')
 
 #
 #
 # variables to update to easily change request
 cmd = 'RRL'  # Spyder command to send
 regTp = 4  # register type; command key/script=4
-pgNm = 0  # page number; zero-based index
 sInx = 0  # start index to begin returning
 mxC = 50  # max number of registers to return
 chr = 30  # number of characters to truncate names to
+
+pgNm = 0  # page number; zero-based index
+row_offset = 0
 #
 #
 
@@ -101,9 +111,8 @@ MESSAGE = message
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-
-#s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#s.connect((UDP_IP, UDP_PORT))
+# s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# s.connect((UDP_IP, UDP_PORT))
 
 s.sendto(MESSAGE, (UDP_IP, UDP_PORT))
 
@@ -111,21 +120,64 @@ data = s.recv(BUFFER_SIZE)
 # s.close()
 
 received_message = data.decode('utf-8')
-
-# logger.debug(f'message = {message}')
-# logger.debug(f'received data: {received_message}')
-
 resCode = received_message[0:1]
-messageBody = received_message[2:-1].split(' ')
-returnCount = messageBody[0]
-msgRcvd = messageBody[1:-1]
+messageBody = received_message[2:].split(' ')
+returnCount = []
+returnCount.append('Return Count')
+returnCount.append(messageBody[0])
+msgRcvd = messageBody[1:]
+
+logger.debug(f'returnCount = {returnCount}')
 
 # replace %20 with spaces
 parsedMessage = replace_space(msgRcvd)
 
 
-logger.debug(f'response code: {resp_code_parse(resCode)}')
-logger.debug(f'Return count: {returnCount}')
-logger.debug(f'message receeived: {parsedMessage}')
+#
+#
+#
+# new list
+gList = []  # the new grouped list
+for i in range(0, len(parsedMessage)-1, 2):
+    gList.append([int(parsedMessage[i]), parsedMessage[i+1]])
 
-logging.debug('***** LAST LINE *****\n')
+# create a set of existing index numbers
+existing_indexes = set([x[0] for x in gList])
+
+# find the minimum and maximum index numbers
+try:
+    min_index = int(min(existing_indexes))
+    max_index = int(max(existing_indexes))
+
+    # iterate through the range of missing index numbers
+    for i in range(min_index, max_index + 1):
+        if i not in existing_indexes:
+            # append a new list with the missing index
+            gList.append([i, '---'])
+
+    # sort the list by index number
+    gList.sort()
+
+    # seperate index and label into two lists for google sheets
+    iNumList = []
+    iNameList = []
+    for i in gList:
+        iNumList.append(i[0])
+        iNameList.append(i[1])
+
+    # update google column
+    wks.update_col(1, iNameList, row_offset)
+    wks.update_col(2, iNumList, row_offset)
+    wks.update_row(row_offset + 1, returnCount, 2)
+except ValueError:
+    print(f'\nValue Error - The page may not exist \nSpyder response {resp_code_parse(resCode)}\n')
+except NameError:
+    print(f'Name Error - Spyder response {resp_code_parse(resCode)}')
+
+logger.info(f'response code: {resp_code_parse(resCode)}')
+logger.info(f'Return count: {returnCount}')
+logger.info(f'Page Number: {pgNm}')
+
+#
+logging.info('***** LAST LINE *****\n')
+#
