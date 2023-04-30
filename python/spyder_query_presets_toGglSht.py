@@ -34,7 +34,6 @@ logger.addHandler(localHandler)
 
 # disables logging when uncommented
 # logging.disable(logging.CRITICAL)
-# logging.debug(' Start of program')
 
 
 def spyder_message(message):
@@ -103,8 +102,10 @@ row_offset = 0
 message_to_send = f'{cmd} {regTp} {pgNm} {sInx} {mxC} {chr}'
 message = spyder_message(message_to_send)
 
+logger.debug(f'message = {message}')
+
 # sends UDP packet
-UDP_IP = '192.168.1.148'
+UDP_IP = '192.168.10.200'
 UDP_PORT = 11116
 BUFFER_SIZE = 1024
 MESSAGE = message
@@ -133,8 +134,6 @@ logger.debug(f'returnCount = {returnCount}')
 parsedMessage = replace_space(msgRcvd)
 
 
-#
-#
 #
 # new list
 gList = []  # the new grouped list
@@ -177,6 +176,11 @@ except NameError:
 logger.info(f'response code: {resp_code_parse(resCode)}')
 logger.info(f'Return count: {returnCount}')
 logger.info(f'Page Number: {pgNm}')
+
+# def main():
+
+# if __name__ == '__main__':
+#     main()    
 
 #
 logging.info('***** LAST LINE *****\n')
