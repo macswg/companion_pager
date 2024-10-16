@@ -24,7 +24,7 @@ formatter = logging.Formatter(format)
 pTrlHandler.setFormatter(formatter)
 
 # creates handler for local logging and sets handler format
-localHandler = logging.FileHandler(filename='logs/py_packet_senders_Log.txt')
+localHandler = logging.FileHandler(filename='../logs/py_packet_senders_Log.txt')
 formatLocal = '%(asctime)s - %(levelname)s - %(message)s'
 formatterLocal = logging.Formatter(formatLocal)
 localHandler.setFormatter(formatterLocal)
@@ -81,7 +81,7 @@ def replace_space(strings: list[str]) -> list[str]:
 
 logger.info('***** Start of program ***** ')
 
-gc = pygsheets.authorize(service_file='client_secret/credentials-sheets-service-acct.json')
+gc = pygsheets.authorize(service_file='../client_secret/credentials-sheets-service-acct.json')
 sht = gc.open('PY test 101')
 wks = sht.worksheet_by_title('SpyderPresets')
 

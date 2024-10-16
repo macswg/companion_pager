@@ -3,7 +3,7 @@
 	"type": "full",
 	"pages": {
 		"1": {
-			"name": "PAGE1",
+			"name": "Show 1",
 			"controls": {
 				"0": {
 					"0": {
@@ -31,9 +31,75 @@
 								"action_sets": {
 									"down": [
 										{
-											"id": "f_sp9NruAVl-UXE2SZegX",
+											"id": "VPdAH992TsjGjhgsWVmfN",
 											"action": "rsc",
-											"instance": "FBuBrqF_fp-drVlT1oU3R",
+											"instance": "cWxk87T7Xyd_PgCnMDYax",
+											"options": {
+												"sidx": "0",
+												"cidx": 1,
+												"type": "R"
+											},
+											"delay": 0
+										},
+										{
+											"id": "8HBp48KGF1qX_1HS1PrFC",
+											"action": "rsc",
+											"instance": "cWxk87T7Xyd_PgCnMDYax",
+											"options": {
+												"sidx": "0",
+												"cidx": 1,
+												"type": "R"
+											},
+											"delay": 0
+										}
+									],
+									"up": []
+								},
+								"options": {
+									"runWhileHeld": []
+								}
+							}
+						}
+					},
+					"1": {
+						"type": "button",
+						"style": {
+							"text": "2",
+							"textExpression": false,
+							"size": "auto",
+							"png64": "iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAYAAABV7bNHAAAAAXNSR0IArs4c6QAAAWxJREFUeF7t1bFRw0AQheG3VOAUymHmuiCCjBpIKQMSurA8Qze4C5aA8YyQ7zjZz4nk36lkWfr87ypyUIpPUyAA+r8OgDrTMxdoL+klit7XMI2507NSr5I2vefpAX1G0X3vIks+nlttFSqtZ2gBZRTdLPnBT733HPQtKabfqwJFOT7x1B9c4vm1F1YNaPVj1frzcqcPpR7Gx4+ArrWeA8q0oinQPoruljgel7rnHPQl6fZwvSnQ01pe5eeC5aBHSW9VoGsfr9qY/SkIoF+i8R4CqDKLAHUWFEAAnfsOYwfNkmPEGLFZoTRPoiAKoiBPgII8P3YQBVGQJ0BBnh87iIIoyBOgIM+PHURBFOQJUJDnxw6iIAryBCjI82MHURAFeQIU5PmxgyiIgjwBCvL82EEUREGeAAV5fuwgCqIgT4CCPD92EAVRkCdAQZ4fO4iCKMgToCDPjx1EQRTkCVCQ58cOoiAK8gQoyPMb76Af/OycYCa7IdsAAAAASUVORK5CYII=",
+							"alignment": "center:center",
+							"pngalignment": "center:center",
+							"color": 16777215,
+							"bgcolor": 13056,
+							"show_topbar": false,
+							"latch": false
+						},
+						"options": {
+							"relativeDelay": false,
+							"rotaryActions": false,
+							"stepAutoProgress": true
+						},
+						"feedbacks": [],
+						"steps": {
+							"0": {
+								"action_sets": {
+									"down": [
+										{
+											"id": "kzOom1qMtS5JWb4AQuQro",
+											"action": "rsc",
+											"instance": "cWxk87T7Xyd_PgCnMDYax",
+											"options": {
+												"sidx": "1",
+												"cidx": 1,
+												"type": "R"
+											},
+											"delay": 0
+										},
+										{
+											"id": "YVQ07ZxbfafGl_dzFuQxM",
+											"action": "rsc",
+											"instance": "cWxk87T7Xyd_PgCnMDYax",
 											"options": {
 												"sidx": 1,
 												"cidx": 1,
@@ -77,9 +143,75 @@
 								"action_sets": {
 									"down": [
 										{
-											"id": "5eGOTl9vniCQvIb4YkbpX",
+											"id": "ePVkjQcklm9rfq6EEgOkT",
 											"action": "rsc",
-											"instance": "FBuBrqF_fp-drVlT1oU3R",
+											"instance": "cWxk87T7Xyd_PgCnMDYax",
+											"options": {
+												"sidx": "0",
+												"cidx": "0",
+												"type": "R"
+											},
+											"delay": 0
+										},
+										{
+											"id": "s7UZSv8xBi5CEgnxA3qrM",
+											"action": "rsc",
+											"instance": "cWxk87T7Xyd_PgCnMDYax",
+											"options": {
+												"sidx": "0",
+												"cidx": "0",
+												"type": "R"
+											},
+											"delay": 0
+										}
+									],
+									"up": []
+								},
+								"options": {
+									"runWhileHeld": []
+								}
+							}
+						}
+					},
+					"1": {
+						"type": "button",
+						"style": {
+							"text": "2",
+							"textExpression": false,
+							"size": "18",
+							"png64": "iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAYAAABV7bNHAAAAAXNSR0IArs4c6QAAAXRJREFUeF7t3MFNQkEUheFz7cAllmMyVOFKW7AMW9CNiUUwJnQjXXjNUwn45DGEsxrezwYSGJj538dlR2RV6vcWRbF9POf7P00I9J8CgRpfDwIRyJugCEIQgrwCCPL6MYMQhCCvAIK8fswgBCHIK4Agrx8zCEEI8gogyOvHDEIQgrwCCPL6MYMQhCCvAIK8fswgBCHIK4Agrx8zCEEI8gogyOvHDEIQgrwCCPL6MYMQhCCvAIK8fswgBCHIK4Agrx8zCEEI8gogyOvHDEIQgrwCCPL6MYMQhCCvAIK8fpMzSNJDFL14b9/36qy6l/S8PUXs15K0iaKbvo/o7T6rPiQtpgJp7n+RMwKjsaAh3DqKbr3r0OfqfNerUnf7uz8UaLaKxnqGUAcDScoouurTwXm7zqrPocd49VSgn9elaiy1PO8j+1iVK60UKlO7PR5ot2oj6TGK3vo49vFdfv+Uh56Uum6d59RArfe52OcJ1Li0BGoE+gJZf51gnMMEuAAAAABJRU5ErkJggg==",
+							"alignment": "center:center",
+							"pngalignment": "center:center",
+							"color": 16777215,
+							"bgcolor": 0,
+							"show_topbar": false,
+							"latch": false
+						},
+						"options": {
+							"relativeDelay": false,
+							"rotaryActions": false,
+							"stepAutoProgress": true
+						},
+						"feedbacks": [],
+						"steps": {
+							"0": {
+								"action_sets": {
+									"down": [
+										{
+											"id": "rmPU9yQZEQJ1wAO7JT3je",
+											"action": "rsc",
+											"instance": "cWxk87T7Xyd_PgCnMDYax",
+											"options": {
+												"sidx": "2",
+												"cidx": "0",
+												"type": "R"
+											},
+											"delay": 0
+										},
+										{
+											"id": "GrmfF0AiSbyWiTT7DDRL5",
+											"action": "rsc",
+											"instance": "cWxk87T7Xyd_PgCnMDYax",
 											"options": {
 												"sidx": 1,
 												"cidx": "0",
@@ -123,9 +255,9 @@
 								"action_sets": {
 									"down": [
 										{
-											"id": "MdMygGY8oPX0x70gedmga",
+											"id": "zhvouEJnrIajsYV_CYkPY",
 											"action": "rsc",
-											"instance": "FBuBrqF_fp-drVlT1oU3R",
+											"instance": "cWxk87T7Xyd_PgCnMDYax",
 											"options": {
 												"sidx": "0",
 												"cidx": 1,
@@ -163,7 +295,7 @@
 						},
 						"feedbacks": [
 							{
-								"id": "Q9PHoKhywUewsuDgtHu8f",
+								"id": "e8KO7ZkN6tSTp-uwRzhbS",
 								"type": "variable_value",
 								"instance_id": "internal",
 								"options": {
@@ -243,7 +375,7 @@
 			}
 		},
 		"2": {
-			"name": "PAGE2",
+			"name": "PAGE",
 			"controls": {
 				"0": {
 					"0": {
@@ -3870,104 +4002,103 @@
 		}
 	},
 	"triggers": {},
-	"custom_variables": {
-		"any_false": {
-			"description": "A custom variable",
-			"defaultValue": "False",
-			"persistCurrentValue": false
-		},
-		"K": {
-			"description": "A custom variable",
-			"defaultValue": "",
-			"persistCurrentValue": false
-		},
-		"Y": {
-			"description": "A custom variable",
-			"defaultValue": "",
-			"persistCurrentValue": false
-		},
-		"L": {
-			"description": "A custom variable",
-			"defaultValue": "",
-			"persistCurrentValue": false
-		},
-		"E": {
-			"description": "A custom variable",
-			"defaultValue": "",
-			"persistCurrentValue": false
-		},
-		"R": {
-			"description": "A custom variable",
-			"defaultValue": "",
-			"persistCurrentValue": false
-		},
-		"ID1": {
-			"description": "A custom variable",
-			"defaultValue": "1",
-			"persistCurrentValue": false,
-			"sortOrder": null
-		}
-	},
+	"custom_variables": {},
 	"instances": {
-		"FBuBrqF_fp-drVlT1oU3R": {
+		"cWxk87T7Xyd_PgCnMDYax": {
 			"instance_type": "christie-spyder",
 			"sortOrder": 1,
-			"label": "spyder_new1",
+			"label": "spyder_201",
 			"isFirstInit": false,
 			"config": {
-				"host": "10.211.55.3"
+				"host": "192.168.10.201"
 			},
 			"lastUpgradeIndex": -1,
 			"enabled": true
 		},
-		"TxblWyHLpI1QxcXRgfH8b": {
-			"instance_type": "generic-ping",
+		"dqk61GBz6fuRTNsPFl4c7": {
+			"instance_type": "christie-spyder",
 			"sortOrder": 2,
-			"label": "SpyderPing1",
+			"label": "spyder_202",
 			"isFirstInit": false,
 			"config": {
-				"product": "Ping",
-				"host": "192.168.10.200",
-				"timeout": 3,
-				"retryrate": 1200,
-				"verbose": false,
-				"import_to": "SOJ3fyXyTg"
+				"host": "192.168.10.202"
 			},
 			"lastUpgradeIndex": -1,
-			"enabled": false
-		},
-		"y_-Co3AfvZ0_-X4X3WS0B": {
-			"instance_type": "generic-ping",
-			"sortOrder": 3,
-			"label": "SpyderPing2",
-			"isFirstInit": false,
-			"config": {
-				"product": "Ping",
-				"host": "192.168.10.201",
-				"timeout": 3,
-				"retryrate": 1600,
-				"verbose": false,
-				"import_to": "ZUpFiMOfsG"
-			},
-			"lastUpgradeIndex": -1,
-			"enabled": false
-		},
-		"XY07xFW2mUAEpe8Vm3-F-": {
-			"instance_type": "generic-ping",
-			"sortOrder": 4,
-			"label": "SpyderPing3",
-			"isFirstInit": false,
-			"config": {
-				"product": "Ping",
-				"host": "192.168.10.202",
-				"timeout": 3,
-				"retryrate": 1800,
-				"verbose": false,
-				"import_to": "bxUGuaiSVD"
-			},
-			"lastUpgradeIndex": -1,
-			"enabled": false
+			"enabled": true
 		}
 	},
-
+	"surfaces": {
+		"emulator:emulator": {
+			"config": {
+				"brightness": 100,
+				"rotation": 0,
+				"never_lock": false,
+				"xOffset": 0,
+				"yOffset": 0,
+				"groupId": null,
+				"emulator_columns": 8,
+				"emulator_rows": 4
+			},
+			"integrationType": "emulator",
+			"type": "Emulator",
+			"gridSize": {
+				"columns": 8,
+				"rows": 4
+			},
+			"groupConfig": {
+				"name": "Unnamed group",
+				"last_page": 1,
+				"startup_page": 1,
+				"use_last_page": true
+			},
+			"groupId": null
+		},
+		"streamdeck:CL28K1A01198": {
+			"type": "Elgato Streamdeck XL",
+			"integrationType": "elgato-streamdeck",
+			"gridSize": {
+				"columns": 8,
+				"rows": 4
+			},
+			"config": {
+				"brightness": 100,
+				"rotation": 0,
+				"never_lock": false,
+				"xOffset": 0,
+				"yOffset": 0,
+				"groupId": null
+			},
+			"groupConfig": {
+				"name": "Unnamed group",
+				"last_page": 1,
+				"startup_page": 1,
+				"use_last_page": true
+			},
+			"groupId": null
+		},
+		"streamdeck:A00NA3483073ZP": {
+			"type": "Elgato Streamdeck XL",
+			"integrationType": "elgato-streamdeck",
+			"gridSize": {
+				"columns": 8,
+				"rows": 4
+			},
+			"config": {
+				"brightness": 100,
+				"rotation": 0,
+				"never_lock": false,
+				"xOffset": 0,
+				"yOffset": 0,
+				"groupId": null
+			},
+			"groupConfig": {
+				"name": "Unnamed group",
+				"last_page": 1,
+				"startup_page": 1,
+				"use_last_page": true
+			},
+			"groupId": null
+		}
+	},
+	"surfaceGroups": {}
 }
