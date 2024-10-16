@@ -33,7 +33,7 @@ archive
 scratch
 
 # Ignore client secrets
-client_secret/
+secret/
 
 # Ignore cache files
 __*
