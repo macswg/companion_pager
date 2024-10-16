@@ -3,7 +3,7 @@
 	"type": "full",
 	"pages": {
 		"1": {
-			"name": "PAGE1",
+			"name": "PAGE",
 			"controls": {
 				"0": {
 					"0": {
@@ -31,11 +31,11 @@
 								"action_sets": {
 									"down": [
 										{
-											"id": "f_sp9NruAVl-UXE2SZegX",
+											"id": "sTzQ9bSG1kL3KIPApUcId",
 											"action": "rsc",
-											"instance": "FBuBrqF_fp-drVlT1oU3R",
+											"instance": "nkxC5RGnwHMiDXEkhk1uV",
 											"options": {
-												"sidx": 1,
+												"sidx": "0",
 												"cidx": 1,
 												"type": "R"
 											},
@@ -77,11 +77,11 @@
 								"action_sets": {
 									"down": [
 										{
-											"id": "5eGOTl9vniCQvIb4YkbpX",
+											"id": "8ltOjbCNsKagd6c81f0_B",
 											"action": "rsc",
-											"instance": "FBuBrqF_fp-drVlT1oU3R",
+											"instance": "nkxC5RGnwHMiDXEkhk1uV",
 											"options": {
-												"sidx": 1,
+												"sidx": "0",
 												"cidx": "0",
 												"type": "R"
 											},
@@ -123,9 +123,9 @@
 								"action_sets": {
 									"down": [
 										{
-											"id": "MdMygGY8oPX0x70gedmga",
+											"id": "r5zHwMrKOX0ZVeorHwsWX",
 											"action": "rsc",
-											"instance": "FBuBrqF_fp-drVlT1oU3R",
+											"instance": "nkxC5RGnwHMiDXEkhk1uV",
 											"options": {
 												"sidx": "0",
 												"cidx": 1,
@@ -163,7 +163,7 @@
 						},
 						"feedbacks": [
 							{
-								"id": "Q9PHoKhywUewsuDgtHu8f",
+								"id": "9ce1tZ4Z0HAhWr3fDPj5A",
 								"type": "variable_value",
 								"instance_id": "internal",
 								"options": {
@@ -175,7 +175,8 @@
 									"color": 9605778,
 									"bgcolor": 26112,
 									"png64": "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"
-								}
+								},
+								"children": []
 							}
 						],
 						"steps": {
@@ -243,7 +244,7 @@
 			}
 		},
 		"2": {
-			"name": "PAGE2",
+			"name": "PAGE",
 			"controls": {
 				"0": {
 					"0": {
@@ -3869,105 +3870,17 @@
 			}
 		}
 	},
-	"triggers": {},
-	"custom_variables": {
-		"any_false": {
-			"description": "A custom variable",
-			"defaultValue": "False",
-			"persistCurrentValue": false
-		},
-		"K": {
-			"description": "A custom variable",
-			"defaultValue": "",
-			"persistCurrentValue": false
-		},
-		"Y": {
-			"description": "A custom variable",
-			"defaultValue": "",
-			"persistCurrentValue": false
-		},
-		"L": {
-			"description": "A custom variable",
-			"defaultValue": "",
-			"persistCurrentValue": false
-		},
-		"E": {
-			"description": "A custom variable",
-			"defaultValue": "",
-			"persistCurrentValue": false
-		},
-		"R": {
-			"description": "A custom variable",
-			"defaultValue": "",
-			"persistCurrentValue": false
-		},
-		"ID1": {
-			"description": "A custom variable",
-			"defaultValue": "1",
-			"persistCurrentValue": false,
-			"sortOrder": null
-		}
-	},
 	"instances": {
-		"FBuBrqF_fp-drVlT1oU3R": {
+		"nkxC5RGnwHMiDXEkhk1uV": {
 			"instance_type": "christie-spyder",
 			"sortOrder": 1,
-			"label": "spyder_new1",
+			"label": "spyder",
 			"isFirstInit": false,
 			"config": {
-				"host": "10.211.55.3"
+				"host": "127.0.0.1"
 			},
 			"lastUpgradeIndex": -1,
 			"enabled": true
-		},
-		"TxblWyHLpI1QxcXRgfH8b": {
-			"instance_type": "generic-ping",
-			"sortOrder": 2,
-			"label": "SpyderPing1",
-			"isFirstInit": false,
-			"config": {
-				"product": "Ping",
-				"host": "192.168.10.200",
-				"timeout": 3,
-				"retryrate": 1200,
-				"verbose": false,
-				"import_to": "SOJ3fyXyTg"
-			},
-			"lastUpgradeIndex": -1,
-			"enabled": false
-		},
-		"y_-Co3AfvZ0_-X4X3WS0B": {
-			"instance_type": "generic-ping",
-			"sortOrder": 3,
-			"label": "SpyderPing2",
-			"isFirstInit": false,
-			"config": {
-				"product": "Ping",
-				"host": "192.168.10.201",
-				"timeout": 3,
-				"retryrate": 1600,
-				"verbose": false,
-				"import_to": "ZUpFiMOfsG"
-			},
-			"lastUpgradeIndex": -1,
-			"enabled": false
-		},
-		"XY07xFW2mUAEpe8Vm3-F-": {
-			"instance_type": "generic-ping",
-			"sortOrder": 4,
-			"label": "SpyderPing3",
-			"isFirstInit": false,
-			"config": {
-				"product": "Ping",
-				"host": "192.168.10.202",
-				"timeout": 3,
-				"retryrate": 1800,
-				"verbose": false,
-				"import_to": "bxUGuaiSVD"
-			},
-			"lastUpgradeIndex": -1,
-			"enabled": false
 		}
-	},
-
+	}
 }

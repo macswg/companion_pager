@@ -133,7 +133,7 @@ READ_CONFIG_FILE = os.path.join(
     current_dir,
     "..",
     "example config files for ref",
-    "reset_template_ready_for_python.companionconfig",
+    "template_ready_for_python.companionconfig",
 )
 
 WRITE_CONFIG_FILE = os.path.join(
