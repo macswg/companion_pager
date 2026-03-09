@@ -1,7 +1,18 @@
 [project]
 name = "companion-pager"
-version = "0.1.0"
-description = "Add your description here"
+version = "0.2.0"
+description = "Sync Aquilon preset names/indexes into a Bitfocus Companion config"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "pyyaml>=6.0",
+    "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+]
+
+[tool.ruff]
+line-length = 100

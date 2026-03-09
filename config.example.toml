@@ -1,0 +1,84 @@
+# config.example.toml
+# Copy this file to config.toml and fill in your values.
+# config.toml is gitignored — never commit it.
+#
+# IP addresses and ports live in .env (copy .env.example → .env).
+# This file holds everything else: page layout, file paths, output settings.
+
+[companion]
+# Path to the Companion config YAML used as the base template.
+# Must have the analogway-livepremier instances already configured.
+template_path = "example config files for ref/nuc-green_2026_draft.companionconfig"
+
+# Where to write the updated config. Import this file into Companion.
+output_path = "outputs/updated.companionconfig"
+
+# Stream Deck columns per row (XL = 8, regular = 5, Plus = 8)
+cols_per_row = 8
+
+# Whether buttons load into "preview" or "program"
+target = "preview"
+
+# Page mappings — one [[companion.pages]] block per Companion page to populate.
+# memory_ids lists the AQ Master Memory IDs to place on that page, in order.
+# color is a 24-bit integer (e.g. 0x003300 = dark green).
+
+[[companion.pages]]
+page_num = 1
+page_title = "Day 1"
+color = 0x003300
+memory_ids = []   # fill in with AQ memory IDs for show day 1
+
+[[companion.pages]]
+page_num = 20
+page_title = "Day 2"
+color = 0x000033
+memory_ids = []   # fill in with AQ memory IDs for show day 2
+
+[[companion.pages]]
+page_num = 40
+page_title = "Day 3"
+color = 0x330000
+memory_ids = []   # fill in with AQ memory IDs for show day 3
+
+[[companion.pages]]
+page_num = 60
+page_title = "Companion Controller"
+color = 0x1a1a00
+memory_ids = []
+
+[[companion.pages]]
+page_num = 80
+page_title = "Emergency"
+color = 0x330000
+memory_ids = []
+
+
+[aq_setup]
+# Output configuration — one [[aq_setup.outputs]] block per physical output.
+# Applied identically to AQ21 and AQ22.
+
+# [[aq_setup.outputs]]
+# id = 0
+# resolution = "3840x2160"
+# refresh_rate = "59.94"
+# connector = "SDI"
+# colorspace = 2
+# chroma = 1
+# color_range = "Limited"
+
+
+[mv_setup]
+# Multiviewer layouts — one [[mv_setup.layouts]] block per named layout preset.
+# Run with: python src/mv_setup/main.py --layout <name>
+
+# [[mv_setup.layouts]]
+# name = "tech_feed"
+# output_id = 2
+# [[mv_setup.layouts.windows]]
+# id = 0
+# source = "input_1"
+# x = 0
+# y = 0
+# w = 640
+# h = 360

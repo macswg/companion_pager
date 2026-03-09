@@ -1,39 +1,47 @@
-# Ignore Mac system files
+# macOS system files
+.DS_Store
 .DS_store
-
-# Ignore all text files
-*.txt
-
-# Ignore files related to API keys
-.env
-
-# Ignore images the test pattern produces
-*.png
-
-# Ignore env directory
-env/
-venv/
-
-# Ignore mac files
 ._*
 
-# Ignore local files
-ignore_*
-.vscode
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+dist/
+build/
 
-# Ignore python generated companion configs
-python_updated.companionconfig
-python_nav_updated.companionconfig
+# Virtual environments
+.venv/
+venv/
+env/
 
-# Ignore archive folders
-archive
-"example config files for ref"/archive
+# IDE
+.idea/
+.vscode/
 
-# Ignore scratch folder
-scratch
-
-# Ignore client secrets
+# Secrets & credentials
+.env
+!.env.example
 secret/
+*.json.key
 
-# Ignore cache files
-__*
+# Log files
+logs/
+*.log
+*.txt
+
+# Generated Companion config outputs (produced at runtime)
+outputs/
+
+# Runtime data directory
+data/
+
+# Python version pin file
+.python-version
+
+# Archive / scratch (kept locally, not tracked)
+archive/
+scratch/
