@@ -11,7 +11,7 @@ import pandas as pd
 PAPERTRAIL_HOST = "logs5.papertrailapp.com"
 PAPERTRAIL_PORT = 54000
 APP_NAME = "spyder_query_presets.py"
-UDP_IP = "10.211.55.3"
+UDP_IP = "192.168.5.21"
 UDP_PORT = 11116
 BUFFER_SIZE = 1024
 
