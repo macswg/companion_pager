@@ -89,6 +89,7 @@ def main() -> None:
 
     cols_per_row = cfg["companion"].get("cols_per_row", 8)
     target = cfg["companion"].get("target", "preview")
+    smart_wrap = cfg["companion"].get("smart_wrap", False)
     pages_config = cfg["companion"].get("pages", [])
     templates = {t["name"]: t for t in cfg["companion"].get("button_templates", [])}
 
@@ -185,6 +186,7 @@ def main() -> None:
                             bgcolor=pin.get("color", bgcolor),
                             text_color=pin.get("text_color", 16777215),
                             text_size=pin.get("text_size", "auto"),
+                            smart_wrap=smart_wrap,
                         )
                     pinned_positions.add((row, col))
                     total_stamped += 1
@@ -207,6 +209,7 @@ def main() -> None:
                 bgcolor=bgcolor,
                 clear_first=False,
                 pinned_positions=frozenset(pinned_positions),
+                smart_wrap=smart_wrap,
             )
             logger.info(f"Page {page_num} ({page_title!r}): {n} auto-flow + {len(pinned_positions)} pinned.")
             total_stamped += n

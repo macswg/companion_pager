@@ -158,6 +158,10 @@ buttons = [
 
 Supported template actions: `"screen-take"` (fires on both AQ instances), `"label"` (no-action reminder button).
 
+**Smart text sizing** — set `smart_wrap = true` in `config.toml` to automatically
+step down font size on `"auto"` buttons so labels never break mid-word. Explicit
+`text_size` values (e.g. `"14"`) are always respected unchanged.
+
 **Color reference:**
 ```
 0xCCCC00  yellow text       0xFF0000  bright red text
@@ -171,10 +175,11 @@ Supported template actions: `"screen-take"` (fires on both AQ instances), `"labe
 ### Tool 3 — AQ Backup Verify
 **`src/aq_backup_verify/main.py`**
 
-Checks that AQ22 (backup) matches AQ21 (primary) — firmware version and Master
-Memory lists. Run on demand any time you want to confirm the backup is in sync.
+Verifies AQ22 (backup) matches AQ21 (primary) across five categories: system
+info (firmware, device type), inputs, screens, outputs, and Master Memory lists.
+Each check reports pass/fail independently. Read-only — does not modify either unit.
 
-**Use for:** Verifying AQ22 matches AQ21 before a show.
+**Use for:** Confirming AQ22 is in sync with AQ21 before a show.
 **Does not touch:** Companion configs, output modes, or MV layouts.
 
 ```bash
@@ -265,8 +270,8 @@ PLAN.md              — implementation plan and status
 | Tool | Status |
 |------|--------|
 | Companion Sync (`src/companion_sync/`) | Code complete; needs on-device validation |
-| MV Setup (`src/mv_setup/`) | Implemented — applies layouts from `mv_config.toml` |
-| AQ Backup Verify (`src/aq_backup_verify/`) | Complete — checks firmware + memory lists |
-| Test suite (`tests/`) | Structure planned, implementation pending |
+| MV Setup (`src/mv_setup/`) | Code complete; needs on-device validation |
+| AQ Backup Verify (`src/aq_backup_verify/`) | Code complete; needs on-device validation |
+| Test suite (`tests/`) | Written; requires live AQ to run |
 
 See `PLAN.md` for details.

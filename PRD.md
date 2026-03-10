@@ -10,7 +10,7 @@ of setup and should not be confused with the others.
 |------|---------|----------|
 | **Companion Sync** | Pull AQ preset names → Companion buttons | After presets are named on AQ (re-runnable) |
 | **MV Setup** | Build multiviewer window layouts on AQ outputs | Show build |
-| **AQ Clone** | Export config from AQ21, import to AQ22, verify both match | On demand, after any significant change to AQ21 |
+| **AQ Backup Verify** | Verify AQ22 firmware + memories match AQ21 | On demand, after any significant change to AQ21 |
 
 ---
 
@@ -53,13 +53,59 @@ Every page must have three reserved navigation buttons:
 These buttons must not be overwritten by preset stamps. Positions are confirmed
 from the reference config and hardcoded in `companion_updater.NAV_POSITIONS`.
 
-### Preset Organization
-- Presets are pulled from the AQ and assigned to pages via a **grouping config**
-  defined in `config.toml`.
-- The grouping config maps memory ID lists to a Companion page number and title.
-- AQ has more total memories than Companion has buttons — only the memories listed
-  in the grouping config appear in Companion.
-- AQ memory numbering mirrors the Companion page numbering as closely as possible.
+### Button Placement
+
+Two placement modes can be mixed on the same page:
+
+**Auto-flow** — `memory_ids` list fills left-to-right, top-to-bottom, skipping
+nav and pinned positions:
+```toml
+[[companion.pages]]
+page_num   = 1
+page_title = "Day 1"
+color      = 0x003300
+memory_ids = [100, 101, 102, 103]
+```
+
+**Pinned** — specific presets placed at exact row/col positions (skipped by auto-flow):
+```toml
+buttons = [
+    { memory_id = 76, row = 2, col = 1, text_color = 0xCCCC00, text_size = "14" },
+    { memory_id = 51, row = 2, col = 5, color = 0x330000 },
+]
+```
+
+**Template buttons** — reusable non-preset buttons (TAKE, reminder labels) defined
+once in `[[companion.button_templates]]` and placed by name on any page:
+```toml
+[[companion.button_templates]]
+name      = "take"
+action    = "screen-take"
+screen_id = 1
+label     = "TAKE"
+color     = 0x9D0101
+
+# In a page's buttons list:
+buttons = [
+    { template = "take", row = 2, col = 6 },
+]
+```
+
+Supported template actions: `"screen-take"` (fires on both AQ instances), `"label"` (no-action reminder).
+
+### Per-Button Overrides
+
+All buttons (auto-flow and pinned) support:
+- `color` — background color (default: page color)
+- `text_color` — label text color (default: white `0xFFFFFF`)
+- `text_size` — font size: `"auto"`, `"7"`, `"14"`, `"18"`, `"24"`, `"30"` (default: `"auto"`)
+
+### Smart Text Sizing (`smart_wrap`)
+
+When `smart_wrap = true` in `config.toml`, auto-sized buttons are stepped down
+through font sizes until the label wraps cleanly at word boundaries. A mid-word
+break is only possible when a single word exceeds the character width for that size.
+Explicit `text_size` values are always respected unchanged.
 
 ### Button Style
 - Buttons are color-coded by page/category (each show day page gets a distinct color).
@@ -81,49 +127,40 @@ per show, so the tool must be data-driven and easy to update.
 ### Scope
 - Position and size MV windows across one or more outputs
 - Assign sources to windows (all inputs + program/preview)
-- Set window titling
-- Support multiple named MV layout presets (e.g. "tech feed", "confidence", "FOH")
+- Support multiple named MV layout presets
 - Capture existing device layouts to a portable TOML config
 - Restore all MV memories from a TOML config to a device
 
 ### Data Source
-Layout parameters (window count, positions, source assignments) are defined in
-`mv_config.toml` as named layout presets. The script applies a chosen layout
-to the AQ. Layouts can also be captured from a live device with `capture.py`.
+Layout parameters are defined in `mv_config.toml` as named layout presets. The
+script applies a chosen layout to the AQ. Layouts can also be captured from a
+live device with `capture.py` and restored with `restore.py`.
 
 ### Flexibility
-The tool must make it easy to adjust layouts between shows without touching
-Python code — layout changes happen in config only.
+Layout changes happen in config only — no Python code changes needed between shows.
 
 ---
 
-## Tool 3 — AQ Clone
+## Tool 3 — AQ Backup Verify
 
 ### Purpose
-Export the full config from AQ21 (primary) and import it to AQ22 (backup),
-then verify both units are in sync. Run on demand any time AQ21 changes
-significantly and the backup needs to match.
+Verify that AQ22 (backup) matches AQ21 (primary). Run on demand any time you
+want to confirm the backup is in sync before or during a show.
 
-### Steps
-1. **Export** — trigger a config/show-file export from AQ21 via the REST API
-2. **Import** — push that exported config to AQ22 via the REST API
-3. **Verify** — query the memory list from both units and assert they are identical:
-   - Same memory IDs
-   - Same memory names
-   - Same count
+### What is verified
+1. **System info** — firmware version and device type match
+2. **Inputs** — same IDs and labels on both units
+3. **Screens** — same IDs, labels, and enabled state
+4. **Outputs** — same IDs, labels, and output formats
+5. **Master Memories** — same IDs, names, and count; no extras on either unit
 
 ### Data source
-No config file needed — the tool reads directly from AQ21 and writes to AQ22.
-Host IPs for both units come from `.env` (`AQ_PRIMARY_HOST`, `AQ_BACKUP_HOST`).
+No config file needed — the tool reads directly from both units.
+Host IPs come from `.env` (`AQ_PRIMARY_HOST`, `AQ_BACKUP_HOST`).
 
 ### Error handling
-If the import or verification fails, the tool must exit with a clear error message
-and a non-zero status. AQ22 must never be left in an ambiguous state silently.
-
-### API mechanism
-TBD — the LivePremier API mechanism for full config export/import needs to be
-confirmed on-device. May be a dedicated endpoint, a file download/upload, or
-an OS-level config file copy.
+The tool reports each check individually as pass/fail and exits non-zero if any
+check fails, so the operator knows exactly what's out of sync.
 
 ---
 
@@ -136,10 +173,10 @@ config must be verified before it goes on-site.
 
 | Check | Description |
 |-------|-------------|
-| **Correct memoryId** | Every button's action `options.memoryId` matches the AQ memory it represents — no off-by-one, no swapped IDs |
+| **Correct memoryId** | Every button's action `options.memoryId` matches the AQ memory it represents |
 | **Label matches name** | Button `style.text` exactly matches the AQ memory name as returned by the API |
-| **Both instances wired** | Every preset button has two `down` actions — one for AQ21, one for AQ22. No button fires only one unit |
-| **Nav buttons present** | Every generated page has page up, page down, and page number buttons at their correct grid positions |
+| **Both instances wired** | Every preset button has two `down` actions — one for AQ21, one for AQ22 |
+| **Nav buttons present** | Every generated page has page up, page down, and page number buttons at correct positions |
 | **Nav never overwritten** | No preset button is stamped onto a nav button slot |
 
 ### Approach
@@ -157,7 +194,7 @@ config must be verified before it goes on-site.
 tests/
   test_companion_sync.py   — verifies generated Companion config correctness
   test_aq_comms.py         — verifies AQ API responses parse correctly
-  test_aq_backup_verify.py         — verifies AQ21 and AQ22 memory lists are identical (stub)
+  test_aq_backup_verify.py — verifies AQ21 and AQ22 match across all checks
   conftest.py              — shared fixtures (live AQ connection, sample configs)
 ```
 
@@ -175,6 +212,6 @@ pytest tests/test_companion_sync.py::TestPresetButtons -v  # single class
 
 | # | Question | Status |
 |---|----------|--------|
-| 1 | AQ Clone export/import API endpoints? | ⚠️ TBD — needs on-device discovery |
-| 2 | MV Setup: needs on-device validation of geometry + save | ⏳ Pending live test |
-| 3 | Companion Sync: needs end-to-end on-device validation | ⏳ Pending live test |
+| 1 | MV Setup: needs on-device validation of geometry + save | ⏳ Pending live test |
+| 2 | Companion Sync: needs end-to-end on-device validation | ⏳ Pending live test |
+| 3 | AQ Backup Verify: confirm system info JSON field names on real device | ⏳ Pending live test |

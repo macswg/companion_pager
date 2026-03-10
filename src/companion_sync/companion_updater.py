@@ -19,6 +19,7 @@ all actions matching the target action name.
 
 import copy
 import logging
+import math
 import uuid
 from pathlib import Path
 
@@ -40,6 +41,29 @@ logger = logging.getLogger(__name__)
 LOAD_MEMORY_ACTION = "/api/tpp/v1/load-master-memory"
 SCREEN_TAKE_ACTION = "/api/tpp/v1/screens/{screenId}/take"
 
+# Font sizes available in Companion, largest to smallest.
+FONT_SIZES: list[str] = ["30", "24", "18", "14", "7"]
+
+# Estimated maximum characters per line at each font size on a 96x96 Stream Deck XL button.
+# Tune these values against the tablet view (127.0.0.1:8888/tablet) if wrapping is off.
+CHARS_PER_LINE: dict[str, int] = {
+    "30": 5,
+    "24": 5,
+    "18": 7,
+    "14": 12,
+    "7":  17,
+}
+
+# Maximum lines visible on a 96x96 Stream Deck XL button at each font size.
+# Tune against the tablet view (127.0.0.1:8888/tablet) if sizing is off.
+MAX_LINES: dict[str, int] = {
+    "30": 2,
+    "24": 2,
+    "18": 2,
+    "14": 4,
+    "7":  8,
+}
+
 # Nav button positions on a Stream Deck XL (row, col) — must never be overwritten.
 # Confirmed from reference config: pageup=row2/col7, pagenum=row3/col6, pagedown=row3/col7.
 NAV_POSITIONS: frozenset[tuple[int, int]] = frozenset({
@@ -47,6 +71,120 @@ NAV_POSITIONS: frozenset[tuple[int, int]] = frozenset({
     (3, 6),  # pagenum
     (3, 7),  # pagedown
 })
+
+
+# ---------------------------------------------------------------------------
+# Smart text sizing
+# ---------------------------------------------------------------------------
+
+def _wrap_lines(text: str, chars_per_line: int) -> list[str]:
+    """
+    Word-wrap text at chars_per_line, splitting at space boundaries.
+
+    Simulates Companion's word-wrap behaviour: words are placed on a line
+    until the next word would exceed chars_per_line, then a new line starts.
+    A word longer than chars_per_line cannot be avoided and occupies its own
+    line (causing a visual truncation / overflow).
+    """
+    words = text.split()
+    if not words:
+        return [""]
+    lines: list[str] = []
+    current = ""
+    for word in words:
+        if not current:
+            current = word
+        elif len(current) + 1 + len(word) <= chars_per_line:
+            current += " " + word
+        else:
+            lines.append(current)
+            current = word
+    lines.append(current)
+    return lines
+
+
+def _line_count(text: str, chars_per_line: int) -> int:
+    """Number of lines after word-wrapping text at chars_per_line."""
+    return len(_wrap_lines(text, chars_per_line))
+
+
+def _has_mid_word_wrap(text: str, chars_per_line: int) -> bool:
+    """
+    Return True if word-wrapping would still split a word.
+
+    With proper word-wrap, a mid-word break only occurs when a single word
+    is longer than chars_per_line (it cannot fit on any line without breaking).
+    """
+    return any(len(word) > chars_per_line for word in text.split())
+
+
+def _fits(text: str, size: str) -> bool:
+    """Return True if text fits within the line capacity for the given size."""
+    cpl = CHARS_PER_LINE[size]
+    return (
+        _line_count(text, cpl) <= MAX_LINES[size]
+        and not _has_mid_word_wrap(text, cpl)
+    )
+
+
+def _resolve_auto_size(text: str) -> str:
+    """
+    Estimate the font size Companion's 'auto' would select for this text.
+
+    Picks the largest size where the word-wrapped line count fits within
+    the button's visible line capacity for that size.
+    """
+    for size in FONT_SIZES:
+        if _line_count(text, CHARS_PER_LINE[size]) <= MAX_LINES[size]:
+            return size
+    return FONT_SIZES[-1]
+
+
+def smart_text_size(label: str, requested_size: str = "auto") -> str:
+    """
+    Return the appropriate font size for this label.
+
+    Only acts on "auto" buttons — explicit sizes (e.g. "14") are always
+    returned unchanged, trusting the user's manual choice.
+
+    For "auto" buttons:
+      - Estimates the size Companion would pick, then steps down if that size
+        causes a mid-word break or line overflow.
+      - If the auto-resolved size already fits cleanly, returns "auto" so
+        Companion handles rendering natively.
+      - If no size avoids a mid-word break (e.g. a single very long word),
+        falls back to the largest size that at least fits within line capacity.
+
+    Tune CHARS_PER_LINE and MAX_LINES at the top of this file against the
+    tablet view (127.0.0.1:8888/tablet) if sizing is off.
+    """
+    if requested_size != "auto":
+        return requested_size  # always respect explicit sizes
+
+    # If the text fits cleanly at the largest size, Companion's native "auto"
+    # will pick the right size on its own — no override needed.
+    if _fits(label, FONT_SIZES[0]):
+        return "auto"
+
+    start = _resolve_auto_size(label)
+
+    try:
+        idx = FONT_SIZES.index(start)
+    except ValueError:
+        return "auto"
+
+    # Step down until a size fits cleanly.
+    for size in FONT_SIZES[idx:]:
+        if _fits(label, size):
+            return size
+
+    # Fallback: word is too long to avoid breaking at any size — pick the
+    # largest size that at least fits within the button's line capacity.
+    for size in FONT_SIZES[idx:]:
+        if _line_count(label, CHARS_PER_LINE[size]) <= MAX_LINES[size]:
+            return size
+
+    return FONT_SIZES[-1]
 
 
 # ---------------------------------------------------------------------------
@@ -108,6 +246,7 @@ def build_preset_button(
     text_size: str = "auto",
     text_color: int = 16777215,   # white
     bgcolor: int = 0,             # black
+    smart_wrap: bool = False,
 ) -> dict:
     """
     Build a Companion v6 button dict for a single Aquilon preset.
@@ -126,6 +265,8 @@ def build_preset_button(
     Returns:
         Dict matching the Companion v6 button schema.
     """
+    resolved_size = smart_text_size(preset.name, text_size) if smart_wrap else text_size
+
     down_actions = [
         {
             "id": _new_action_id(),
@@ -144,7 +285,7 @@ def build_preset_button(
         "style": {
             "text": preset.name,
             "textExpression": False,
-            "size": text_size,
+            "size": resolved_size,
             "png64": None,
             "alignment": "center:center",
             "pngalignment": "center:center",
@@ -186,6 +327,7 @@ def place_preset_button(
     bgcolor: int = 0,
     text_color: int = 16777215,
     text_size: str = "auto",
+    smart_wrap: bool = False,
 ) -> None:
     """
     Place a single preset button at an exact (row, col) position on a page.
@@ -200,6 +342,7 @@ def place_preset_button(
     btn = build_preset_button(
         preset, instance_ids, target=target,
         bgcolor=bgcolor, text_color=text_color, text_size=text_size,
+        smart_wrap=smart_wrap,
     )
     controls.setdefault(str(row), {})[str(col)] = btn
     logger.debug(f"  [{row}/{col}] pinned memoryId={preset.memory_id} → {preset.name!r}")
@@ -217,6 +360,7 @@ def apply_presets_to_page(
     bgcolor: int = 0,
     clear_first: bool = True,
     pinned_positions: frozenset[tuple[int, int]] = frozenset(),
+    smart_wrap: bool = False,
 ) -> int:
     """
     Stamp a list of Aquilon presets onto a Companion page as buttons.
@@ -270,7 +414,7 @@ def apply_presets_to_page(
             if (row, col) not in NAV_POSITIONS and (row, col) not in pinned_positions:
                 break
 
-        btn = build_preset_button(preset, instance_ids, target=target, bgcolor=bgcolor)
+        btn = build_preset_button(preset, instance_ids, target=target, bgcolor=bgcolor, smart_wrap=smart_wrap)
         controls.setdefault(str(row), {})[str(col)] = btn
 
         logger.debug(f"  [{row}/{col}] memoryId={preset.memory_id} → {preset.name!r}")

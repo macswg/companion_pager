@@ -12,7 +12,6 @@ different stages of show prep.
 | **AQ Backup Verify** | `src/aq_backup_verify/main.py` | Verify AQ22 firmware + memories match AQ21 | On demand |
 
 All tools share `src/common/aquilon_comms.py` as the LivePremier REST + WebSocket API client.
-Each tool is independent — do not mix them up.
 
 ---
 
@@ -34,7 +33,7 @@ companion_pager/
 │   │   ├── main.py                  ← apply named layout from TOML to device
 │   │   ├── capture.py               ← snapshot device MV memories → TOML
 │   │   └── restore.py               ← restore all MV memories from TOML → device
-│   ├── aq_backup_verify/                    ← TOOL 3: Verify AQ22 matches AQ21
+│   ├── aq_backup_verify/            ← TOOL 3: Verify AQ22 matches AQ21
 │   │   └── main.py
 │   └── common/                      ← shared (not a tool)
 │       ├── aquilon_comms.py
@@ -112,37 +111,39 @@ Memory path: `device.masterPresetBank.bankList.items[id].control.pp.label` (name
 
 `src/common/aquilon_comms.py` is fully implemented and smoke-tested.
 
-### Phase 2 — Grouping Config  ✅ COMPLETE
+### Phase 2 — Button Placement  ✅ COMPLETE
 
-Mapping from AQ memory IDs → Companion pages is defined in `config.toml`:
+Three placement modes, all configurable in `config.toml`:
 
-```toml
-[[companion.pages]]
-page_num = 1
-page_title = "Day 1"
-color = 0x003300        # dark green
-memory_ids = [1, 2, 3, 4, 5, 6, 7, 8]
+**Auto-flow** — `memory_ids` fill left-to-right, top-to-bottom, skipping nav and pinned positions.
 
-[[companion.pages]]
-page_num = 20
-page_title = "Day 2"
-color = 0x000033        # dark blue
-memory_ids = [20, 21, 22, 23, 24, 25, 26, 27]
+**Pinned** — specific presets at exact row/col. Per-button overrides for `color`,
+`text_color`, `text_size`. Pinned positions are skipped by auto-flow.
 
-[[companion.pages]]
-page_num = 40
-page_title = "Day 3"
-color = 0x330000        # dark red
-memory_ids = [40, 41, 42, 43, 44, 45, 46, 47]
+**Template buttons** — reusable non-preset buttons defined in `[[companion.button_templates]]`
+and placed by name in any page's `buttons` list. Per-placement overrides are merged on top.
+Supported actions: `"screen-take"` (fires on both AQ instances), `"label"` (no-action reminder).
+
+### Phase 3 — Smart Text Sizing  ✅ COMPLETE
+
+`smart_wrap = true` in `config.toml` enables automatic font size step-down for "auto" buttons.
+Word-wrap simulation: wraps at spaces; a mid-word break only occurs when a single word exceeds
+the character width for that size. Steps down through `["30", "24", "18", "14", "7"]` until
+the label fits cleanly. Explicit `text_size` values are always passed through unchanged.
+
+Calibrated constants in `companion_updater.py`:
+```python
+CHARS_PER_LINE = {"30": 5, "24": 5, "18": 7, "14": 12, "7": 17}
+MAX_LINES      = {"30": 2, "24": 2, "18": 2, "14": 4,  "7": 8}
 ```
 
-### Phase 3 — Nav Buttons  ✅ COMPLETE
+### Phase 4 — Nav Buttons  ✅ COMPLETE
 
 Nav button positions confirmed and hardcoded in `companion_updater.NAV_POSITIONS`.
 `apply_presets_to_page()` preserves nav buttons when clearing a page and skips
 their positions when placing presets.
 
-### Phase 4 — End-to-End Test  ⏳ PENDING
+### Phase 5 — End-to-End Test  ⏳ PENDING
 
 1. `pip install pyyaml python-dotenv`
 2. `cp config.example.toml config.toml` — fill in page mappings
@@ -213,42 +214,28 @@ Apply a layout, verify on the MV output monitor.
 
 ## Tool 3 — AQ Backup Verify
 
-**Status:** ✅ Complete. Needs on-device validation.
+**Status:** ✅ Code complete. Needs on-device validation.
 
 ### Purpose
-Export the full show config from AQ21, import it to AQ22, then verify both
-units have identical memory lists. Run on demand after any significant change
-to AQ21.
+Verify AQ22 (backup) matches AQ21 (primary) across five categories.
+Read-only — does not modify either unit.
 
-### Steps the tool performs
-1. **Export** — call the LivePremier export API on AQ21 and capture the config payload
-2. **Import** — push that payload to AQ22 via the import API
-3. **Verify** — query memory lists from both units, assert they are identical:
-   - Same number of memories
-   - Same IDs
-   - Same names, in the same order
-4. Report pass/fail clearly. Exit non-zero on any failure.
+### What is verified
 
-### Phase 1 — Find the export/import API endpoints  ⏳ PENDING
+| Check | Details |
+|-------|---------|
+| System info | Firmware version + device type |
+| Inputs | IDs and labels |
+| Screens | IDs, labels, enabled state |
+| Outputs | IDs, labels, output formats |
+| Master Memories | IDs, names, count; no extras on either unit |
 
-The mechanism is unknown. To discover it:
-- Browse `http://127.0.0.1:3003/api/tpp/v1/` for relevant endpoints
-- Check for endpoints like `/config/export`, `/show/save`, `/backup`, etc.
-- May be a file download (GET returns a binary/JSON blob) + file upload (POST)
+Each check reports pass/fail independently. Tool exits non-zero if any check fails.
 
-### Phase 2 — Implement
+### Phase 2 — Test on device  ⏳ PENDING
 
-```
-src/aq_backup_verify/
-  main.py    ← orchestrates export → import → verify
-```
-
-Config: both unit IPs come from `.env` (`AQ_PRIMARY_HOST`, `AQ_BACKUP_HOST`).
-
-### Phase 3 — Test
-
-Run against both live units, verify memory lists match after clone.
-Add to `tests/test_aq_backup_verify.py`.
+Run against both live units. Confirm system info JSON field names (`firmware`,
+`deviceType`) match actual API response. See `tests/test_aq_backup_verify.py`.
 
 ---
 
@@ -273,7 +260,7 @@ tests/
   conftest.py              — live AQ fixture, sample config fixtures
   test_companion_sync.py   — end-to-end: generate config → verify all checks
   test_aq_comms.py         — verify AQ API responses parse correctly
-  test_aq_backup_verify.py         — verify AQ21 and AQ22 memory lists are identical (stub)
+  test_aq_backup_verify.py — verify AQ21 and AQ22 match across all checks
 ```
 
 Tests run against a **live Aquilon** — no mocking. Requires the AQ to be
@@ -284,12 +271,6 @@ if `.env` variables are missing.
 pytest tests/ -v
 pytest tests/test_companion_sync.py::TestPresetButtons -v  # single class
 ```
-
-### Built-in verification in `main.py`
-
-After writing the output file, `main.py` reads it back and runs all checks
-automatically. Prints a pass/fail summary to the terminal. Exits non-zero if
-any check fails — the output file should be considered invalid in that case.
 
 ---
 
@@ -314,6 +295,9 @@ python src/companion_sync/main.py
 # Tool 2 — MV layout
 python src/mv_setup/main.py --config mv_config.toml --layout <name>
 python src/mv_setup/main.py --config mv_config.toml --list
+
+# Tool 3 — Verify backup matches primary
+python src/aq_backup_verify/main.py
 ```
 
 ---
