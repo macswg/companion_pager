@@ -11,7 +11,7 @@ USE THIS TOOL TO: Apply a named MV window layout from an mv_config.toml file.
 DO NOT USE THIS TOOL FOR:
   - Companion config files → use src/companion_sync/main.py
   - Output format setup    → use src/aq_setup/main.py
-  - Cloning AQ21 to AQ22  → use src/aq_clone/main.py
+  - Verifying AQ22 backup → use src/aq_backup_verify/main.py
 
 Usage:
     python src/mv_setup/main.py --config mv_config.toml --layout <name>

@@ -9,7 +9,7 @@ different stages of show prep.
 |------|-------------|---------|-------|
 | **Companion Sync** | `src/companion_sync/main.py` | AQ preset names → Companion buttons | After presets named |
 | **MV Setup** | `src/mv_setup/main.py` | Configure multiviewer window layouts | Show build |
-| **AQ Clone** | `src/aq_clone/main.py` | Export AQ21 config → import to AQ22 → verify both match | On demand |
+| **AQ Backup Verify** | `src/aq_backup_verify/main.py` | Verify AQ22 firmware + memories match AQ21 | On demand |
 
 All tools share `src/common/aquilon_comms.py` as the LivePremier REST + WebSocket API client.
 Each tool is independent — do not mix them up.
@@ -34,7 +34,7 @@ companion_pager/
 │   │   ├── main.py                  ← apply named layout from TOML to device
 │   │   ├── capture.py               ← snapshot device MV memories → TOML
 │   │   └── restore.py               ← restore all MV memories from TOML → device
-│   ├── aq_clone/                    ← TOOL 3: Clone AQ21 config → AQ22
+│   ├── aq_backup_verify/                    ← TOOL 3: Verify AQ22 matches AQ21
 │   │   └── main.py
 │   └── common/                      ← shared (not a tool)
 │       ├── aquilon_comms.py
@@ -211,9 +211,9 @@ Apply a layout, verify on the MV output monitor.
 
 ---
 
-## Tool 3 — AQ Clone
+## Tool 3 — AQ Backup Verify
 
-**Status:** ⚠️ Stub — API mechanism TBD.
+**Status:** ✅ Complete. Needs on-device validation.
 
 ### Purpose
 Export the full show config from AQ21, import it to AQ22, then verify both
@@ -239,7 +239,7 @@ The mechanism is unknown. To discover it:
 ### Phase 2 — Implement
 
 ```
-src/aq_clone/
+src/aq_backup_verify/
   main.py    ← orchestrates export → import → verify
 ```
 
@@ -248,7 +248,7 @@ Config: both unit IPs come from `.env` (`AQ_PRIMARY_HOST`, `AQ_BACKUP_HOST`).
 ### Phase 3 — Test
 
 Run against both live units, verify memory lists match after clone.
-Add to `tests/test_aq_clone.py`.
+Add to `tests/test_aq_backup_verify.py`.
 
 ---
 
@@ -273,7 +273,7 @@ tests/
   conftest.py              — live AQ fixture, sample config fixtures
   test_companion_sync.py   — end-to-end: generate config → verify all checks
   test_aq_comms.py         — verify AQ API responses parse correctly
-  test_aq_clone.py         — verify AQ21 and AQ22 memory lists are identical (stub)
+  test_aq_backup_verify.py         — verify AQ21 and AQ22 memory lists are identical (stub)
 ```
 
 Tests run against a **live Aquilon** — no mocking. Requires the AQ to be

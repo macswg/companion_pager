@@ -49,7 +49,7 @@ Key constraint: nav button positions `(2,7)`, `(3,6)`, `(3,7)` are always skippe
 
 Layout TOML format: `[[layouts]]` blocks with `name`, `mv_id`, `canvas_w/h`, and `[[layouts.windows]]` entries (`widget_id`, `source_type`, `source_id`, `x/y/w/h`).
 
-### Tool 3 — AQ Clone (`src/aq_clone/main.py`)
+### Tool 3 — AQ Clone (`src/aq_backup_verify/main.py`)
 Stub — export/import API endpoints still TBD.
 
 ### Common (`src/common/`)

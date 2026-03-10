@@ -157,7 +157,7 @@ config must be verified before it goes on-site.
 tests/
   test_companion_sync.py   — verifies generated Companion config correctness
   test_aq_comms.py         — verifies AQ API responses parse correctly
-  test_aq_clone.py         — verifies AQ21 and AQ22 memory lists are identical (stub)
+  test_aq_backup_verify.py         — verifies AQ21 and AQ22 memory lists are identical (stub)
   conftest.py              — shared fixtures (live AQ connection, sample configs)
 ```
 

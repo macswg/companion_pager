@@ -109,18 +109,17 @@ w = 320
 h = 270
 ```
 
-### Tool 3 — AQ Clone
-**`src/aq_clone/main.py`**
+### Tool 3 — AQ Backup Verify
+**`src/aq_backup_verify/main.py`**
 
-Exports the full config from AQ21 (primary), imports it to AQ22 (backup), then
-verifies both units have identical memory lists. Run on demand any time AQ21
-changes and the backup needs to match.
+Checks that AQ22 (backup) matches AQ21 (primary) — firmware version and Master
+Memory lists. Run on demand any time you want to confirm the backup is in sync.
 
-**Use for:** Keeping AQ22 in sync with AQ21 after programming.
+**Use for:** Verifying AQ22 matches AQ21 before a show.
 **Does not touch:** Companion configs, output modes, or MV layouts.
 
 ```bash
-python src/aq_clone/main.py
+python src/aq_backup_verify/main.py
 ```
 
 ---
@@ -128,8 +127,8 @@ python src/aq_clone/main.py
 ## Show Prep Workflow
 
 ```
-1. AQ Clone         → push AQ21 config to AQ22 and verify they match
-                      python src/aq_clone/main.py
+1. AQ Backup Verify → confirm AQ22 firmware and memories match AQ21
+                      python src/aq_backup_verify/main.py
 
 2. MV Setup         → apply multiviewer layout from config file
                       python src/mv_setup/main.py --config <file>.toml --layout <name>
@@ -177,7 +176,7 @@ src/
     main.py
     capture.py
     restore.py
-  aq_clone/               ← Tool 3: Clone AQ21 config to AQ22
+  aq_backup_verify/               ← Tool 3: Verify AQ22 matches AQ21
     main.py
   common/                 ← Shared: LivePremier REST API client
     aquilon_comms.py
@@ -186,7 +185,7 @@ tests/
   conftest.py
   test_companion_sync.py
   test_aq_comms.py
-  test_aq_clone.py
+  test_aq_backup_verify.py
 
 example config files for ref/
   nuc-green_2026_draft.companionconfig  — 2025 show reference layout
@@ -208,7 +207,7 @@ PLAN.md              — implementation plan and status
 |------|--------|
 | Companion Sync (`src/companion_sync/`) | Code complete; needs on-device validation |
 | MV Setup (`src/mv_setup/`) | Implemented — applies layouts from `mv_config.toml` |
-| AQ Clone (`src/aq_clone/`) | Verify logic complete; export/import API TBD |
+| AQ Backup Verify (`src/aq_backup_verify/`) | Complete — checks firmware + memory lists |
 | Test suite (`tests/`) | Structure planned, implementation pending |
 
 See `PLAN.md` for details.
