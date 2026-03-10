@@ -247,6 +247,7 @@ def build_preset_button(
     text_color: int = 16777215,   # white
     bgcolor: int = 0,             # black
     smart_wrap: bool = False,
+    label: str | None = None,
 ) -> dict:
     """
     Build a Companion v6 button dict for a single Aquilon preset.
@@ -265,7 +266,8 @@ def build_preset_button(
     Returns:
         Dict matching the Companion v6 button schema.
     """
-    resolved_size = smart_text_size(preset.name, text_size) if smart_wrap else text_size
+    display_label = label if label is not None else preset.name
+    resolved_size = smart_text_size(display_label, text_size) if smart_wrap else text_size
 
     down_actions = [
         {
@@ -283,7 +285,7 @@ def build_preset_button(
     return {
         "type": "button",
         "style": {
-            "text": preset.name,
+            "text": display_label,
             "textExpression": False,
             "size": resolved_size,
             "png64": None,
@@ -328,6 +330,7 @@ def place_preset_button(
     text_color: int = 16777215,
     text_size: str = "auto",
     smart_wrap: bool = False,
+    label: str | None = None,
 ) -> None:
     """
     Place a single preset button at an exact (row, col) position on a page.
@@ -342,10 +345,10 @@ def place_preset_button(
     btn = build_preset_button(
         preset, instance_ids, target=target,
         bgcolor=bgcolor, text_color=text_color, text_size=text_size,
-        smart_wrap=smart_wrap,
+        smart_wrap=smart_wrap, label=label,
     )
     controls.setdefault(str(row), {})[str(col)] = btn
-    logger.debug(f"  [{row}/{col}] pinned memoryId={preset.memory_id} → {preset.name!r}")
+    logger.debug(f"  [{row}/{col}] pinned memoryId={preset.memory_id} → {label or preset.name!r}")
 
 
 def apply_presets_to_page(

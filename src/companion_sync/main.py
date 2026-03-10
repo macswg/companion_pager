@@ -172,7 +172,29 @@ def main() -> None:
                             continue
                         # merge template defaults with any per-placement overrides
                         merged = {**templates[tname], **{k: v for k, v in pin.items() if k not in ("template", "row", "col")}}
-                        place_template_button(config, page_num, row, col, merged, instance_ids)
+                        if merged.get("action") == "preset":
+                            mid = merged.get("memory_id")
+                            if mid is None:
+                                logger.warning(f"Page {page_num}: template {tname!r} has action='preset' but no memory_id, skipping.")
+                                continue
+                            if mid not in preset_map:
+                                logger.warning(f"Page {page_num}: template {tname!r} memory_id {mid} not found on device, skipping.")
+                                continue
+                            # Use explicit label if set, else fall back to device name.
+                            label = merged.get("label") or None
+                            place_preset_button(
+                                config, page_num, row, col,
+                                preset=preset_map[mid],
+                                instance_ids=instance_ids,
+                                target=target,
+                                bgcolor=merged.get("color", bgcolor),
+                                text_color=merged.get("text_color", 16777215),
+                                text_size=merged.get("text_size", "auto"),
+                                smart_wrap=smart_wrap,
+                                label=label,
+                            )
+                        else:
+                            place_template_button(config, page_num, row, col, merged, instance_ids)
                     else:
                         mid = pin["memory_id"]
                         if mid not in preset_map:

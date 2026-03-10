@@ -57,6 +57,7 @@ black            = 0x000000
 # Supported actions:
 #   "screen-take"  fires /api/tpp/v1/screens/{screenId}/take on both AQ instances
 #   "label"        no-action reminder/note button (show_topbar hides the topbar)
+#   "preset"       fires load-master-memory for memory_id on both AQ instances (label pulled from device)
 
 [[companion.button_templates]]
 name      = "take"
@@ -75,6 +76,42 @@ color      = 0x000000
 text_color = 0xFF00FF
 text_size  = "auto"
 show_topbar = false
+
+[[companion.button_templates]]
+name       = "p76"
+action     = "preset"
+memory_id  = 76
+text_color = 0xCCCC00
+text_size  = "14"
+
+[[companion.button_templates]]
+name       = "p69"
+action     = "preset"
+memory_id  = 69
+
+[[companion.button_templates]]
+name       = "p68"
+action     = "preset"
+memory_id  = 68
+text_color = 0xFF0000
+
+[[companion.button_templates]]
+name       = "p51"
+action     = "preset"
+memory_id  = 51
+color      = 0x330000
+
+[[companion.button_templates]]
+name       = "p20"
+action     = "preset"
+memory_id  = 20
+text_size  = "14"
+
+[[companion.button_templates]]
+name       = "p49"
+action     = "preset"
+memory_id  = 49
+color      = 0x330000
 
 [[companion.pages]]
 page_num = 1
