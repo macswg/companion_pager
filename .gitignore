@@ -25,6 +25,12 @@ env/
 # Secrets & credentials
 .env
 !.env.example
+
+# Show-specific config files (gitignored; examples are committed)
+config.toml
+!config.example.toml
+mv_config*.toml
+!mv_config.example.toml
 secret/
 *.json.key
 

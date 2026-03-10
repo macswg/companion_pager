@@ -58,20 +58,30 @@ def generated_config(app_config, live_presets, instance_ids, tmp_path_factory):
     template_path = REPO_ROOT / app_config["companion"]["template_path"]
     config = load_config(template_path)
 
-    page_num = str(app_config["companion"].get("page_num", 1))
-    page_title = app_config["companion"].get("page_title", "Aquilon Presets")
     cols_per_row = app_config["companion"].get("cols_per_row", 8)
     target = app_config["companion"].get("target", "preview")
+    pages_cfg = app_config["companion"].get("pages", [])
 
-    update_page_title(config, page_num, page_title)
-    apply_presets_to_page(
-        config,
-        page_num=page_num,
-        presets=live_presets,
-        instance_ids=instance_ids,
-        cols_per_row=cols_per_row,
-        target=target,
-    )
+    preset_map_all = {p.memory_id: p for p in live_presets}
+
+    for page_cfg in pages_cfg:
+        page_num = page_cfg["page_num"]
+        page_title = page_cfg.get("page_title", f"Page {page_num}")
+        bgcolor = page_cfg.get("color", 0)
+        memory_ids = page_cfg.get("memory_ids", [])
+        page_presets = [preset_map_all[mid] for mid in memory_ids if mid in preset_map_all]
+        if not page_presets:
+            continue
+        update_page_title(config, page_num, page_title)
+        apply_presets_to_page(
+            config,
+            page_num=page_num,
+            presets=page_presets,
+            instance_ids=instance_ids,
+            cols_per_row=cols_per_row,
+            target=target,
+            bgcolor=bgcolor,
+        )
 
     out = tmp_path_factory.mktemp("output") / "test_output.companionconfig"
     save_config(config, out)
@@ -88,9 +98,25 @@ def preset_map(live_presets) -> dict[int, str]:
 
 
 @pytest.fixture(scope="module")
-def page_controls(generated_config, app_config) -> dict:
-    page_num = str(app_config["companion"].get("page_num", 1))
-    return generated_config["pages"][page_num]["controls"]
+def all_page_controls(generated_config, app_config) -> list[dict]:
+    """List of controls dicts for every configured page that has memory_ids."""
+    pages_cfg = app_config["companion"].get("pages", [])
+    result = []
+    for page_cfg in pages_cfg:
+        if not page_cfg.get("memory_ids"):
+            continue
+        page_num = str(page_cfg["page_num"])
+        controls = generated_config.get("pages", {}).get(page_num, {}).get("controls", {})
+        result.append(controls)
+    return result
+
+
+@pytest.fixture(scope="module")
+def page_controls(all_page_controls) -> dict:
+    """Controls from the first configured page (for nav button tests)."""
+    if not all_page_controls:
+        pytest.skip("No configured pages with memory_ids in config.toml")
+    return all_page_controls[0]
 
 
 # ---------------------------------------------------------------------------
@@ -98,7 +124,7 @@ def page_controls(generated_config, app_config) -> dict:
 # ---------------------------------------------------------------------------
 
 class TestPresetButtons:
-    """Verify every generated preset button is correct."""
+    """Verify every generated preset button is correct (checks all configured pages)."""
 
     def _collect_preset_buttons(self, controls: dict) -> list[tuple[int, int, dict]]:
         """Return (row, col, button) for every button that has a load-memory action."""
@@ -110,69 +136,80 @@ class TestPresetButtons:
                     buttons.append((int(row_k), int(col_k), btn))
         return buttons
 
-    def test_all_expected_presets_have_buttons(self, page_controls, preset_map, app_config):
-        """Every memory in the grouping config must have a button."""
-        preset_buttons = self._collect_preset_buttons(page_controls)
-        found_ids = set()
-        for _, _, btn in preset_buttons:
-            for action in get_down_actions(btn):
-                if action.get("action") == "/api/tpp/v1/load-master-memory":
-                    found_ids.add(action["options"]["memoryId"])
-                    break
+    def test_all_expected_presets_have_buttons(self, all_page_controls, preset_map, app_config):
+        """Every memory_id in each page's config must have a corresponding button."""
+        pages_cfg = app_config["companion"].get("pages", [])
+        for page_cfg, controls in zip(pages_cfg, all_page_controls):
+            memory_ids = page_cfg.get("memory_ids", [])
+            if not memory_ids:
+                continue
 
-        for memory_id in preset_map:
-            assert memory_id in found_ids, (
-                f"Memory {memory_id} ({preset_map[memory_id]!r}) has no button in the config"
-            )
+            found_ids = set()
+            for _, _, btn in self._collect_preset_buttons(controls):
+                for action in get_down_actions(btn):
+                    if action.get("action") == "/api/tpp/v1/load-master-memory":
+                        found_ids.add(action["options"]["memoryId"])
+                        break
 
-    def test_button_labels_match_preset_names(self, page_controls, preset_map):
-        """Button style.text must exactly match the AQ memory name."""
-        for row_k, row in page_controls.items():
-            for col_k, btn in row.items():
-                actions = get_down_actions(btn)
-                load_actions = [a for a in actions if a.get("action") == "/api/tpp/v1/load-master-memory"]
-                if not load_actions:
-                    continue
-
-                memory_id = load_actions[0]["options"]["memoryId"]
-                expected_name = preset_map.get(memory_id)
-                actual_label = btn.get("style", {}).get("text", "")
-
-                assert actual_label == expected_name, (
-                    f"Button [{row_k}/{col_k}] label mismatch: "
-                    f"got {actual_label!r}, expected {expected_name!r} (memoryId={memory_id})"
+            for memory_id in memory_ids:
+                if memory_id not in preset_map:
+                    continue  # not on device — tested elsewhere
+                assert memory_id in found_ids, (
+                    f"Page {page_cfg['page_num']}: "
+                    f"Memory {memory_id} ({preset_map[memory_id]!r}) has no button"
                 )
 
-    def test_correct_memory_id_on_every_button(self, page_controls, preset_map):
-        """Every action's memoryId must exist in the AQ memory list."""
-        for row_k, row in page_controls.items():
-            for col_k, btn in row.items():
-                for action in get_down_actions(btn):
-                    if action.get("action") != "/api/tpp/v1/load-master-memory":
+    def test_button_labels_match_preset_names(self, all_page_controls, preset_map):
+        """Button style.text must exactly match the AQ memory name."""
+        for controls in all_page_controls:
+            for row_k, row in controls.items():
+                for col_k, btn in row.items():
+                    actions = get_down_actions(btn)
+                    load_actions = [a for a in actions if a.get("action") == "/api/tpp/v1/load-master-memory"]
+                    if not load_actions:
                         continue
-                    memory_id = action["options"]["memoryId"]
-                    assert memory_id in preset_map, (
-                        f"Button [{row_k}/{col_k}] has unknown memoryId {memory_id} "
-                        f"— not found in AQ memory list"
+
+                    memory_id = load_actions[0]["options"]["memoryId"]
+                    expected_name = preset_map.get(memory_id)
+                    actual_label = btn.get("style", {}).get("text", "")
+
+                    assert actual_label == expected_name, (
+                        f"Button [{row_k}/{col_k}] label mismatch: "
+                        f"got {actual_label!r}, expected {expected_name!r} (memoryId={memory_id})"
                     )
 
-    def test_both_aq_instances_on_every_preset_button(self, page_controls, instance_ids):
+    def test_correct_memory_id_on_every_button(self, all_page_controls, preset_map):
+        """Every action's memoryId must exist in the AQ memory list."""
+        for controls in all_page_controls:
+            for row_k, row in controls.items():
+                for col_k, btn in row.items():
+                    for action in get_down_actions(btn):
+                        if action.get("action") != "/api/tpp/v1/load-master-memory":
+                            continue
+                        memory_id = action["options"]["memoryId"]
+                        assert memory_id in preset_map, (
+                            f"Button [{row_k}/{col_k}] has unknown memoryId {memory_id} "
+                            f"— not found in AQ memory list"
+                        )
+
+    def test_both_aq_instances_on_every_preset_button(self, all_page_controls, instance_ids):
         """Every preset button must fire on all AQ instances."""
-        for row_k, row in page_controls.items():
-            for col_k, btn in row.items():
-                load_actions = [
-                    a for a in get_down_actions(btn)
-                    if a.get("action") == "/api/tpp/v1/load-master-memory"
-                ]
-                if not load_actions:
-                    continue
+        for controls in all_page_controls:
+            for row_k, row in controls.items():
+                for col_k, btn in row.items():
+                    load_actions = [
+                        a for a in get_down_actions(btn)
+                        if a.get("action") == "/api/tpp/v1/load-master-memory"
+                    ]
+                    if not load_actions:
+                        continue
 
-                fired_instances = {a["instance"] for a in load_actions}
-                for inst_id in instance_ids:
-                    assert inst_id in fired_instances, (
-                        f"Button [{row_k}/{col_k}] is missing action for instance {inst_id} "
-                        f"(fires on {fired_instances}, expected all of {instance_ids})"
-                    )
+                    fired_instances = {a["instance"] for a in load_actions}
+                    for inst_id in instance_ids:
+                        assert inst_id in fired_instances, (
+                            f"Button [{row_k}/{col_k}] is missing action for instance {inst_id} "
+                            f"(fires on {fired_instances}, expected all of {instance_ids})"
+                        )
 
 
 class TestNavButtons:
@@ -185,9 +222,8 @@ class TestNavButtons:
         found = {}
         for row_k, row in controls.items():
             for col_k, btn in row.items():
-                style = btn.get("style")
-                if style in self.NAV_TYPES:
-                    found[style] = (int(row_k), int(col_k))
+                if isinstance(btn, dict) and btn.get("type") in self.NAV_TYPES:
+                    found[btn["type"]] = (int(row_k), int(col_k))
         return found
 
     def test_pageup_button_present(self, page_controls):
@@ -202,19 +238,19 @@ class TestNavButtons:
         nav = self._get_nav_positions(page_controls)
         assert "pagenum" in nav, "No 'pagenum' nav button found on the page"
 
-    def test_preset_buttons_do_not_overwrite_nav(self, page_controls):
-        """No preset button should be at a nav button position."""
-        nav = self._get_nav_positions(page_controls)
-        nav_positions = set(nav.values())
+    def test_preset_buttons_do_not_overwrite_nav(self, all_page_controls):
+        """No preset button should sit at a nav button position on any page."""
+        for controls in all_page_controls:
+            nav = self._get_nav_positions(controls)
+            nav_positions = set(nav.values())
 
-        for row_k, row in page_controls.items():
-            for col_k, btn in row.items():
-                pos = (int(row_k), int(col_k))
-                if pos not in nav_positions:
-                    continue
-                # This position is a nav slot — make sure it's still a nav button
-                style = btn.get("style")
-                assert style in self.NAV_TYPES, (
-                    f"Nav position {pos} was overwritten by a non-nav button "
-                    f"(style={style!r})"
-                )
+            for row_k, row in controls.items():
+                for col_k, btn in row.items():
+                    pos = (int(row_k), int(col_k))
+                    if pos not in nav_positions:
+                        continue
+                    btn_type = btn.get("type") if isinstance(btn, dict) else None
+                    assert btn_type in self.NAV_TYPES, (
+                        f"Nav position {pos} was overwritten by a non-nav button "
+                        f"(type={btn_type!r})"
+                    )

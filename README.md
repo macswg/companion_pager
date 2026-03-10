@@ -27,35 +27,89 @@ python src/companion_sync/main.py
 
 ---
 
-### Tool 2 — AQ Setup
-**`src/aq_setup/main.py`**
-
-Configures the Aquilon device itself: create/update Master Memories, set output
-modes, configure inputs, save device state.
-
-**Use for:** Programming the Aquilon before a show.
-**Does not touch:** Companion configs or multiviewer layouts.
-
-```bash
-python src/aq_setup/main.py
-```
-
----
-
-### Tool 3 — MV Setup
+### Tool 2 — MV Setup
 **`src/mv_setup/main.py`**
 
-Configures multiviewer window layouts on Aquilon outputs: position and size MV
-windows, assign sources, set titling.
+Applies a named multiviewer layout to the Aquilon: window positions, sizes, and
+source assignments (inputs, program bus, preview bus). Layouts are defined in a
+separate TOML file so multiple configs can coexist for different shows or days.
 
 **Use for:** Building the multiviewer layout on Aquilon outputs.
 **Does not touch:** Companion configs or device presets.
 
+MV layouts live in their own config file — keep one per show:
+
 ```bash
-python src/mv_setup/main.py
+# Copy the example to get started
+cp mv_config.example.toml mv_config.toml
+
+# Or capture all MV memories from a live Aquilon into a named file
+# (see "Capturing MV layouts" below)
+
+# List available layouts in a config file
+python src/mv_setup/main.py --config coachella_mv_config.toml --list
+
+# Apply a layout
+python src/mv_setup/main.py --config coachella_mv_config.toml --layout 10_mv_all_pgm_bot
 ```
 
-### Tool 4 — AQ Clone
+#### Capturing MV layouts from a live Aquilon
+
+To snapshot all MV memories from a programmed device and save them as a
+portable config file, run the capture script:
+
+```bash
+python src/mv_setup/capture.py --out coachella_mv_config.toml
+```
+
+This reads every programmed MV memory from the device and writes a TOML file
+with one `[[layouts]]` block per memory. The resulting file can be checked in
+and used to restore layouts on any Aquilon.
+
+#### Restoring MV layouts to a new Aquilon
+
+To push all memories from a captured config file back to a device, run the
+restore script:
+
+```bash
+python src/mv_setup/restore.py --config coachella_mv_config.toml
+```
+
+For each `[[layouts]]` block the script:
+1. Applies the window layout to the live MV output (sources, positions, sizes)
+2. Sets the memory slot label
+3. Triggers an in-device save so the layout is stored in the bank
+
+Preview what will happen without touching the device:
+
+```bash
+python src/mv_setup/restore.py --config coachella_mv_config.toml --dry-run
+```
+
+Layout names must start with the slot number followed by an underscore
+(e.g. `01_inputs`, `10_mv_all_pgm_bot`).  Files produced by `capture.py`
+always follow this format.
+
+#### Layout config format
+
+```toml
+[[layouts]]
+name     = "all_inputs"   # used with --layout
+mv_id    = 1              # which MV output (1-based)
+canvas_w = 1920           # MV canvas size in pixels
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1           # window slot (1-based)
+source_type = "input"     # input | screen-program | screen-preview | image | none
+source_id   = 1           # source number (1-based); omit for "none"
+x = 0                     # position and size in canvas pixels
+y = 0
+w = 320
+h = 270
+```
+
+### Tool 3 — AQ Clone
 **`src/aq_clone/main.py`**
 
 Exports the full config from AQ21 (primary), imports it to AQ22 (backup), then
@@ -74,20 +128,17 @@ python src/aq_clone/main.py
 ## Show Prep Workflow
 
 ```
-1. AQ Setup         → configure outputs on the Aquilon
-                      python src/aq_setup/main.py
-
-2. AQ Clone         → push AQ21 config to AQ22 and verify they match
+1. AQ Clone         → push AQ21 config to AQ22 and verify they match
                       python src/aq_clone/main.py
 
-3. MV Setup         → build multiviewer layouts on Aquilon outputs
-                      python src/mv_setup/main.py
+2. MV Setup         → apply multiviewer layout from config file
+                      python src/mv_setup/main.py --config <file>.toml --layout <name>
 
-4. Companion Sync   → pull preset names into Companion buttons
+3. Companion Sync   → pull preset names into Companion buttons
                       python src/companion_sync/main.py
                       → import outputs/updated.companionconfig into Companion
 
-5. Test             → verify every button is correct
+4. Test             → verify every button is correct
                       pytest tests/ -v
 ```
 
@@ -107,6 +158,10 @@ cp .env.example .env
 # Everything else (page layout, file paths, output settings) goes in config.toml
 cp config.example.toml config.toml
 # Edit config.toml as needed
+
+# MV layouts go in a separate file (one per show)
+cp mv_config.example.toml mv_config.toml
+# Or capture from a live device: python src/mv_setup/capture.py --out mv_config.toml
 ```
 
 ---
@@ -118,11 +173,11 @@ src/
   companion_sync/         ← Tool 1: Companion preset sync
     main.py
     companion_updater.py
-  aq_setup/               ← Tool 2: Aquilon output configuration
+  mv_setup/               ← Tool 2: Multiviewer layout configuration
     main.py
-  mv_setup/               ← Tool 3: Multiviewer layout configuration
-    main.py
-  aq_clone/               ← Tool 4: Clone AQ21 config to AQ22
+    capture.py
+    restore.py
+  aq_clone/               ← Tool 3: Clone AQ21 config to AQ22
     main.py
   common/                 ← Shared: LivePremier REST API client
     aquilon_comms.py
@@ -136,9 +191,11 @@ tests/
 example config files for ref/
   nuc-green_2026_draft.companionconfig  — 2025 show reference layout
 
-outputs/             — generated Companion configs (gitignored)
-logs/                — log files (gitignored)
-config.example.toml  — reference config (copy → config.toml)
+outputs/              — generated Companion configs (gitignored)
+logs/                 — log files (gitignored)
+config.example.toml   — reference config (copy → config.toml)
+mv_config.example.toml — reference MV layout config (copy → mv_config.toml)
+coachella_mv_config.toml — captured Coachella MV memories (36 layouts)
 PRD.md               — product requirements
 PLAN.md              — implementation plan and status
 ```
@@ -149,10 +206,9 @@ PLAN.md              — implementation plan and status
 
 | Tool | Status |
 |------|--------|
-| Companion Sync (`src/companion_sync/`) | Code complete; API endpoint needs on-device confirmation |
-| AQ Setup (`src/aq_setup/`) | Stub only — scope defined, implementation pending |
-| MV Setup (`src/mv_setup/`) | Stub only — scope defined, implementation pending |
-| AQ Clone (`src/aq_clone/`) | Stub only — export/import API mechanism TBD |
+| Companion Sync (`src/companion_sync/`) | Code complete; needs on-device validation |
+| MV Setup (`src/mv_setup/`) | Implemented — applies layouts from `mv_config.toml` |
+| AQ Clone (`src/aq_clone/`) | Verify logic complete; export/import API TBD |
 | Test suite (`tests/`) | Structure planned, implementation pending |
 
 See `PLAN.md` for details.

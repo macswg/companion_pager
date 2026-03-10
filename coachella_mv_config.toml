@@ -1,0 +1,5464 @@
+# coachella_mv_config.toml
+# All 36 MV memories captured from the Aquilon on 2026-03-09.
+# Each [[layouts]] block is one named memory that can be applied via mv_setup.
+#
+# Usage:
+#   python src/mv_setup/main.py --config coachella_mv_config.toml --list
+#   python src/mv_setup/main.py --config coachella_mv_config.toml --layout <name>
+
+[[layouts]]
+name     = "01_inputs"
+# Memory slot 1: "INPUTS"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 27
+source_type = "input"
+source_id   = 1
+x = 0
+y = 0
+w = 320
+h = 270
+
+[[layouts.windows]]
+widget_id   = 28
+source_type = "input"
+source_id   = 2
+x = 320
+y = 0
+w = 320
+h = 270
+
+[[layouts.windows]]
+widget_id   = 29
+source_type = "input"
+source_id   = 3
+x = 640
+y = 0
+w = 320
+h = 270
+
+[[layouts.windows]]
+widget_id   = 30
+source_type = "input"
+source_id   = 4
+x = 960
+y = 0
+w = 320
+h = 270
+
+[[layouts.windows]]
+widget_id   = 31
+source_type = "input"
+source_id   = 5
+x = 1280
+y = 0
+w = 320
+h = 270
+
+[[layouts.windows]]
+widget_id   = 32
+source_type = "input"
+source_id   = 6
+x = 1600
+y = 0
+w = 320
+h = 270
+
+[[layouts.windows]]
+widget_id   = 33
+source_type = "input"
+source_id   = 7
+x = 0
+y = 270
+w = 320
+h = 270
+
+[[layouts.windows]]
+widget_id   = 34
+source_type = "input"
+source_id   = 8
+x = 320
+y = 270
+w = 320
+h = 270
+
+[[layouts.windows]]
+widget_id   = 35
+source_type = "input"
+source_id   = 9
+x = 640
+y = 270
+w = 320
+h = 270
+
+[[layouts.windows]]
+widget_id   = 36
+source_type = "input"
+source_id   = 10
+x = 960
+y = 270
+w = 320
+h = 270
+
+[[layouts.windows]]
+widget_id   = 37
+source_type = "input"
+source_id   = 11
+x = 1280
+y = 270
+w = 320
+h = 270
+
+[[layouts.windows]]
+widget_id   = 38
+source_type = "input"
+source_id   = 12
+x = 1600
+y = 270
+w = 320
+h = 270
+
+[[layouts.windows]]
+widget_id   = 39
+source_type = "input"
+source_id   = 13
+x = 0
+y = 540
+w = 320
+h = 270
+
+[[layouts.windows]]
+widget_id   = 40
+source_type = "input"
+source_id   = 14
+x = 320
+y = 540
+w = 320
+h = 270
+
+[[layouts.windows]]
+widget_id   = 41
+source_type = "input"
+source_id   = 15
+x = 640
+y = 540
+w = 320
+h = 270
+
+[[layouts.windows]]
+widget_id   = 42
+source_type = "input"
+source_id   = 16
+x = 960
+y = 540
+w = 320
+h = 270
+
+[[layouts.windows]]
+widget_id   = 43
+source_type = "input"
+source_id   = 17
+x = 1280
+y = 540
+w = 320
+h = 270
+
+[[layouts.windows]]
+widget_id   = 44
+source_type = "input"
+source_id   = 18
+x = 1600
+y = 540
+w = 320
+h = 270
+
+[[layouts.windows]]
+widget_id   = 45
+source_type = "input"
+source_id   = 19
+x = 0
+y = 810
+w = 320
+h = 270
+
+[[layouts.windows]]
+widget_id   = 46
+source_type = "input"
+source_id   = 20
+x = 320
+y = 810
+w = 320
+h = 270
+
+[[layouts.windows]]
+widget_id   = 47
+source_type = "input"
+source_id   = 21
+x = 640
+y = 810
+w = 320
+h = 270
+
+[[layouts.windows]]
+widget_id   = 48
+source_type = "input"
+source_id   = 22
+x = 960
+y = 810
+w = 320
+h = 270
+
+[[layouts.windows]]
+widget_id   = 49
+source_type = "input"
+source_id   = 23
+x = 1280
+y = 810
+w = 320
+h = 270
+
+[[layouts.windows]]
+widget_id   = 50
+source_type = "input"
+source_id   = 24
+x = 1600
+y = 810
+w = 320
+h = 270
+
+[[layouts]]
+name     = "02_inputs_with_label"
+# Memory slot 2: "INPUTS with label"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 27
+source_type = "input"
+source_id   = 1
+x = 0
+y = 0
+w = 320
+h = 216
+
+[[layouts.windows]]
+widget_id   = 28
+source_type = "input"
+source_id   = 2
+x = 320
+y = 0
+w = 320
+h = 216
+
+[[layouts.windows]]
+widget_id   = 29
+source_type = "input"
+source_id   = 3
+x = 640
+y = 0
+w = 320
+h = 216
+
+[[layouts.windows]]
+widget_id   = 30
+source_type = "input"
+source_id   = 4
+x = 960
+y = 0
+w = 320
+h = 216
+
+[[layouts.windows]]
+widget_id   = 31
+source_type = "input"
+source_id   = 5
+x = 1280
+y = 0
+w = 320
+h = 216
+
+[[layouts.windows]]
+widget_id   = 32
+source_type = "input"
+source_id   = 6
+x = 1600
+y = 0
+w = 320
+h = 216
+
+[[layouts.windows]]
+widget_id   = 33
+source_type = "input"
+source_id   = 7
+x = 0
+y = 216
+w = 320
+h = 216
+
+[[layouts.windows]]
+widget_id   = 34
+source_type = "input"
+source_id   = 8
+x = 320
+y = 216
+w = 320
+h = 216
+
+[[layouts.windows]]
+widget_id   = 35
+source_type = "input"
+source_id   = 9
+x = 640
+y = 216
+w = 320
+h = 216
+
+[[layouts.windows]]
+widget_id   = 36
+source_type = "input"
+source_id   = 10
+x = 960
+y = 216
+w = 320
+h = 216
+
+[[layouts.windows]]
+widget_id   = 37
+source_type = "input"
+source_id   = 11
+x = 1280
+y = 216
+w = 320
+h = 216
+
+[[layouts.windows]]
+widget_id   = 38
+source_type = "input"
+source_id   = 12
+x = 1600
+y = 216
+w = 320
+h = 216
+
+[[layouts.windows]]
+widget_id   = 39
+source_type = "input"
+source_id   = 13
+x = 0
+y = 432
+w = 320
+h = 216
+
+[[layouts.windows]]
+widget_id   = 40
+source_type = "input"
+source_id   = 14
+x = 320
+y = 432
+w = 320
+h = 216
+
+[[layouts.windows]]
+widget_id   = 41
+source_type = "input"
+source_id   = 15
+x = 640
+y = 432
+w = 320
+h = 216
+
+[[layouts.windows]]
+widget_id   = 42
+source_type = "input"
+source_id   = 16
+x = 960
+y = 432
+w = 320
+h = 216
+
+[[layouts.windows]]
+widget_id   = 43
+source_type = "input"
+source_id   = 17
+x = 1280
+y = 432
+w = 320
+h = 216
+
+[[layouts.windows]]
+widget_id   = 44
+source_type = "input"
+source_id   = 18
+x = 1600
+y = 432
+w = 320
+h = 216
+
+[[layouts.windows]]
+widget_id   = 45
+source_type = "input"
+source_id   = 19
+x = 0
+y = 648
+w = 320
+h = 216
+
+[[layouts.windows]]
+widget_id   = 46
+source_type = "input"
+source_id   = 20
+x = 320
+y = 648
+w = 320
+h = 216
+
+[[layouts.windows]]
+widget_id   = 47
+source_type = "input"
+source_id   = 21
+x = 640
+y = 648
+w = 320
+h = 216
+
+[[layouts.windows]]
+widget_id   = 48
+source_type = "input"
+source_id   = 22
+x = 960
+y = 648
+w = 320
+h = 216
+
+[[layouts.windows]]
+widget_id   = 49
+source_type = "input"
+source_id   = 23
+x = 1280
+y = 648
+w = 320
+h = 216
+
+[[layouts.windows]]
+widget_id   = 50
+source_type = "input"
+source_id   = 24
+x = 1600
+y = 648
+w = 320
+h = 216
+
+[[layouts.windows]]
+widget_id   = 51
+source_type = "image"
+source_id   = 35
+x = 0
+y = 872
+w = 1920
+h = 200
+
+[[layouts]]
+name     = "05_pgm_full"
+# Memory slot 5: "PGM FULL"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1
+source_type = "screen-program"
+source_id   = 1
+x = 0
+y = 0
+w = 1920
+h = 540
+
+[[layouts.windows]]
+widget_id   = 2
+source_type = "screen-preview"
+source_id   = 1
+x = 0
+y = 540
+w = 1920
+h = 540
+
+[[layouts]]
+name     = "06_pgm_bottom"
+# Memory slot 6: "PGM bottom"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1
+source_type = "screen-program"
+source_id   = 1
+x = 0
+y = 505
+w = 1920
+h = 285
+
+[[layouts.windows]]
+widget_id   = 2
+source_type = "screen-preview"
+source_id   = 1
+x = 0
+y = 792
+w = 1920
+h = 285
+
+[[layouts.windows]]
+widget_id   = 51
+source_type = "image"
+source_id   = 35
+x = 0
+y = 0
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "07_pgm_top"
+# Memory slot 7: "PGM top"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1
+source_type = "screen-program"
+source_id   = 1
+x = 0
+y = 2
+w = 1920
+h = 285
+
+[[layouts.windows]]
+widget_id   = 2
+source_type = "screen-preview"
+source_id   = 1
+x = 0
+y = 287
+w = 1920
+h = 285
+
+[[layouts.windows]]
+widget_id   = 51
+source_type = "image"
+source_id   = 35
+x = 0
+y = 984
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "09_mv_all_pgm_top"
+# Memory slot 9: "MV ALL PGM TOP"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1
+source_type = "input"
+source_id   = 1
+x = 0
+y = 502
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 2
+source_type = "input"
+source_id   = 2
+x = 320
+y = 502
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 3
+source_type = "input"
+source_id   = 3
+x = 640
+y = 502
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 4
+source_type = "input"
+source_id   = 4
+x = 960
+y = 502
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 5
+source_type = "input"
+source_id   = 5
+x = 1280
+y = 502
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 6
+source_type = "input"
+source_id   = 6
+x = 1600
+y = 502
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 7
+source_type = "input"
+source_id   = 7
+x = 0
+y = 622
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 8
+source_type = "input"
+source_id   = 8
+x = 320
+y = 622
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 9
+source_type = "input"
+source_id   = 9
+x = 640
+y = 622
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 10
+source_type = "input"
+source_id   = 10
+x = 960
+y = 622
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 11
+source_type = "input"
+source_id   = 11
+x = 1280
+y = 622
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 12
+source_type = "input"
+source_id   = 12
+x = 1600
+y = 622
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 13
+source_type = "input"
+source_id   = 13
+x = 0
+y = 742
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 14
+source_type = "input"
+source_id   = 14
+x = 320
+y = 742
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 15
+source_type = "input"
+source_id   = 15
+x = 640
+y = 742
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 16
+source_type = "input"
+source_id   = 16
+x = 960
+y = 742
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 17
+source_type = "input"
+source_id   = 17
+x = 1280
+y = 742
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 18
+source_type = "input"
+source_id   = 18
+x = 1600
+y = 742
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 19
+source_type = "input"
+source_id   = 19
+x = 0
+y = 862
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 20
+source_type = "input"
+source_id   = 20
+x = 320
+y = 862
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 21
+source_type = "input"
+source_id   = 21
+x = 640
+y = 862
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 22
+source_type = "input"
+source_id   = 22
+x = 960
+y = 862
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 23
+source_type = "input"
+source_id   = 23
+x = 1280
+y = 862
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 24
+source_type = "input"
+source_id   = 24
+x = 1600
+y = 862
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 25
+source_type = "screen-program"
+source_id   = 1
+x = 0
+y = 0
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 26
+source_type = "screen-preview"
+source_id   = 1
+x = 0
+y = 250
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 984
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "10_mv_all_pgm_bot"
+# Memory slot 10: "MV ALL PGM BOT"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1
+source_type = "input"
+source_id   = 1
+x = 0
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 2
+source_type = "input"
+source_id   = 2
+x = 320
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 3
+source_type = "input"
+source_id   = 3
+x = 640
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 4
+source_type = "input"
+source_id   = 4
+x = 960
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 5
+source_type = "input"
+source_id   = 5
+x = 1280
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 6
+source_type = "input"
+source_id   = 6
+x = 1600
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 7
+source_type = "input"
+source_id   = 7
+x = 0
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 8
+source_type = "input"
+source_id   = 8
+x = 320
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 9
+source_type = "input"
+source_id   = 9
+x = 640
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 10
+source_type = "input"
+source_id   = 10
+x = 960
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 11
+source_type = "input"
+source_id   = 11
+x = 1280
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 12
+source_type = "input"
+source_id   = 12
+x = 1600
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 13
+source_type = "input"
+source_id   = 13
+x = 0
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 14
+source_type = "input"
+source_id   = 14
+x = 320
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 15
+source_type = "input"
+source_id   = 15
+x = 640
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 16
+source_type = "input"
+source_id   = 16
+x = 960
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 17
+source_type = "input"
+source_id   = 17
+x = 1280
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 18
+source_type = "input"
+source_id   = 18
+x = 1600
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 19
+source_type = "input"
+source_id   = 19
+x = 0
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 20
+source_type = "input"
+source_id   = 20
+x = 320
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 21
+source_type = "input"
+source_id   = 21
+x = 640
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 22
+source_type = "input"
+source_id   = 22
+x = 960
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 23
+source_type = "input"
+source_id   = 23
+x = 1280
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 24
+source_type = "input"
+source_id   = 24
+x = 1600
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 25
+source_type = "screen-program"
+source_id   = 1
+x = 0
+y = 580
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 26
+source_type = "screen-preview"
+source_id   = 1
+x = 0
+y = 830
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 0
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "11_mv_all_pgm_bot_2025"
+# Memory slot 11: "MV ALL PGM BOT 2025"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1
+source_type = "input"
+source_id   = 1
+x = 0
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 2
+source_type = "input"
+source_id   = 2
+x = 320
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 3
+source_type = "input"
+source_id   = 3
+x = 640
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 4
+source_type = "input"
+source_id   = 4
+x = 960
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 5
+source_type = "input"
+source_id   = 5
+x = 1280
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 6
+source_type = "input"
+source_id   = 6
+x = 1600
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 7
+source_type = "input"
+source_id   = 7
+x = 0
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 8
+source_type = "input"
+source_id   = 8
+x = 320
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 9
+source_type = "input"
+source_id   = 9
+x = 640
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 10
+source_type = "input"
+source_id   = 10
+x = 960
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 11
+source_type = "input"
+source_id   = 11
+x = 1280
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 12
+source_type = "input"
+source_id   = 12
+x = 1600
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 13
+source_type = "input"
+source_id   = 14
+x = 0
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 14
+source_type = "input"
+source_id   = 15
+x = 320
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 15
+source_type = "input"
+source_id   = 16
+x = 640
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 16
+source_type = "input"
+source_id   = 17
+x = 960
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 17
+source_type = "none"
+x = 1280
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 18
+source_type = "input"
+source_id   = 23
+x = 1600
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 19
+source_type = "input"
+source_id   = 18
+x = 0
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 20
+source_type = "input"
+source_id   = 19
+x = 320
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 21
+source_type = "input"
+source_id   = 20
+x = 640
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 22
+source_type = "input"
+source_id   = 21
+x = 960
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 23
+source_type = "input"
+source_id   = 22
+x = 1280
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 24
+source_type = "input"
+source_id   = 24
+x = 1600
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 25
+source_type = "screen-program"
+source_id   = 1
+x = 0
+y = 580
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 26
+source_type = "screen-preview"
+source_id   = 1
+x = 0
+y = 830
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 0
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "12_mv_all_pgm_top_2025"
+# Memory slot 12: "MV ALL PGM TOP 2025"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1
+source_type = "input"
+source_id   = 1
+x = 0
+y = 502
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 2
+source_type = "input"
+source_id   = 2
+x = 320
+y = 502
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 3
+source_type = "input"
+source_id   = 3
+x = 640
+y = 502
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 4
+source_type = "input"
+source_id   = 4
+x = 960
+y = 502
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 5
+source_type = "input"
+source_id   = 5
+x = 1280
+y = 502
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 6
+source_type = "input"
+source_id   = 6
+x = 1600
+y = 502
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 7
+source_type = "input"
+source_id   = 7
+x = 0
+y = 622
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 8
+source_type = "input"
+source_id   = 8
+x = 320
+y = 622
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 9
+source_type = "input"
+source_id   = 9
+x = 640
+y = 622
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 10
+source_type = "input"
+source_id   = 10
+x = 960
+y = 622
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 11
+source_type = "input"
+source_id   = 11
+x = 1280
+y = 622
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 12
+source_type = "input"
+source_id   = 12
+x = 1600
+y = 622
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 13
+source_type = "input"
+source_id   = 14
+x = 0
+y = 742
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 14
+source_type = "input"
+source_id   = 15
+x = 320
+y = 742
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 15
+source_type = "input"
+source_id   = 16
+x = 640
+y = 742
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 16
+source_type = "input"
+source_id   = 17
+x = 960
+y = 742
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 17
+source_type = "none"
+x = 1280
+y = 742
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 18
+source_type = "input"
+source_id   = 23
+x = 1600
+y = 742
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 19
+source_type = "input"
+source_id   = 18
+x = 0
+y = 862
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 20
+source_type = "input"
+source_id   = 19
+x = 320
+y = 862
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 21
+source_type = "input"
+source_id   = 20
+x = 640
+y = 862
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 22
+source_type = "input"
+source_id   = 21
+x = 960
+y = 862
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 23
+source_type = "input"
+source_id   = 22
+x = 1280
+y = 862
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 24
+source_type = "input"
+source_id   = 24
+x = 1600
+y = 862
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 25
+source_type = "screen-program"
+source_id   = 1
+x = 0
+y = 0
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 26
+source_type = "screen-preview"
+source_id   = 1
+x = 0
+y = 250
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 984
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "13_mv_9_up"
+# Memory slot 13: "MV 9-UP"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1
+source_type = "input"
+source_id   = 1
+x = 0
+y = 0
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 2
+source_type = "input"
+source_id   = 2
+x = 640
+y = 0
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 3
+source_type = "input"
+source_id   = 3
+x = 1280
+y = 0
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 4
+source_type = "input"
+source_id   = 4
+x = 0
+y = 270
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 5
+source_type = "input"
+source_id   = 5
+x = 640
+y = 270
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 6
+source_type = "input"
+source_id   = 6
+x = 1280
+y = 270
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 7
+source_type = "input"
+source_id   = 7
+x = 0
+y = 540
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 8
+source_type = "input"
+source_id   = 8
+x = 640
+y = 540
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 9
+source_type = "input"
+source_id   = 9
+x = 1280
+y = 540
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 11
+source_type = "image"
+source_id   = 35
+x = 0
+y = 810
+w = 1280
+h = 270
+
+[[layouts.windows]]
+widget_id   = 12
+source_type = "input"
+source_id   = 21
+x = 1280
+y = 810
+w = 640
+h = 270
+
+[[layouts]]
+name     = "14_mv_9_up_fri_sat"
+# Memory slot 14: "MV 9-up Fri/SAT"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1
+source_type = "input"
+source_id   = 7
+x = 0
+y = 0
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 2
+source_type = "input"
+source_id   = 8
+x = 640
+y = 0
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 3
+source_type = "input"
+source_id   = 9
+x = 1280
+y = 0
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 4
+source_type = "input"
+source_id   = 10
+x = 0
+y = 270
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 5
+source_type = "input"
+source_id   = 11
+x = 640
+y = 270
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 6
+source_type = "input"
+source_id   = 12
+x = 1280
+y = 270
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 7
+source_type = "input"
+source_id   = 15
+x = 0
+y = 540
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 8
+source_type = "input"
+source_id   = 16
+x = 640
+y = 540
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 9
+source_type = "input"
+source_id   = 17
+x = 1280
+y = 540
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 11
+source_type = "image"
+source_id   = 35
+x = 0
+y = 810
+w = 1280
+h = 270
+
+[[layouts.windows]]
+widget_id   = 12
+source_type = "input"
+source_id   = 21
+x = 1280
+y = 810
+w = 640
+h = 270
+
+[[layouts]]
+name     = "15_mv_9_up_sun"
+# Memory slot 15: "MV 9-up SUN"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1
+source_type = "input"
+source_id   = 4
+x = 0
+y = 0
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 2
+source_type = "input"
+source_id   = 5
+x = 640
+y = 0
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 3
+source_type = "input"
+source_id   = 6
+x = 1280
+y = 0
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 4
+source_type = "input"
+source_id   = 10
+x = 0
+y = 270
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 5
+source_type = "input"
+source_id   = 11
+x = 640
+y = 270
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 6
+source_type = "input"
+source_id   = 12
+x = 1280
+y = 270
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 7
+source_type = "input"
+source_id   = 15
+x = 0
+y = 540
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 8
+source_type = "input"
+source_id   = 16
+x = 640
+y = 540
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 9
+source_type = "input"
+source_id   = 17
+x = 1280
+y = 540
+w = 640
+h = 270
+
+[[layouts.windows]]
+widget_id   = 11
+source_type = "image"
+source_id   = 35
+x = 0
+y = 810
+w = 1280
+h = 270
+
+[[layouts.windows]]
+widget_id   = 12
+source_type = "input"
+source_id   = 21
+x = 1280
+y = 810
+w = 640
+h = 270
+
+[[layouts]]
+name     = "17_5_up_10_14"
+# Memory slot 17: "5 UP 10-14"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 10
+source_type = "input"
+source_id   = 10
+x = 0
+y = 0
+w = 640
+h = 423
+
+[[layouts.windows]]
+widget_id   = 11
+source_type = "input"
+source_id   = 11
+x = 640
+y = 0
+w = 640
+h = 423
+
+[[layouts.windows]]
+widget_id   = 12
+source_type = "input"
+source_id   = 12
+x = 1280
+y = 0
+w = 640
+h = 423
+
+[[layouts.windows]]
+widget_id   = 13
+source_type = "input"
+source_id   = 13
+x = 0
+y = 423
+w = 640
+h = 423
+
+[[layouts.windows]]
+widget_id   = 14
+source_type = "input"
+source_id   = 14
+x = 640
+y = 423
+w = 640
+h = 423
+
+[[layouts.windows]]
+widget_id   = 15
+source_type = "input"
+source_id   = 22
+x = 1280
+y = 423
+w = 640
+h = 423
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 984
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "18_6_up_4_9"
+# Memory slot 18: "6 UP 4-9"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 10
+source_type = "input"
+source_id   = 4
+x = 0
+y = 0
+w = 640
+h = 388
+
+[[layouts.windows]]
+widget_id   = 11
+source_type = "input"
+source_id   = 5
+x = 640
+y = 0
+w = 640
+h = 388
+
+[[layouts.windows]]
+widget_id   = 12
+source_type = "input"
+source_id   = 6
+x = 1280
+y = 0
+w = 640
+h = 388
+
+[[layouts.windows]]
+widget_id   = 13
+source_type = "input"
+source_id   = 7
+x = 0
+y = 388
+w = 640
+h = 388
+
+[[layouts.windows]]
+widget_id   = 14
+source_type = "input"
+source_id   = 8
+x = 640
+y = 388
+w = 640
+h = 388
+
+[[layouts.windows]]
+widget_id   = 15
+source_type = "input"
+source_id   = 9
+x = 1280
+y = 388
+w = 640
+h = 388
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 984
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "19_5_up_5_9"
+# Memory slot 19: "5 up 5-9"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 10
+source_type = "input"
+source_id   = 5
+x = 0
+y = 0
+w = 640
+h = 423
+
+[[layouts.windows]]
+widget_id   = 11
+source_type = "input"
+source_id   = 6
+x = 640
+y = 0
+w = 640
+h = 423
+
+[[layouts.windows]]
+widget_id   = 12
+source_type = "input"
+source_id   = 7
+x = 1280
+y = 0
+w = 640
+h = 423
+
+[[layouts.windows]]
+widget_id   = 13
+source_type = "input"
+source_id   = 8
+x = 0
+y = 423
+w = 640
+h = 423
+
+[[layouts.windows]]
+widget_id   = 14
+source_type = "input"
+source_id   = 9
+x = 640
+y = 423
+w = 640
+h = 423
+
+[[layouts.windows]]
+widget_id   = 15
+source_type = "input"
+source_id   = 22
+x = 1280
+y = 423
+w = 640
+h = 423
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 984
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "20_5_up_1_5"
+# Memory slot 20: "5 UP 1-5"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 10
+source_type = "input"
+source_id   = 1
+x = 0
+y = 0
+w = 640
+h = 423
+
+[[layouts.windows]]
+widget_id   = 11
+source_type = "input"
+source_id   = 2
+x = 640
+y = 0
+w = 640
+h = 423
+
+[[layouts.windows]]
+widget_id   = 12
+source_type = "input"
+source_id   = 3
+x = 1280
+y = 0
+w = 640
+h = 423
+
+[[layouts.windows]]
+widget_id   = 13
+source_type = "input"
+source_id   = 4
+x = 0
+y = 423
+w = 640
+h = 423
+
+[[layouts.windows]]
+widget_id   = 14
+source_type = "input"
+source_id   = 5
+x = 640
+y = 423
+w = 640
+h = 423
+
+[[layouts.windows]]
+widget_id   = 15
+source_type = "input"
+source_id   = 22
+x = 1280
+y = 423
+w = 640
+h = 423
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 984
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "21_3_up_15_17"
+# Memory slot 21: "3 UP 15-17"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 15
+source_type = "input"
+source_id   = 15
+x = 84
+y = 0
+w = 875
+h = 492
+
+[[layouts.windows]]
+widget_id   = 16
+source_type = "input"
+source_id   = 16
+x = 959
+y = 0
+w = 875
+h = 492
+
+[[layouts.windows]]
+widget_id   = 17
+source_type = "input"
+source_id   = 17
+x = 84
+y = 492
+w = 875
+h = 492
+
+[[layouts.windows]]
+widget_id   = 18
+source_type = "input"
+source_id   = 21
+x = 960
+y = 492
+w = 875
+h = 492
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 984
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "22_3_up_5_7"
+# Memory slot 22: "3 UP 5-7"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 15
+source_type = "input"
+source_id   = 5
+x = 84
+y = 0
+w = 875
+h = 492
+
+[[layouts.windows]]
+widget_id   = 16
+source_type = "input"
+source_id   = 6
+x = 959
+y = 0
+w = 875
+h = 492
+
+[[layouts.windows]]
+widget_id   = 17
+source_type = "input"
+source_id   = 7
+x = 84
+y = 492
+w = 875
+h = 492
+
+[[layouts.windows]]
+widget_id   = 18
+source_type = "input"
+source_id   = 22
+x = 960
+y = 492
+w = 875
+h = 492
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 984
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "23_3_up_1_3"
+# Memory slot 23: "3 UP 1-3"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 15
+source_type = "input"
+source_id   = 1
+x = 84
+y = 0
+w = 875
+h = 492
+
+[[layouts.windows]]
+widget_id   = 16
+source_type = "input"
+source_id   = 2
+x = 959
+y = 0
+w = 875
+h = 492
+
+[[layouts.windows]]
+widget_id   = 17
+source_type = "input"
+source_id   = 3
+x = 84
+y = 492
+w = 875
+h = 492
+
+[[layouts.windows]]
+widget_id   = 18
+source_type = "input"
+source_id   = 22
+x = 960
+y = 492
+w = 875
+h = 492
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 984
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "24_3_up_4_6"
+# Memory slot 24: "3 UP 4-6"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 15
+source_type = "input"
+source_id   = 4
+x = 84
+y = 0
+w = 875
+h = 492
+
+[[layouts.windows]]
+widget_id   = 16
+source_type = "input"
+source_id   = 5
+x = 959
+y = 0
+w = 875
+h = 492
+
+[[layouts.windows]]
+widget_id   = 17
+source_type = "input"
+source_id   = 6
+x = 84
+y = 492
+w = 875
+h = 492
+
+[[layouts.windows]]
+widget_id   = 18
+source_type = "input"
+source_id   = 21
+x = 960
+y = 492
+w = 875
+h = 492
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 984
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "25_2_up_1_2"
+# Memory slot 25: "2 UP 1-2"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1
+source_type = "input"
+source_id   = 1
+x = 0
+y = 0
+w = 960
+h = 540
+
+[[layouts.windows]]
+widget_id   = 2
+source_type = "input"
+source_id   = 2
+x = 960
+y = 0
+w = 960
+h = 540
+
+[[layouts.windows]]
+widget_id   = 3
+source_type = "input"
+source_id   = 22
+x = 566
+y = 540
+w = 788
+h = 443
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 984
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "26_2_up_8_9"
+# Memory slot 26: "2 UP 8-9"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1
+source_type = "input"
+source_id   = 8
+x = 0
+y = 0
+w = 960
+h = 540
+
+[[layouts.windows]]
+widget_id   = 2
+source_type = "input"
+source_id   = 9
+x = 960
+y = 0
+w = 960
+h = 540
+
+[[layouts.windows]]
+widget_id   = 3
+source_type = "input"
+source_id   = 22
+x = 566
+y = 540
+w = 788
+h = 443
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 984
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "29_1_up_1"
+# Memory slot 29: "1 UP 1"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1
+source_type = "input"
+source_id   = 1
+x = 0
+y = 0
+w = 960
+h = 540
+
+[[layouts.windows]]
+widget_id   = 18
+source_type = "input"
+source_id   = 22
+x = 960
+y = 0
+w = 960
+h = 540
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 984
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "30_1_up_2"
+# Memory slot 30: "1 UP 2"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1
+source_type = "input"
+source_id   = 2
+x = 0
+y = 0
+w = 960
+h = 540
+
+[[layouts.windows]]
+widget_id   = 18
+source_type = "input"
+source_id   = 22
+x = 960
+y = 0
+w = 960
+h = 540
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 984
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "33_mv_all_pgm_bot_less_10_14"
+# Memory slot 33: "MV ALL PGM BOT less 10-14"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1
+source_type = "input"
+source_id   = 1
+x = 0
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 2
+source_type = "input"
+source_id   = 2
+x = 320
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 3
+source_type = "input"
+source_id   = 3
+x = 640
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 4
+source_type = "input"
+source_id   = 4
+x = 960
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 5
+source_type = "input"
+source_id   = 5
+x = 1280
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 6
+source_type = "input"
+source_id   = 6
+x = 1600
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 7
+source_type = "input"
+source_id   = 7
+x = 0
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 8
+source_type = "input"
+source_id   = 8
+x = 320
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 9
+source_type = "input"
+source_id   = 9
+x = 640
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 10
+source_type = "none"
+x = 960
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 11
+source_type = "none"
+x = 1280
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 12
+source_type = "none"
+x = 1600
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 13
+source_type = "none"
+x = 0
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 14
+source_type = "none"
+x = 320
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 15
+source_type = "input"
+source_id   = 15
+x = 640
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 16
+source_type = "input"
+source_id   = 16
+x = 960
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 17
+source_type = "input"
+source_id   = 17
+x = 1280
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 18
+source_type = "input"
+source_id   = 18
+x = 1600
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 19
+source_type = "input"
+source_id   = 19
+x = 0
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 20
+source_type = "input"
+source_id   = 20
+x = 320
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 21
+source_type = "input"
+source_id   = 21
+x = 640
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 22
+source_type = "none"
+x = 960
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 23
+source_type = "input"
+source_id   = 23
+x = 1280
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 24
+source_type = "input"
+source_id   = 24
+x = 1600
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 25
+source_type = "screen-program"
+source_id   = 1
+x = 0
+y = 580
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 26
+source_type = "screen-preview"
+source_id   = 1
+x = 0
+y = 830
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 0
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "34_mv_all_pgm_bot_less_4_9"
+# Memory slot 34: "MV ALL PGM BOT less 4-9"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1
+source_type = "input"
+source_id   = 1
+x = 0
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 2
+source_type = "input"
+source_id   = 2
+x = 320
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 3
+source_type = "input"
+source_id   = 3
+x = 640
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 4
+source_type = "none"
+x = 960
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 5
+source_type = "none"
+x = 1280
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 6
+source_type = "none"
+x = 1600
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 7
+source_type = "none"
+x = 0
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 8
+source_type = "none"
+x = 320
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 9
+source_type = "none"
+x = 640
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 10
+source_type = "input"
+source_id   = 10
+x = 960
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 11
+source_type = "input"
+source_id   = 11
+x = 1280
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 12
+source_type = "input"
+source_id   = 12
+x = 1600
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 13
+source_type = "input"
+source_id   = 13
+x = 0
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 14
+source_type = "input"
+source_id   = 14
+x = 320
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 15
+source_type = "input"
+source_id   = 15
+x = 640
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 16
+source_type = "input"
+source_id   = 16
+x = 960
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 17
+source_type = "input"
+source_id   = 17
+x = 1280
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 18
+source_type = "input"
+source_id   = 18
+x = 1600
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 19
+source_type = "input"
+source_id   = 19
+x = 0
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 20
+source_type = "input"
+source_id   = 20
+x = 320
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 21
+source_type = "input"
+source_id   = 21
+x = 640
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 22
+source_type = "input"
+source_id   = 22
+x = 960
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 23
+source_type = "input"
+source_id   = 23
+x = 1280
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 24
+source_type = "input"
+source_id   = 24
+x = 1600
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 25
+source_type = "screen-program"
+source_id   = 1
+x = 0
+y = 580
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 26
+source_type = "screen-preview"
+source_id   = 1
+x = 0
+y = 830
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 0
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "35_mv_all_pgm_bot_less_5_9"
+# Memory slot 35: "MV ALL PGM BOT less 5-9"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1
+source_type = "input"
+source_id   = 1
+x = 0
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 2
+source_type = "input"
+source_id   = 2
+x = 320
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 3
+source_type = "input"
+source_id   = 3
+x = 640
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 4
+source_type = "input"
+source_id   = 4
+x = 960
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 5
+source_type = "none"
+x = 1280
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 6
+source_type = "none"
+x = 1600
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 7
+source_type = "none"
+x = 0
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 8
+source_type = "none"
+x = 320
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 9
+source_type = "none"
+x = 640
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 10
+source_type = "input"
+source_id   = 10
+x = 960
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 11
+source_type = "input"
+source_id   = 11
+x = 1280
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 12
+source_type = "input"
+source_id   = 12
+x = 1600
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 13
+source_type = "input"
+source_id   = 13
+x = 0
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 14
+source_type = "input"
+source_id   = 14
+x = 320
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 15
+source_type = "input"
+source_id   = 15
+x = 640
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 16
+source_type = "input"
+source_id   = 16
+x = 960
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 17
+source_type = "input"
+source_id   = 17
+x = 1280
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 18
+source_type = "input"
+source_id   = 18
+x = 1600
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 19
+source_type = "input"
+source_id   = 19
+x = 0
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 20
+source_type = "input"
+source_id   = 20
+x = 320
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 21
+source_type = "input"
+source_id   = 21
+x = 640
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 22
+source_type = "none"
+x = 960
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 23
+source_type = "input"
+source_id   = 23
+x = 1280
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 24
+source_type = "input"
+source_id   = 24
+x = 1600
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 25
+source_type = "screen-program"
+source_id   = 1
+x = 0
+y = 580
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 26
+source_type = "screen-preview"
+source_id   = 1
+x = 0
+y = 830
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 0
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "36_mv_all_pgm_bot_less1_5"
+# Memory slot 36: "MV ALL PGM BOT less1-5"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1
+source_type = "none"
+x = 0
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 2
+source_type = "none"
+x = 320
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 3
+source_type = "none"
+x = 640
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 4
+source_type = "none"
+x = 960
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 5
+source_type = "none"
+x = 1280
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 6
+source_type = "input"
+source_id   = 6
+x = 1600
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 7
+source_type = "input"
+source_id   = 7
+x = 0
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 8
+source_type = "input"
+source_id   = 8
+x = 320
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 9
+source_type = "input"
+source_id   = 9
+x = 640
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 10
+source_type = "input"
+source_id   = 10
+x = 960
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 11
+source_type = "input"
+source_id   = 11
+x = 1280
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 12
+source_type = "input"
+source_id   = 12
+x = 1600
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 13
+source_type = "input"
+source_id   = 13
+x = 0
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 14
+source_type = "input"
+source_id   = 14
+x = 320
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 15
+source_type = "input"
+source_id   = 15
+x = 640
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 16
+source_type = "input"
+source_id   = 16
+x = 960
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 17
+source_type = "input"
+source_id   = 17
+x = 1280
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 18
+source_type = "input"
+source_id   = 18
+x = 1600
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 19
+source_type = "input"
+source_id   = 19
+x = 0
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 20
+source_type = "input"
+source_id   = 20
+x = 320
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 21
+source_type = "input"
+source_id   = 21
+x = 640
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 22
+source_type = "none"
+x = 960
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 23
+source_type = "input"
+source_id   = 23
+x = 1280
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 24
+source_type = "input"
+source_id   = 24
+x = 1600
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 25
+source_type = "screen-program"
+source_id   = 1
+x = 0
+y = 580
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 26
+source_type = "screen-preview"
+source_id   = 1
+x = 0
+y = 830
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 0
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "37_mv_all_pgm_bot_less_15_17"
+# Memory slot 37: "MV ALL PGM BOT less 15-17"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1
+source_type = "input"
+source_id   = 1
+x = 0
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 2
+source_type = "input"
+source_id   = 2
+x = 320
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 3
+source_type = "input"
+source_id   = 3
+x = 640
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 4
+source_type = "input"
+source_id   = 4
+x = 960
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 5
+source_type = "input"
+source_id   = 5
+x = 1280
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 6
+source_type = "input"
+source_id   = 6
+x = 1600
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 7
+source_type = "input"
+source_id   = 7
+x = 0
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 8
+source_type = "input"
+source_id   = 8
+x = 320
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 9
+source_type = "input"
+source_id   = 9
+x = 640
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 10
+source_type = "input"
+source_id   = 10
+x = 960
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 11
+source_type = "input"
+source_id   = 11
+x = 1280
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 12
+source_type = "input"
+source_id   = 12
+x = 1600
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 13
+source_type = "input"
+source_id   = 13
+x = 0
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 14
+source_type = "input"
+source_id   = 14
+x = 320
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 15
+source_type = "none"
+x = 640
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 16
+source_type = "none"
+x = 960
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 17
+source_type = "none"
+x = 1280
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 18
+source_type = "input"
+source_id   = 18
+x = 1600
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 19
+source_type = "input"
+source_id   = 19
+x = 0
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 20
+source_type = "input"
+source_id   = 20
+x = 320
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 21
+source_type = "none"
+x = 640
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 22
+source_type = "input"
+source_id   = 22
+x = 960
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 23
+source_type = "input"
+source_id   = 23
+x = 1280
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 24
+source_type = "input"
+source_id   = 24
+x = 1600
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 25
+source_type = "screen-program"
+source_id   = 1
+x = 0
+y = 580
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 26
+source_type = "screen-preview"
+source_id   = 1
+x = 0
+y = 830
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 0
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "38_mv_all_pgm_bot_less_5_7"
+# Memory slot 38: "MV ALL PGM BOT less 5-7"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1
+source_type = "input"
+source_id   = 1
+x = 0
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 2
+source_type = "input"
+source_id   = 2
+x = 320
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 3
+source_type = "input"
+source_id   = 3
+x = 640
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 4
+source_type = "input"
+source_id   = 4
+x = 960
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 5
+source_type = "none"
+x = 1280
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 6
+source_type = "none"
+x = 1600
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 7
+source_type = "none"
+x = 0
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 8
+source_type = "input"
+source_id   = 8
+x = 320
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 9
+source_type = "input"
+source_id   = 9
+x = 640
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 10
+source_type = "input"
+source_id   = 10
+x = 960
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 11
+source_type = "input"
+source_id   = 11
+x = 1280
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 12
+source_type = "input"
+source_id   = 12
+x = 1600
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 13
+source_type = "input"
+source_id   = 13
+x = 0
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 14
+source_type = "input"
+source_id   = 14
+x = 320
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 15
+source_type = "input"
+source_id   = 15
+x = 640
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 16
+source_type = "input"
+source_id   = 16
+x = 960
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 17
+source_type = "input"
+source_id   = 17
+x = 1280
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 18
+source_type = "input"
+source_id   = 18
+x = 1600
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 19
+source_type = "input"
+source_id   = 19
+x = 0
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 20
+source_type = "input"
+source_id   = 20
+x = 320
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 21
+source_type = "input"
+source_id   = 21
+x = 640
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 22
+source_type = "none"
+x = 960
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 23
+source_type = "input"
+source_id   = 23
+x = 1280
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 24
+source_type = "input"
+source_id   = 24
+x = 1600
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 25
+source_type = "screen-program"
+source_id   = 1
+x = 0
+y = 580
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 26
+source_type = "screen-preview"
+source_id   = 1
+x = 0
+y = 830
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 0
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "39_mv_all_pgm_bot_less_1_3"
+# Memory slot 39: "MV ALL PGM BOT less 1-3"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1
+source_type = "none"
+x = 0
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 2
+source_type = "none"
+x = 320
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 3
+source_type = "none"
+x = 640
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 4
+source_type = "input"
+source_id   = 4
+x = 960
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 5
+source_type = "input"
+source_id   = 5
+x = 1280
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 6
+source_type = "input"
+source_id   = 6
+x = 1600
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 7
+source_type = "input"
+source_id   = 7
+x = 0
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 8
+source_type = "input"
+source_id   = 8
+x = 320
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 9
+source_type = "input"
+source_id   = 9
+x = 640
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 10
+source_type = "input"
+source_id   = 10
+x = 960
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 11
+source_type = "input"
+source_id   = 11
+x = 1280
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 12
+source_type = "input"
+source_id   = 12
+x = 1600
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 13
+source_type = "input"
+source_id   = 13
+x = 0
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 14
+source_type = "input"
+source_id   = 14
+x = 320
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 15
+source_type = "input"
+source_id   = 15
+x = 640
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 16
+source_type = "input"
+source_id   = 16
+x = 960
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 17
+source_type = "input"
+source_id   = 17
+x = 1280
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 18
+source_type = "input"
+source_id   = 18
+x = 1600
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 19
+source_type = "input"
+source_id   = 19
+x = 0
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 20
+source_type = "input"
+source_id   = 20
+x = 320
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 21
+source_type = "input"
+source_id   = 21
+x = 640
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 22
+source_type = "none"
+x = 960
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 23
+source_type = "input"
+source_id   = 23
+x = 1280
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 24
+source_type = "input"
+source_id   = 24
+x = 1600
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 25
+source_type = "screen-program"
+source_id   = 1
+x = 0
+y = 580
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 26
+source_type = "screen-preview"
+source_id   = 1
+x = 0
+y = 830
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 0
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "40_mv_all_pgm_bot_less_4_6"
+# Memory slot 40: "MV ALL PGM BOT less 4-6"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1
+source_type = "input"
+source_id   = 1
+x = 0
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 2
+source_type = "input"
+source_id   = 2
+x = 320
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 3
+source_type = "input"
+source_id   = 3
+x = 640
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 4
+source_type = "none"
+x = 960
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 5
+source_type = "none"
+x = 1280
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 6
+source_type = "none"
+x = 1600
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 7
+source_type = "input"
+source_id   = 7
+x = 0
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 8
+source_type = "input"
+source_id   = 8
+x = 320
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 9
+source_type = "input"
+source_id   = 9
+x = 640
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 10
+source_type = "input"
+source_id   = 10
+x = 960
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 11
+source_type = "input"
+source_id   = 11
+x = 1280
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 12
+source_type = "input"
+source_id   = 12
+x = 1600
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 13
+source_type = "input"
+source_id   = 13
+x = 0
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 14
+source_type = "input"
+source_id   = 14
+x = 320
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 15
+source_type = "input"
+source_id   = 15
+x = 640
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 16
+source_type = "input"
+source_id   = 16
+x = 960
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 17
+source_type = "input"
+source_id   = 17
+x = 1280
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 18
+source_type = "input"
+source_id   = 18
+x = 1600
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 19
+source_type = "input"
+source_id   = 19
+x = 0
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 20
+source_type = "input"
+source_id   = 20
+x = 320
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 21
+source_type = "none"
+x = 640
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 22
+source_type = "input"
+source_id   = 22
+x = 960
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 23
+source_type = "input"
+source_id   = 23
+x = 1280
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 24
+source_type = "input"
+source_id   = 24
+x = 1600
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 25
+source_type = "screen-program"
+source_id   = 1
+x = 0
+y = 580
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 26
+source_type = "screen-preview"
+source_id   = 1
+x = 0
+y = 830
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 0
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "41_mv_all_pgm_bot_less_1_2"
+# Memory slot 41: "MV ALL PGM BOT less 1-2"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1
+source_type = "none"
+x = 0
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 2
+source_type = "none"
+x = 320
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 3
+source_type = "input"
+source_id   = 3
+x = 640
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 4
+source_type = "input"
+source_id   = 4
+x = 960
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 5
+source_type = "input"
+source_id   = 5
+x = 1280
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 6
+source_type = "input"
+source_id   = 6
+x = 1600
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 7
+source_type = "input"
+source_id   = 7
+x = 0
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 8
+source_type = "input"
+source_id   = 8
+x = 320
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 9
+source_type = "input"
+source_id   = 9
+x = 640
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 10
+source_type = "input"
+source_id   = 10
+x = 960
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 11
+source_type = "input"
+source_id   = 11
+x = 1280
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 12
+source_type = "input"
+source_id   = 12
+x = 1600
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 13
+source_type = "input"
+source_id   = 13
+x = 0
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 14
+source_type = "input"
+source_id   = 14
+x = 320
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 15
+source_type = "input"
+source_id   = 15
+x = 640
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 16
+source_type = "input"
+source_id   = 16
+x = 960
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 17
+source_type = "input"
+source_id   = 17
+x = 1280
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 18
+source_type = "input"
+source_id   = 18
+x = 1600
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 19
+source_type = "input"
+source_id   = 19
+x = 0
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 20
+source_type = "input"
+source_id   = 20
+x = 320
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 21
+source_type = "input"
+source_id   = 21
+x = 640
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 22
+source_type = "none"
+x = 960
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 23
+source_type = "input"
+source_id   = 23
+x = 1280
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 24
+source_type = "input"
+source_id   = 24
+x = 1600
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 25
+source_type = "screen-program"
+source_id   = 1
+x = 0
+y = 580
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 26
+source_type = "screen-preview"
+source_id   = 1
+x = 0
+y = 830
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 0
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "42_mv_all_pgm_bot_less_8_9"
+# Memory slot 42: "MV ALL PGM BOT less 8-9"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1
+source_type = "input"
+source_id   = 1
+x = 0
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 2
+source_type = "input"
+source_id   = 2
+x = 320
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 3
+source_type = "input"
+source_id   = 3
+x = 640
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 4
+source_type = "input"
+source_id   = 4
+x = 960
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 5
+source_type = "input"
+source_id   = 5
+x = 1280
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 6
+source_type = "input"
+source_id   = 6
+x = 1600
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 7
+source_type = "input"
+source_id   = 7
+x = 0
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 8
+source_type = "none"
+x = 320
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 9
+source_type = "none"
+x = 640
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 10
+source_type = "input"
+source_id   = 10
+x = 960
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 11
+source_type = "input"
+source_id   = 11
+x = 1280
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 12
+source_type = "input"
+source_id   = 12
+x = 1600
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 13
+source_type = "input"
+source_id   = 13
+x = 0
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 14
+source_type = "input"
+source_id   = 14
+x = 320
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 15
+source_type = "input"
+source_id   = 15
+x = 640
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 16
+source_type = "input"
+source_id   = 16
+x = 960
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 17
+source_type = "input"
+source_id   = 17
+x = 1280
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 18
+source_type = "input"
+source_id   = 18
+x = 1600
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 19
+source_type = "input"
+source_id   = 19
+x = 0
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 20
+source_type = "input"
+source_id   = 20
+x = 320
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 21
+source_type = "input"
+source_id   = 21
+x = 640
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 22
+source_type = "none"
+x = 960
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 23
+source_type = "input"
+source_id   = 23
+x = 1280
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 24
+source_type = "input"
+source_id   = 24
+x = 1600
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 25
+source_type = "screen-program"
+source_id   = 1
+x = 0
+y = 580
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 26
+source_type = "screen-preview"
+source_id   = 1
+x = 0
+y = 830
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 0
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "45_mv_all_pgm_bot_less_1"
+# Memory slot 45: "MV ALL PGM BOT less 1"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1
+source_type = "none"
+x = 0
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 2
+source_type = "input"
+source_id   = 2
+x = 320
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 3
+source_type = "input"
+source_id   = 3
+x = 640
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 4
+source_type = "input"
+source_id   = 4
+x = 960
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 5
+source_type = "input"
+source_id   = 5
+x = 1280
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 6
+source_type = "input"
+source_id   = 6
+x = 1600
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 7
+source_type = "input"
+source_id   = 7
+x = 0
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 8
+source_type = "input"
+source_id   = 8
+x = 320
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 9
+source_type = "input"
+source_id   = 9
+x = 640
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 10
+source_type = "input"
+source_id   = 10
+x = 960
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 11
+source_type = "input"
+source_id   = 11
+x = 1280
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 12
+source_type = "input"
+source_id   = 12
+x = 1600
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 13
+source_type = "input"
+source_id   = 13
+x = 0
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 14
+source_type = "input"
+source_id   = 14
+x = 320
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 15
+source_type = "input"
+source_id   = 15
+x = 640
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 16
+source_type = "input"
+source_id   = 16
+x = 960
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 17
+source_type = "input"
+source_id   = 17
+x = 1280
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 18
+source_type = "input"
+source_id   = 18
+x = 1600
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 19
+source_type = "input"
+source_id   = 19
+x = 0
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 20
+source_type = "input"
+source_id   = 20
+x = 320
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 21
+source_type = "input"
+source_id   = 21
+x = 640
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 22
+source_type = "none"
+x = 960
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 23
+source_type = "input"
+source_id   = 23
+x = 1280
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 24
+source_type = "input"
+source_id   = 24
+x = 1600
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 25
+source_type = "screen-program"
+source_id   = 1
+x = 0
+y = 580
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 26
+source_type = "screen-preview"
+source_id   = 1
+x = 0
+y = 830
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 0
+w = 1920
+h = 96
+
+[[layouts]]
+name     = "46_mv_all_pgm_bot_less_2"
+# Memory slot 46: "MV ALL PGM BOT less 2"
+mv_id    = 1
+canvas_w = 1920
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1
+source_type = "input"
+source_id   = 1
+x = 0
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 2
+source_type = "none"
+x = 320
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 3
+source_type = "input"
+source_id   = 3
+x = 640
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 4
+source_type = "input"
+source_id   = 4
+x = 960
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 5
+source_type = "input"
+source_id   = 5
+x = 1280
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 6
+source_type = "input"
+source_id   = 6
+x = 1600
+y = 98
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 7
+source_type = "input"
+source_id   = 7
+x = 0
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 8
+source_type = "input"
+source_id   = 8
+x = 320
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 9
+source_type = "input"
+source_id   = 9
+x = 640
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 10
+source_type = "input"
+source_id   = 10
+x = 960
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 11
+source_type = "input"
+source_id   = 11
+x = 1280
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 12
+source_type = "input"
+source_id   = 12
+x = 1600
+y = 218
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 13
+source_type = "input"
+source_id   = 13
+x = 0
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 14
+source_type = "input"
+source_id   = 14
+x = 320
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 15
+source_type = "input"
+source_id   = 15
+x = 640
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 16
+source_type = "input"
+source_id   = 16
+x = 960
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 17
+source_type = "input"
+source_id   = 17
+x = 1280
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 18
+source_type = "input"
+source_id   = 18
+x = 1600
+y = 338
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 19
+source_type = "input"
+source_id   = 19
+x = 0
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 20
+source_type = "input"
+source_id   = 20
+x = 320
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 21
+source_type = "input"
+source_id   = 21
+x = 640
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 22
+source_type = "none"
+x = 960
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 23
+source_type = "input"
+source_id   = 23
+x = 1280
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 24
+source_type = "input"
+source_id   = 24
+x = 1600
+y = 458
+w = 320
+h = 120
+
+[[layouts.windows]]
+widget_id   = 25
+source_type = "screen-program"
+source_id   = 1
+x = 0
+y = 580
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 26
+source_type = "screen-preview"
+source_id   = 1
+x = 0
+y = 830
+w = 1920
+h = 250
+
+[[layouts.windows]]
+widget_id   = 52
+source_type = "image"
+source_id   = 35
+x = 0
+y = 0
+w = 1920
+h = 96
+

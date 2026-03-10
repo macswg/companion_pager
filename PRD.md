@@ -9,8 +9,7 @@ of setup and should not be confused with the others.
 | Tool | Purpose | Run when |
 |------|---------|----------|
 | **Companion Sync** | Pull AQ preset names → Companion buttons | After presets are named on AQ (re-runnable) |
-| **AQ Setup** | Configure Aquilon outputs (resolution, connector, colorspace) | Show build, before doors |
-| **MV Setup** | Build multiviewer window layouts on AQ outputs | Show build, after outputs are configured |
+| **MV Setup** | Build multiviewer window layouts on AQ outputs | Show build |
 | **AQ Clone** | Export config from AQ21, import to AQ22, verify both match | On demand, after any significant change to AQ21 |
 
 ---
@@ -23,7 +22,8 @@ of setup and should not be confused with the others.
 | AQ relationship | Matched pair — identical `memoryId` fired on both simultaneously |
 | Stream Deck | XL (8 cols × 4 rows) |
 | Companion module | `analogway-livepremier` |
-| API | LivePremier REST at `http://<host>/api/tpp/v1/` (dev: `127.0.0.1:3003`) |
+| REST API | `http://<host>/api/tpp/v1/` (dev: `127.0.0.1:3003`) |
+| AWJ WebSocket | `ws://<host>/api/ws/v1/awj` — used for all SET writes |
 
 ---
 
@@ -46,19 +46,17 @@ Companion buttons, organized by show day and category.
 
 ### Navigation Buttons
 Every page must have three reserved navigation buttons:
-- **Page Up** — goes to next page
-- **Page Down** — goes to previous page
-- **Page Number** — displays current page number
+- **Page Up** — row 2, col 7
+- **Page Number** — row 3, col 6
+- **Page Down** — row 3, col 7
 
-These buttons must not be overwritten by preset stamps. Their positions match
-the Companion `pageup`, `pagedown`, and `pagenum` button types. Exact grid
-positions TBD (confirm from reference config).
+These buttons must not be overwritten by preset stamps. Positions are confirmed
+from the reference config and hardcoded in `companion_updater.NAV_POSITIONS`.
 
 ### Preset Organization
 - Presets are pulled from the AQ and assigned to pages via a **grouping config**
   defined in `config.toml`.
-- The grouping config maps memory ID ranges (or name patterns) to a Companion page
-  number and title.
+- The grouping config maps memory ID lists to a Companion page number and title.
 - AQ has more total memories than Companion has buttons — only the memories listed
   in the grouping config appear in Companion.
 - AQ memory numbering mirrors the Companion page numbering as closely as possible.
@@ -74,27 +72,7 @@ it multiple times overwrites the previous output — it does not accumulate chan
 
 ---
 
-## Tool 2 — AQ Setup
-
-### Purpose
-Script-driven configuration of the Aquilon outputs. Replaces manual menu
-navigation for settings that need to be consistent show-to-show.
-
-### Scope
-- **Output resolution** — UHD (3840×2160), 1080p, etc.
-- **Connector type** — SDI, HDMI, DisplayPort, etc.
-- **Colorspace / chroma** — colorspace, chroma subsampling, color range
-
-### Data Source
-All configuration values come from `config.toml`. No data is pulled from the
-AQ itself for this tool — values are set, not read.
-
-### Applied to
-Both AQ21 and AQ22 (same settings applied to both).
-
----
-
-## Tool 3 — MV Setup
+## Tool 2 — MV Setup
 
 ### Purpose
 Configure multiviewer window layouts on Aquilon outputs. The layout changes
@@ -105,11 +83,13 @@ per show, so the tool must be data-driven and easy to update.
 - Assign sources to windows (all inputs + program/preview)
 - Set window titling
 - Support multiple named MV layout presets (e.g. "tech feed", "confidence", "FOH")
+- Capture existing device layouts to a portable TOML config
+- Restore all MV memories from a TOML config to a device
 
 ### Data Source
-Layout parameters (window count, grid dimensions, spacing, source assignments)
-are defined in `config.toml` as named layout presets. The script applies a
-chosen layout to the AQ.
+Layout parameters (window count, positions, source assignments) are defined in
+`mv_config.toml` as named layout presets. The script applies a chosen layout
+to the AQ. Layouts can also be captured from a live device with `capture.py`.
 
 ### Flexibility
 The tool must make it easy to adjust layouts between shows without touching
@@ -117,7 +97,7 @@ Python code — layout changes happen in config only.
 
 ---
 
-## Tool 4 — AQ Clone
+## Tool 3 — AQ Clone
 
 ### Purpose
 Export the full config from AQ21 (primary) and import it to AQ22 (backup),
@@ -134,7 +114,7 @@ significantly and the backup needs to match.
 
 ### Data source
 No config file needed — the tool reads directly from AQ21 and writes to AQ22.
-Host IPs for both units come from `config.toml`.
+Host IPs for both units come from `.env` (`AQ_PRIMARY_HOST`, `AQ_BACKUP_HOST`).
 
 ### Error handling
 If the import or verification fails, the tool must exit with a clear error message
@@ -177,6 +157,7 @@ config must be verified before it goes on-site.
 tests/
   test_companion_sync.py   — verifies generated Companion config correctness
   test_aq_comms.py         — verifies AQ API responses parse correctly
+  test_aq_clone.py         — verifies AQ21 and AQ22 memory lists are identical (stub)
   conftest.py              — shared fixtures (live AQ connection, sample configs)
 ```
 
@@ -185,6 +166,7 @@ tests/
 ```bash
 # Requires live AQ on the network
 pytest tests/ -v
+pytest tests/test_companion_sync.py::TestPresetButtons -v  # single class
 ```
 
 ---
@@ -193,10 +175,6 @@ pytest tests/ -v
 
 | # | Question | Status |
 |---|----------|--------|
-| 1 | Exact REST endpoint for listing Master Memories? | TODO — needs on-device check |
-| 2 | Response JSON schema for memories list? | TODO |
-| 3 | Does the API require authentication? | TODO |
-| 4 | Exact grid positions for page up/down/num nav buttons? | TODO — check reference config |
-| 5 | Which Stream Deck button positions are reserved for nav on each page? | TODO |
-| 6 | MV REST endpoints for setting window position/size/source? | TODO |
-| 7 | AQ output config REST endpoints? | TODO |
+| 1 | AQ Clone export/import API endpoints? | ⚠️ TBD — needs on-device discovery |
+| 2 | MV Setup: needs on-device validation of geometry + save | ⏳ Pending live test |
+| 3 | Companion Sync: needs end-to-end on-device validation | ⏳ Pending live test |

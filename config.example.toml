@@ -54,31 +54,6 @@ color = 0x330000
 memory_ids = []
 
 
-[aq_setup]
-# Output configuration — one [[aq_setup.outputs]] block per physical output.
-# Applied identically to AQ21 and AQ22.
-
-# [[aq_setup.outputs]]
-# id = 0
-# resolution = "3840x2160"
-# refresh_rate = "59.94"
-# connector = "SDI"
-# colorspace = 2
-# chroma = 1
-# color_range = "Limited"
-
-
-[mv_setup]
-# Multiviewer layouts — one [[mv_setup.layouts]] block per named layout preset.
-# Run with: python src/mv_setup/main.py --layout <name>
-
-# [[mv_setup.layouts]]
-# name = "tech_feed"
-# output_id = 2
-# [[mv_setup.layouts.windows]]
-# id = 0
-# source = "input_1"
-# x = 0
-# y = 0
-# w = 640
-# h = 360
+# MV layouts live in a separate file: mv_config.toml
+# Copy mv_config.example.toml → mv_config.toml and define your layouts there.
+# Usage: python src/mv_setup/main.py --config mv_config.toml --layout <name>

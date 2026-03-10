@@ -85,11 +85,9 @@ def main() -> None:
     template_path = REPO_ROOT / cfg["companion"]["template_path"]
     output_path = REPO_ROOT / cfg["companion"]["output_path"]
 
-    # Page settings
-    page_num = str(cfg["companion"].get("page_num", 1))
-    page_title = cfg["companion"].get("page_title", "Aquilon Presets")
     cols_per_row = cfg["companion"].get("cols_per_row", 8)
     target = cfg["companion"].get("target", "preview")
+    pages_config = cfg["companion"].get("pages", [])
 
     # --- Step 1: Load template config ---
     logger.info(f"Loading template: {template_path}")
@@ -122,16 +120,51 @@ def main() -> None:
     for p in presets:
         logger.info(f"  [{p.memory_id:3d}] {p.name}")
 
-    # --- Step 4: Update the target page ---
-    update_page_title(config, page_num, page_title)
-    apply_presets_to_page(
-        config,
-        page_num=page_num,
-        presets=presets,
-        instance_ids=instance_ids,
-        cols_per_row=cols_per_row,
-        target=target,
-    )
+    # --- Step 4: Update each configured page ---
+    preset_map = {p.memory_id: p for p in presets}
+    total_stamped = 0
+
+    if not pages_config:
+        logger.warning(
+            "No [[companion.pages]] entries in config.toml — nothing to stamp.\n"
+            "Add at least one [[companion.pages]] block with page_num and memory_ids."
+        )
+    else:
+        for page_cfg in pages_config:
+            page_num = page_cfg["page_num"]
+            page_title = page_cfg.get("page_title", f"Page {page_num}")
+            bgcolor = page_cfg.get("color", 0)
+            memory_ids = page_cfg.get("memory_ids", [])
+
+            if not memory_ids:
+                logger.info(f"Page {page_num} ({page_title!r}): no memory_ids configured, skipping.")
+                continue
+
+            page_presets = [preset_map[mid] for mid in memory_ids if mid in preset_map]
+            missing = [mid for mid in memory_ids if mid not in preset_map]
+            if missing:
+                logger.warning(
+                    f"Page {page_num}: {len(missing)} memory ID(s) not found on device: {missing}"
+                )
+
+            if not page_presets:
+                logger.warning(f"Page {page_num}: no matching presets found, skipping.")
+                continue
+
+            update_page_title(config, page_num, page_title)
+            n = apply_presets_to_page(
+                config,
+                page_num=page_num,
+                presets=page_presets,
+                instance_ids=instance_ids,
+                cols_per_row=cols_per_row,
+                target=target,
+                bgcolor=bgcolor,
+            )
+            logger.info(f"Page {page_num} ({page_title!r}): stamped {n} presets.")
+            total_stamped += n
+
+    logger.info(f"Total preset buttons stamped: {total_stamped}")
 
     # --- Step 5: Save output ---
     save_config(config, output_path)

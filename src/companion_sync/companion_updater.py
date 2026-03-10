@@ -39,6 +39,14 @@ logger = logging.getLogger(__name__)
 
 LOAD_MEMORY_ACTION = "/api/tpp/v1/load-master-memory"
 
+# Nav button positions on a Stream Deck XL (row, col) — must never be overwritten.
+# Confirmed from reference config: pageup=row2/col7, pagenum=row3/col6, pagedown=row3/col7.
+NAV_POSITIONS: frozenset[tuple[int, int]] = frozenset({
+    (2, 7),  # pageup
+    (3, 6),  # pagenum
+    (3, 7),  # pagedown
+})
+
 
 # ---------------------------------------------------------------------------
 # File I/O
@@ -175,14 +183,14 @@ def apply_presets_to_page(
     start_col: int = 0,
     cols_per_row: int = 8,
     target: str = "preview",
+    bgcolor: int = 0,
     clear_first: bool = True,
 ) -> int:
     """
     Stamp a list of Aquilon presets onto a Companion page as buttons.
 
     Buttons are placed left-to-right, top-to-bottom starting from
-    (start_row, start_col). Each preset gets its own button with the preset
-    name as the label and the memory ID in the action options.
+    (start_row, start_col). Nav button positions are always skipped.
 
     Args:
         config:       Full Companion config dict (modified in-place).
@@ -193,7 +201,8 @@ def apply_presets_to_page(
         start_col:    Grid column for the first preset button.
         cols_per_row: Stream Deck columns per row (XL = 8, regular = 5).
         target:       Action target — "preview" or "program".
-        clear_first:  If True, remove existing buttons from the page first.
+        bgcolor:      Background color for all buttons on this page (24-bit int).
+        clear_first:  If True, remove existing buttons (preserving nav) first.
 
     Returns:
         Number of presets stamped onto the page.
@@ -202,16 +211,31 @@ def apply_presets_to_page(
     controls = config["pages"][page_num].setdefault("controls", {})
 
     if clear_first:
+        # Preserve nav buttons; remove everything else.
+        saved_nav: dict[tuple[int, int], dict] = {}
+        for row_str, cols in controls.items():
+            for col_str, btn in cols.items():
+                pos = (int(row_str), int(col_str))
+                if pos in NAV_POSITIONS:
+                    saved_nav[pos] = btn
         controls.clear()
-        logger.debug(f"Cleared existing buttons on page {page_num}")
+        for (r, c), btn in saved_nav.items():
+            controls.setdefault(str(r), {})[str(c)] = btn
+        logger.debug(f"Cleared page {page_num} (preserved {len(saved_nav)} nav buttons)")
 
     applied = 0
-    for i, preset in enumerate(presets):
-        flat = (start_row * cols_per_row + start_col) + i
-        row = flat // cols_per_row
-        col = flat % cols_per_row
+    slot = 0  # counts through nav-safe positions
+    for preset in presets:
+        # Advance slot until we land on a position that is not a nav button.
+        while True:
+            flat = (start_row * cols_per_row + start_col) + slot
+            row = flat // cols_per_row
+            col = flat % cols_per_row
+            slot += 1
+            if (row, col) not in NAV_POSITIONS:
+                break
 
-        btn = build_preset_button(preset, instance_ids, target=target)
+        btn = build_preset_button(preset, instance_ids, target=target, bgcolor=bgcolor)
         controls.setdefault(str(row), {})[str(col)] = btn
 
         logger.debug(f"  [{row}/{col}] memoryId={preset.memory_id} → {preset.name!r}")
