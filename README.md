@@ -109,6 +109,65 @@ w = 320
 h = 270
 ```
 
+#### Companion config format
+
+Buttons are defined per-page in `config.toml`. Two placement modes can be mixed freely on the same page:
+
+**Auto-flow** — presets fill left-to-right, top-to-bottom, skipping nav slots:
+```toml
+[[companion.pages]]
+page_num   = 1
+page_title = "Friday Show (1)"
+color      = 0x000000
+memory_ids = [100, 101, 102, 103, 104, 105]
+```
+
+**Pinned** — place a specific preset at an exact row/col position. Pinned positions are skipped by auto-flow:
+```toml
+buttons = [
+    { memory_id = 76, row = 2, col = 1 },
+    { memory_id = 68, row = 2, col = 3, color = 0x330000, text_color = 0xCCCC00, text_size = "14" },
+]
+```
+
+**Template buttons** — reusable non-preset buttons (TAKE, reminder labels, etc.) defined once and placeable on any page:
+```toml
+[[companion.button_templates]]
+name      = "take"
+action    = "screen-take"
+screen_id = 1
+label     = "TAKE"
+color     = 0x9D0101
+
+[[companion.button_templates]]
+name       = "must_off_interstitial"
+action     = "label"
+label      = "MUST OFF before -> Interstitial"
+text_color = 0xFF00FF
+show_topbar = false
+```
+
+Then reference by name in any page's `buttons` list. Per-placement overrides are supported:
+```toml
+buttons = [
+    { template = "take", row = 0, col = 7 },
+    { template = "must_off_interstitial", row = 1, col = 0 },
+    { template = "take", row = 2, col = 7, color = 0x330000 },
+]
+```
+
+Supported template actions: `"screen-take"` (fires on both AQ instances), `"label"` (no-action reminder button).
+
+**Color reference:**
+```
+0xCCCC00  yellow text       0xFF0000  bright red text
+0x9D0101  bright red bg     0x330000  dark red bg
+0x003300  green bg          0xFF00FF  purple text
+0xFFFFFF  white             0x000000  black
+```
+
+---
+
 ### Tool 3 — AQ Backup Verify
 **`src/aq_backup_verify/main.py`**
 

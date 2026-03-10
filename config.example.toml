@@ -45,6 +45,32 @@ black            = 0x000000
 #   text_color  label text color — defaults to white (0xFFFFFF)
 #   text_size   font size string: "auto", "7", "14", "18", "24", "30" — defaults to "auto"
 
+# Button templates — reusable buttons placeable on any page.
+# Reference by name in a page's buttons list: { template = "take", row = 0, col = 7 }
+# Per-placement overrides (color, text_color, text_size, label) are merged on top of the template.
+#
+# Supported actions:
+#   "screen-take"  fires /api/tpp/v1/screens/{screenId}/take on both AQ instances
+#   "label"        no-action reminder/note button (show_topbar hides the topbar)
+
+[[companion.button_templates]]
+name      = "take"
+action    = "screen-take"
+screen_id = 1
+label     = "TAKE"
+color     = 0x9D0101
+text_color = 0xFFFFFF
+text_size = "auto"
+
+[[companion.button_templates]]
+name       = "must_off_interstitial"
+action     = "label"
+label      = "MUST OFF before -> Interstitial"
+color      = 0x000000
+text_color = 0xFF00FF
+text_size  = "auto"
+show_topbar = false
+
 [[companion.pages]]
 page_num = 1
 page_title = "Day 1"

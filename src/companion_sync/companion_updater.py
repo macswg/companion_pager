@@ -38,6 +38,7 @@ from aquilon_comms import AquilonPreset
 logger = logging.getLogger(__name__)
 
 LOAD_MEMORY_ACTION = "/api/tpp/v1/load-master-memory"
+SCREEN_TAKE_ACTION = "/api/tpp/v1/screens/{screenId}/take"
 
 # Nav button positions on a Stream Deck XL (row, col) — must never be overwritten.
 # Confirmed from reference config: pageup=row2/col7, pagenum=row3/col6, pagedown=row3/col7.
@@ -277,6 +278,128 @@ def apply_presets_to_page(
 
     logger.info(f"Stamped {applied} preset buttons onto page {page_num}")
     return applied
+
+
+# ---------------------------------------------------------------------------
+# Template button builders
+# ---------------------------------------------------------------------------
+
+def build_screen_take_button(
+    screen_id: int,
+    instance_ids: list[str],
+    label: str = "TAKE",
+    text_color: int = 16777215,
+    bgcolor: int = 0,
+    text_size: str = "auto",
+) -> dict:
+    """Build a TAKE button that fires /api/tpp/v1/screens/{screenId}/take on all instances."""
+    down_actions = [
+        {
+            "id": _new_action_id(),
+            "action": SCREEN_TAKE_ACTION,
+            "instance": inst_id,
+            "options": {"screenId": screen_id},
+        }
+        for inst_id in instance_ids
+    ]
+    return {
+        "type": "button",
+        "style": {
+            "text": label,
+            "textExpression": False,
+            "size": text_size,
+            "png64": None,
+            "alignment": "center:center",
+            "pngalignment": "center:center",
+            "color": text_color,
+            "bgcolor": bgcolor,
+            "show_topbar": "default",
+        },
+        "options": {"rotaryActions": False, "stepAutoProgress": True},
+        "feedbacks": [],
+        "steps": {
+            "0": {
+                "action_sets": {"down": down_actions, "up": []},
+                "options": {"runWhileHeld": []},
+            }
+        },
+    }
+
+
+def build_label_button(
+    label: str,
+    text_color: int = 16777215,
+    bgcolor: int = 0,
+    text_size: str = "auto",
+    show_topbar: bool | str = False,
+) -> dict:
+    """Build a no-action label/reminder button."""
+    return {
+        "type": "button",
+        "style": {
+            "text": label,
+            "textExpression": False,
+            "size": text_size,
+            "png64": None,
+            "alignment": "center:center",
+            "pngalignment": "center:center",
+            "color": text_color,
+            "bgcolor": bgcolor,
+            "show_topbar": show_topbar,
+        },
+        "options": {"rotaryActions": False, "stepAutoProgress": True},
+        "feedbacks": [],
+        "steps": {
+            "0": {
+                "action_sets": {"down": [], "up": []},
+                "options": {"runWhileHeld": []},
+            }
+        },
+    }
+
+
+def place_template_button(
+    config: dict,
+    page_num: str | int,
+    row: int,
+    col: int,
+    template: dict,
+    instance_ids: list[str],
+) -> None:
+    """
+    Place a template button at an exact (row, col) position on a page.
+
+    The template dict comes from [[companion.button_templates]] in config.toml,
+    optionally merged with per-placement overrides from the buttons list.
+
+    Supported template actions:
+      "screen-take"  — fires /api/tpp/v1/screens/{screenId}/take on all instances
+      "label"        — no-action reminder/label button
+
+    Raises ValueError if the position is a reserved nav slot.
+    """
+    if (row, col) in NAV_POSITIONS:
+        raise ValueError(f"Cannot place template at ({row}, {col}) — reserved nav position")
+
+    action = template.get("action")
+    label = template.get("label", "")
+    bgcolor = template.get("color", 0)
+    text_color = template.get("text_color", 16777215)
+    text_size = template.get("text_size", "auto")
+
+    if action == "screen-take":
+        screen_id = template.get("screen_id", 1)
+        btn = build_screen_take_button(screen_id, instance_ids, label, text_color, bgcolor, text_size)
+    elif action == "label":
+        show_topbar = template.get("show_topbar", False)
+        btn = build_label_button(label, text_color, bgcolor, text_size, show_topbar)
+    else:
+        raise ValueError(f"Unknown template action: {action!r} (supported: 'screen-take', 'label')")
+
+    page_num = str(page_num)
+    controls = config["pages"][page_num].setdefault("controls", {})
+    controls.setdefault(str(row), {})[str(col)] = btn
+    logger.debug(f"  [{row}/{col}] template {action!r} → {label!r}")
 
 
 # ---------------------------------------------------------------------------

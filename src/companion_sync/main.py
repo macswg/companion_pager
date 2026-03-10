@@ -28,6 +28,7 @@ from companion_updater import (
     get_instance_ids_by_type,
     load_config,
     place_preset_button,
+    place_template_button,
     save_config,
     update_page_title,
 )
@@ -89,6 +90,7 @@ def main() -> None:
     cols_per_row = cfg["companion"].get("cols_per_row", 8)
     target = cfg["companion"].get("target", "preview")
     pages_config = cfg["companion"].get("pages", [])
+    templates = {t["name"]: t for t in cfg["companion"].get("button_templates", [])}
 
     # --- Step 1: Load template config ---
     logger.info(f"Loading template: {template_path}")
@@ -160,23 +162,30 @@ def main() -> None:
             pinned_cfg = page_cfg.get("buttons", [])
             pinned_positions = set()
             for pin in pinned_cfg:
-                mid, row, col = pin["memory_id"], pin["row"], pin["col"]
-                pin_color = pin.get("color", bgcolor)
-                pin_text_color = pin.get("text_color", 16777215)
-                pin_text_size = pin.get("text_size", "auto")
-                if mid not in preset_map:
-                    logger.warning(f"Page {page_num}: pinned memory_id {mid} not found on device, skipping.")
-                    continue
+                row, col = pin["row"], pin["col"]
                 try:
-                    place_preset_button(
-                        config, page_num, row, col,
-                        preset=preset_map[mid],
-                        instance_ids=instance_ids,
-                        target=target,
-                        bgcolor=pin_color,
-                        text_color=pin_text_color,
-                        text_size=pin_text_size,
-                    )
+                    if "template" in pin:
+                        tname = pin["template"]
+                        if tname not in templates:
+                            logger.warning(f"Page {page_num}: unknown template {tname!r}, skipping.")
+                            continue
+                        # merge template defaults with any per-placement overrides
+                        merged = {**templates[tname], **{k: v for k, v in pin.items() if k not in ("template", "row", "col")}}
+                        place_template_button(config, page_num, row, col, merged, instance_ids)
+                    else:
+                        mid = pin["memory_id"]
+                        if mid not in preset_map:
+                            logger.warning(f"Page {page_num}: pinned memory_id {mid} not found on device, skipping.")
+                            continue
+                        place_preset_button(
+                            config, page_num, row, col,
+                            preset=preset_map[mid],
+                            instance_ids=instance_ids,
+                            target=target,
+                            bgcolor=pin.get("color", bgcolor),
+                            text_color=pin.get("text_color", 16777215),
+                            text_size=pin.get("text_size", "auto"),
+                        )
                     pinned_positions.add((row, col))
                     total_stamped += 1
                 except ValueError as e:
