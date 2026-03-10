@@ -19,15 +19,42 @@ cols_per_row = 8
 # Whether buttons load into "preview" or "program"
 target = "preview"
 
+# Color presets — copy these values into color/text_color fields below.
+# (TOML does not support variable references, so copy-paste as needed.)
+[colors]
+yellow_text      = 0xCCCC00
+bright_red_text  = 0xFF0000
+bright_red_bg    = 0x9D0101
+dark_red_bg      = 0x330000
+green_bg         = 0x003300
+purple_text      = 0xFF00FF
+white            = 0xFFFFFF
+black            = 0x000000
+
 # Page mappings — one [[companion.pages]] block per Companion page to populate.
-# memory_ids lists the AQ Master Memory IDs to place on that page, in order.
-# color is a 24-bit integer (e.g. 0x003300 = dark green).
+# memory_ids: AQ Master Memory IDs to auto-flow left-to-right, top-to-bottom.
+# buttons:    Pin a specific memory ID to an exact row/col position.
+# Both can be used together on the same page; pinned positions are skipped by auto-flow.
+# color is a 24-bit integer (see color reference above).
+#
+# Per-button fields (all optional except memory_id/row/col):
+#   memory_id   (required) AQ Master Memory ID
+#   row         (required) 0-indexed grid row
+#   col         (required) 0-indexed grid col
+#   color       background color — defaults to page color
+#   text_color  label text color — defaults to white (0xFFFFFF)
+#   text_size   font size string: "auto", "7", "14", "18", "24", "30" — defaults to "auto"
 
 [[companion.pages]]
 page_num = 1
 page_title = "Day 1"
 color = 0x003300
 memory_ids = []   # fill in with AQ memory IDs for show day 1
+# buttons = [
+#   { memory_id = 105, row = 0, col = 7 },
+#   { memory_id = 110, row = 1, col = 7, color = 0x003300, text_color = 0xFFFF00, text_size = "18" },
+# ]
+# All button fields except memory_id/row/col are optional and default to the page color / white / auto.
 
 [[companion.pages]]
 page_num = 20

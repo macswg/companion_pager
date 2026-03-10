@@ -104,7 +104,7 @@ def build_preset_button(
     preset: AquilonPreset,
     instance_ids: list[str],
     target: str = "preview",
-    text_size: str = "18",
+    text_size: str = "auto",
     text_color: int = 16777215,   # white
     bgcolor: int = 0,             # black
 ) -> dict:
@@ -174,6 +174,36 @@ def build_preset_button(
 # Page population
 # ---------------------------------------------------------------------------
 
+def place_preset_button(
+    config: dict,
+    page_num: str | int,
+    row: int,
+    col: int,
+    preset: AquilonPreset,
+    instance_ids: list[str],
+    target: str = "preview",
+    bgcolor: int = 0,
+    text_color: int = 16777215,
+    text_size: str = "auto",
+) -> None:
+    """
+    Place a single preset button at an exact (row, col) position on a page.
+
+    Raises ValueError if the position is a reserved nav slot.
+    """
+    if (row, col) in NAV_POSITIONS:
+        raise ValueError(f"Cannot place preset at ({row}, {col}) — reserved nav position")
+
+    page_num = str(page_num)
+    controls = config["pages"][page_num].setdefault("controls", {})
+    btn = build_preset_button(
+        preset, instance_ids, target=target,
+        bgcolor=bgcolor, text_color=text_color, text_size=text_size,
+    )
+    controls.setdefault(str(row), {})[str(col)] = btn
+    logger.debug(f"  [{row}/{col}] pinned memoryId={preset.memory_id} → {preset.name!r}")
+
+
 def apply_presets_to_page(
     config: dict,
     page_num: str | int,
@@ -185,24 +215,28 @@ def apply_presets_to_page(
     target: str = "preview",
     bgcolor: int = 0,
     clear_first: bool = True,
+    pinned_positions: frozenset[tuple[int, int]] = frozenset(),
 ) -> int:
     """
     Stamp a list of Aquilon presets onto a Companion page as buttons.
 
     Buttons are placed left-to-right, top-to-bottom starting from
-    (start_row, start_col). Nav button positions are always skipped.
+    (start_row, start_col). Nav button positions and any pinned_positions
+    are always skipped.
 
     Args:
-        config:       Full Companion config dict (modified in-place).
-        page_num:     Target page number (int or string).
-        presets:      Ordered list of AquilonPreset objects.
-        instance_ids: Companion instance IDs for each Aquilon unit.
-        start_row:    Grid row for the first preset button.
-        start_col:    Grid column for the first preset button.
-        cols_per_row: Stream Deck columns per row (XL = 8, regular = 5).
-        target:       Action target — "preview" or "program".
-        bgcolor:      Background color for all buttons on this page (24-bit int).
-        clear_first:  If True, remove existing buttons (preserving nav) first.
+        config:           Full Companion config dict (modified in-place).
+        page_num:         Target page number (int or string).
+        presets:          Ordered list of AquilonPreset objects.
+        instance_ids:     Companion instance IDs for each Aquilon unit.
+        start_row:        Grid row for the first preset button.
+        start_col:        Grid column for the first preset button.
+        cols_per_row:     Stream Deck columns per row (XL = 8, regular = 5).
+        target:           Action target — "preview" or "program".
+        bgcolor:          Background color for all buttons on this page (24-bit int).
+        clear_first:      If True, remove existing buttons (preserving nav) first.
+        pinned_positions: Additional (row, col) positions to skip during auto-flow
+                          (used when buttons have been pinned via place_preset_button).
 
     Returns:
         Number of presets stamped onto the page.
@@ -232,7 +266,7 @@ def apply_presets_to_page(
             row = flat // cols_per_row
             col = flat % cols_per_row
             slot += 1
-            if (row, col) not in NAV_POSITIONS:
+            if (row, col) not in NAV_POSITIONS and (row, col) not in pinned_positions:
                 break
 
         btn = build_preset_button(preset, instance_ids, target=target, bgcolor=bgcolor)

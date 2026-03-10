@@ -27,6 +27,7 @@ from companion_updater import (
     apply_presets_to_page,
     get_instance_ids_by_type,
     load_config,
+    place_preset_button,
     save_config,
     update_page_title,
 )
@@ -147,11 +148,46 @@ def main() -> None:
                     f"Page {page_num}: {len(missing)} memory ID(s) not found on device: {missing}"
                 )
 
+            update_page_title(config, page_num, page_title)
+
+            # Step 1: clear the page (preserving nav), regardless of what follows.
+            apply_presets_to_page(
+                config, page_num=page_num, presets=[],
+                instance_ids=instance_ids, clear_first=True,
+            )
+
+            # Step 2: place pinned buttons at exact positions.
+            pinned_cfg = page_cfg.get("buttons", [])
+            pinned_positions = set()
+            for pin in pinned_cfg:
+                mid, row, col = pin["memory_id"], pin["row"], pin["col"]
+                pin_color = pin.get("color", bgcolor)
+                pin_text_color = pin.get("text_color", 16777215)
+                pin_text_size = pin.get("text_size", "auto")
+                if mid not in preset_map:
+                    logger.warning(f"Page {page_num}: pinned memory_id {mid} not found on device, skipping.")
+                    continue
+                try:
+                    place_preset_button(
+                        config, page_num, row, col,
+                        preset=preset_map[mid],
+                        instance_ids=instance_ids,
+                        target=target,
+                        bgcolor=pin_color,
+                        text_color=pin_text_color,
+                        text_size=pin_text_size,
+                    )
+                    pinned_positions.add((row, col))
+                    total_stamped += 1
+                except ValueError as e:
+                    logger.error(f"Page {page_num}: {e}")
+
+            # Step 3: auto-flow remaining presets into open slots.
             if not page_presets:
-                logger.warning(f"Page {page_num}: no matching presets found, skipping.")
+                if not pinned_cfg:
+                    logger.warning(f"Page {page_num}: no matching presets found, skipping.")
                 continue
 
-            update_page_title(config, page_num, page_title)
             n = apply_presets_to_page(
                 config,
                 page_num=page_num,
@@ -160,8 +196,10 @@ def main() -> None:
                 cols_per_row=cols_per_row,
                 target=target,
                 bgcolor=bgcolor,
+                clear_first=False,
+                pinned_positions=frozenset(pinned_positions),
             )
-            logger.info(f"Page {page_num} ({page_title!r}): stamped {n} presets.")
+            logger.info(f"Page {page_num} ({page_title!r}): {n} auto-flow + {len(pinned_positions)} pinned.")
             total_stamped += n
 
     logger.info(f"Total preset buttons stamped: {total_stamped}")
