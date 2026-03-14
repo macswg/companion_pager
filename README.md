@@ -1,9 +1,8 @@
 # Aquilon Show Control Toolkit
 
 Python tools for show prep with the Analog Way LivePremier (Aquilon) and Bitfocus
-Companion. Automates output configuration, multiviewer layout, unit cloning, and
-Companion button sync — tasks that would otherwise require manual setup on every
-show build.
+Companion. Automates Companion button sync, multiviewer layout, and backup verification
+— tasks that would otherwise require manual setup on every show build.
 
 Each tool is independent. Use the right one for the right stage of setup.
 
@@ -23,6 +22,76 @@ on the Aquilon so button labels and action indexes stay in sync.
 
 ```bash
 python src/companion_sync/main.py
+# → import outputs/updated.companionconfig into Companion
+```
+
+#### Companion config format
+
+Buttons are defined per-page in `config.toml`. Placement modes can be mixed freely on the same page:
+
+**Auto-flow** — `memory_ids` fill left-to-right, top-to-bottom, skipping nav and pinned slots:
+```toml
+[[companion.pages]]
+page_num   = 1
+page_title = "Friday Show (1)"
+color      = 0x000000
+memory_ids = [100, 101, 102, 103, 104, 105]
+```
+
+**Pinned** — place a specific preset at an exact row/col position. Pinned positions are skipped by auto-flow. Per-button `color`, `text_color`, and `text_size` overrides are supported:
+```toml
+buttons = [
+    { memory_id = 76, row = 2, col = 1, text_color = 0xCCCC00, text_size = "14" },
+    { memory_id = 68, row = 2, col = 3, color = 0x330000 },
+]
+```
+
+**Template buttons** — reusable buttons defined once in `[[companion.button_templates]]` and placed by name on any page. Per-placement overrides are merged on top of the template:
+```toml
+[[companion.button_templates]]
+name      = "take"
+action    = "screen-take"
+screen_id = 1
+label     = "TAKE"
+color     = 0x9D0101
+
+[[companion.button_templates]]
+name       = "must_off_interstitial"
+action     = "label"
+label      = "MUST OFF before -> Interstitial"
+text_color = 0xFF00FF
+show_topbar = false
+
+[[companion.button_templates]]
+name      = "p76"
+action    = "preset"
+memory_id = 76
+```
+
+Then reference by name in any page's `buttons` list:
+```toml
+buttons = [
+    { template = "take", row = 2, col = 6 },
+    { template = "must_off_interstitial", row = 3, col = 2 },
+    { template = "p76", row = 2, col = 1, text_color = 0xCCCC00, text_size = "14" },
+]
+```
+
+Supported template actions:
+- `"screen-take"` — fires `/api/tpp/v1/screens/{screenId}/take` on both AQ instances
+- `"label"` — no-action reminder/note button (`show_topbar = false` hides the topbar)
+- `"preset"` — fires `load-master-memory` for `memory_id` on both AQ instances; button label pulled from device name unless `label` is set explicitly
+
+**Smart text sizing** — set `smart_wrap = true` in `config.toml` to automatically
+step down font size on `"auto"` buttons so labels never break mid-word. Explicit
+`text_size` values (e.g. `"14"`) are always respected unchanged.
+
+**Color reference:**
+```
+0xCCCC00  yellow text       0xFF0000  bright red text
+0x9D0101  bright red bg     0x330000  dark red bg
+0x003300  green bg          0xFF00FF  purple text
+0xFFFFFF  white             0x000000  black
 ```
 
 ---
@@ -37,15 +106,7 @@ separate TOML file so multiple configs can coexist for different shows or days.
 **Use for:** Building the multiviewer layout on Aquilon outputs.
 **Does not touch:** Companion configs or device presets.
 
-MV layouts live in their own config file — keep one per show:
-
 ```bash
-# Copy the example to get started
-cp mv_config.example.toml mv_config.toml
-
-# Or capture all MV memories from a live Aquilon into a named file
-# (see "Capturing MV layouts" below)
-
 # List available layouts in a config file
 python src/mv_setup/main.py --config coachella_mv_config.toml --list
 
@@ -54,9 +115,6 @@ python src/mv_setup/main.py --config coachella_mv_config.toml --layout 10_mv_all
 ```
 
 #### Capturing MV layouts from a live Aquilon
-
-To snapshot all MV memories from a programmed device and save them as a
-portable config file, run the capture script:
 
 ```bash
 python src/mv_setup/capture.py --out coachella_mv_config.toml
@@ -68,11 +126,9 @@ and used to restore layouts on any Aquilon.
 
 #### Restoring MV layouts to a new Aquilon
 
-To push all memories from a captured config file back to a device, run the
-restore script:
-
 ```bash
 python src/mv_setup/restore.py --config coachella_mv_config.toml
+python src/mv_setup/restore.py --config coachella_mv_config.toml --dry-run
 ```
 
 For each `[[layouts]]` block the script:
@@ -80,14 +136,8 @@ For each `[[layouts]]` block the script:
 2. Sets the memory slot label
 3. Triggers an in-device save so the layout is stored in the bank
 
-Preview what will happen without touching the device:
-
-```bash
-python src/mv_setup/restore.py --config coachella_mv_config.toml --dry-run
-```
-
 Layout names must start with the slot number followed by an underscore
-(e.g. `01_inputs`, `10_mv_all_pgm_bot`).  Files produced by `capture.py`
+(e.g. `01_inputs`, `10_mv_all_pgm_bot`). Files produced by `capture.py`
 always follow this format.
 
 #### Layout config format
@@ -107,67 +157,6 @@ x = 0                     # position and size in canvas pixels
 y = 0
 w = 320
 h = 270
-```
-
-#### Companion config format
-
-Buttons are defined per-page in `config.toml`. Two placement modes can be mixed freely on the same page:
-
-**Auto-flow** — presets fill left-to-right, top-to-bottom, skipping nav slots:
-```toml
-[[companion.pages]]
-page_num   = 1
-page_title = "Friday Show (1)"
-color      = 0x000000
-memory_ids = [100, 101, 102, 103, 104, 105]
-```
-
-**Pinned** — place a specific preset at an exact row/col position. Pinned positions are skipped by auto-flow:
-```toml
-buttons = [
-    { memory_id = 76, row = 2, col = 1 },
-    { memory_id = 68, row = 2, col = 3, color = 0x330000, text_color = 0xCCCC00, text_size = "14" },
-]
-```
-
-**Template buttons** — reusable non-preset buttons (TAKE, reminder labels, etc.) defined once and placeable on any page:
-```toml
-[[companion.button_templates]]
-name      = "take"
-action    = "screen-take"
-screen_id = 1
-label     = "TAKE"
-color     = 0x9D0101
-
-[[companion.button_templates]]
-name       = "must_off_interstitial"
-action     = "label"
-label      = "MUST OFF before -> Interstitial"
-text_color = 0xFF00FF
-show_topbar = false
-```
-
-Then reference by name in any page's `buttons` list. Per-placement overrides are supported:
-```toml
-buttons = [
-    { template = "take", row = 0, col = 7 },
-    { template = "must_off_interstitial", row = 1, col = 0 },
-    { template = "take", row = 2, col = 7, color = 0x330000 },
-]
-```
-
-Supported template actions: `"screen-take"` (fires on both AQ instances), `"label"` (no-action reminder button).
-
-**Smart text sizing** — set `smart_wrap = true` in `config.toml` to automatically
-step down font size on `"auto"` buttons so labels never break mid-word. Explicit
-`text_size` values (e.g. `"14"`) are always respected unchanged.
-
-**Color reference:**
-```
-0xCCCC00  yellow text       0xFF0000  bright red text
-0x9D0101  bright red bg     0x330000  dark red bg
-0x003300  green bg          0xFF00FF  purple text
-0xFFFFFF  white             0x000000  black
 ```
 
 ---
@@ -233,16 +222,16 @@ cp mv_config.example.toml mv_config.toml
 
 ```
 src/
-  companion_sync/         ← Tool 1: Companion preset sync
+  companion_sync/      ← Tool 1: Companion preset sync
     main.py
     companion_updater.py
-  mv_setup/               ← Tool 2: Multiviewer layout configuration
+  mv_setup/            ← Tool 2: Multiviewer layout configuration
     main.py
     capture.py
     restore.py
-  aq_backup_verify/               ← Tool 3: Verify AQ22 matches AQ21
+  aq_backup_verify/    ← Tool 3: Verify AQ22 matches AQ21
     main.py
-  common/                 ← Shared: LivePremier REST API client
+  common/              ← Shared: LivePremier REST API client
     aquilon_comms.py
 
 tests/
@@ -254,13 +243,13 @@ tests/
 example config files for ref/
   nuc-green_2026_draft.companionconfig  — 2025 show reference layout
 
-outputs/              — generated Companion configs (gitignored)
-logs/                 — log files (gitignored)
-config.example.toml   — reference config (copy → config.toml)
+outputs/               — generated Companion configs (gitignored)
+logs/                  — log files (gitignored)
+config.example.toml    — reference config (copy → config.toml)
 mv_config.example.toml — reference MV layout config (copy → mv_config.toml)
 coachella_mv_config.toml — captured Coachella MV memories (36 layouts)
-PRD.md               — product requirements
-PLAN.md              — implementation plan and status
+PRD.md                 — product requirements
+PLAN.md                — implementation plan and status
 ```
 
 ---
