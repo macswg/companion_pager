@@ -1,0 +1,40 @@
+# mv_config.example.toml
+# Copy this file to mv_config.toml (or any name you like) and define your layouts.
+# mv_config.toml is gitignored — never commit it.
+#
+# Usage:
+#   python src/mv_setup/main.py --config mv_config.toml --layout <name>
+#   python src/mv_setup/main.py --config mv_config.toml --list
+#
+# Multiple layout files can coexist for different shows or days:
+#   mv_config_day1.toml, mv_config_day2.toml, etc.
+#
+# ── Widget source_type values ────────────────────────────────────────────────
+#   "input"              → live input         (source_id = input number, 1-based)
+#   "screen-program"     → program bus        (source_id = screen number, 1-based)
+#   "screen-preview"     → preview bus        (source_id = screen number, 1-based)
+#   "timer"              → timer source       (source_id = timer number, 1-based)
+#   "none"               → blank/black window
+#
+# ── Positions & sizes ────────────────────────────────────────────────────────
+#   All values are in MV canvas pixels.
+#   Standard canvas: 1920×1080 (6-wide × 4-tall grid of 320×270 tiles).
+#   widget_id is 1-based (matches the LivePremier REST API).
+#
+# ── Example: 24-input grid (6×4) ─────────────────────────────────────────────
+#
+# [[layouts]]
+# name     = "all_inputs"
+# mv_id    = 1
+# canvas_w = 1920
+# canvas_h = 1080
+#
+# [[layouts.windows]]
+# widget_id = 1 ; source_type = "input" ; source_id = 1
+# x = 0 ; y = 0 ; w = 320 ; h = 270
+#
+# [[layouts.windows]]
+# widget_id = 2 ; source_type = "input" ; source_id = 2
+# x = 320 ; y = 0 ; w = 320 ; h = 270
+#
+# ... (continue for all 24 inputs)

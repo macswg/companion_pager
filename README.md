@@ -1,12 +1,289 @@
-# companion_pagerS21
-Python code to update companion config
+# Aquilon Show Control Toolkit
 
+Python tools for show prep with the Analog Way LivePremier (Aquilon) and Bitfocus
+Companion. Automates Companion button sync, multiviewer layout, and backup verification
+— tasks that would otherwise require manual setup on every show build.
 
-This repo is a collection of scripts to update a bitfocus companion config.
+Each tool is independent. Use the right one for the right stage of setup.
 
-Script descriptions:
+---
 
-'companion_navUpdate.py' is used to update the nav buttons across all companion pages.
+## Tools
 
-'companion_pager_v2.py' as of this writing uses the first set of buttons (button 1 and button 9 on the streamdeck) in the example config and creates copies with updated labels and actions. The scipts are currently focused on controlling a Spyder X80.
+### Tool 1 — Companion Preset Sync
+**`src/companion_sync/main.py`**
 
+Queries Master Memory names and IDs from the LivePremier and stamps them onto
+Stream Deck buttons in a Companion config. Run this after presets are finalized
+on the Aquilon so button labels and action indexes stay in sync.
+
+**Use for:** Updating Companion button labels and preset indexes.
+**Does not touch:** The Aquilon device itself.
+
+```bash
+python src/companion_sync/main.py
+# → import outputs/updated_<timestamp>.companionconfig into Companion
+
+# Use a different config file (default: config.toml)
+python src/companion_sync/main.py --config other_config.toml
+```
+
+#### Companion config format
+
+Buttons are defined per-page in `config.toml`. Placement modes can be mixed freely on the same page:
+
+**Auto-flow** — `memory_ids` fill left-to-right, top-to-bottom, skipping nav and pinned slots:
+```toml
+[[companion.pages]]
+page_num   = 1
+page_title = "Friday Show (1)"
+color      = 0x000000
+memory_ids = [100, 101, 102, 103, 104, 105]
+```
+
+**Pinned** — place a specific preset at an exact row/col position. Pinned positions are skipped by auto-flow. Per-button `color`, `text_color`, and `text_size` overrides are supported:
+```toml
+buttons = [
+    { memory_id = 76, row = 2, col = 1, text_color = 0xCCCC00, text_size = "14" },
+    { memory_id = 68, row = 2, col = 3, color = 0x330000 },
+]
+```
+
+**Template buttons** — reusable buttons defined once in `[[companion.button_templates]]` and placed by name on any page. Per-placement overrides are merged on top of the template:
+```toml
+[[companion.button_templates]]
+name      = "take"
+action    = "screen-take"
+screen_id = 1
+label     = "TAKE"
+color     = 0x9D0101
+
+[[companion.button_templates]]
+name       = "must_off_interstitial"
+action     = "label"
+label      = "MUST OFF before -> Interstitial"
+text_color = 0xFF00FF
+show_topbar = false
+
+[[companion.button_templates]]
+name      = "p76"
+action    = "preset"
+memory_id = 76
+```
+
+Then reference by name in any page's `buttons` list:
+```toml
+buttons = [
+    { template = "take", row = 2, col = 6 },
+    { template = "must_off_interstitial", row = 3, col = 2 },
+    { template = "p76", row = 2, col = 1, text_color = 0xCCCC00, text_size = "14" },
+]
+```
+
+Supported template actions:
+- `"screen-take"` — fires `/api/tpp/v1/screens/{screenId}/take` on both AQ instances
+- `"label"` — no-action reminder/note button (`show_topbar = false` hides the topbar)
+- `"preset"` — fires `load-master-memory` for `memory_id` on both AQ instances; button label pulled from device name unless `label` is set explicitly
+- `"page-jump"` — navigates to a Companion page. `controller` can be `"self"` (default), a static device serial (e.g. `"streamdeck:CL37L2A00862"`), or a Companion variable (e.g. `"$(custom:green_surface)"`)
+
+**Inline action buttons** — buttons with an `action` field directly in the `buttons` list (no `template` name needed):
+```toml
+buttons = [
+    { action = "page-jump", page = 50, label = "Page Control", color = 0x003300, row = 0, col = 0 },
+    { action = "label", label = "$(internal:time_h) :", color = 0x242424, show_topbar = false, row = 2, col = 0 },
+]
+```
+
+**`clear = false`** — add to a page to skip the wipe step. Buttons defined in `buttons` are pinned on top of the template content, leaving everything else (e.g. complex nav or utility buttons from the template) intact:
+```toml
+[[companion.pages]]
+page_num   = 50
+clear      = false
+memory_ids = []
+buttons    = [ ... ]
+```
+
+**Smart text sizing** — set `smart_wrap = true` in `config.toml` to automatically
+step down font size on `"auto"` buttons so labels never break mid-word. Explicit
+`text_size` values (e.g. `"14"`) are always respected unchanged.
+
+**Color reference:**
+```
+0xCCCC00  yellow text       0xFF0000  bright red text
+0x9D0101  bright red bg     0x330000  dark red bg
+0x003300  green bg          0xFF00FF  purple text
+0xFFFFFF  white             0x000000  black
+```
+
+---
+
+### Tool 2 — MV Setup
+**`src/mv_setup/main.py`**
+
+Applies a named multiviewer layout to the Aquilon: window positions, sizes, and
+source assignments (inputs, program bus, preview bus). Layouts are defined in a
+separate TOML file so multiple configs can coexist for different shows or days.
+
+**Use for:** Building the multiviewer layout on Aquilon outputs.
+**Does not touch:** Companion configs or device presets.
+
+```bash
+# List available layouts in a config file
+python src/mv_setup/main.py --config my_show_mv_config.toml --list
+
+# Apply a layout
+python src/mv_setup/main.py --config my_show_mv_config.toml --layout 10_mv_all_pgm_bot
+```
+
+#### Capturing MV layouts from a live Aquilon
+
+```bash
+python src/mv_setup/capture.py --out my_show_mv_config.toml
+```
+
+This reads every programmed MV memory from the device and writes a TOML file
+with one `[[layouts]]` block per memory. The resulting file can be checked in
+and used to restore layouts on any Aquilon.
+
+#### Restoring MV layouts to a new Aquilon
+
+```bash
+python src/mv_setup/restore.py --config my_show_mv_config.toml
+python src/mv_setup/restore.py --config my_show_mv_config.toml --dry-run
+```
+
+For each `[[layouts]]` block the script:
+1. Applies the window layout to the live MV output (sources, positions, sizes)
+2. Sets the memory slot label
+3. Triggers an in-device save so the layout is stored in the bank
+
+Layout names must start with the slot number followed by an underscore
+(e.g. `01_inputs`, `10_mv_all_pgm_bot`). Files produced by `capture.py`
+always follow this format.
+
+#### Layout config format
+
+```toml
+[[layouts]]
+name     = "all_inputs"   # used with --layout
+mv_id    = 1              # which MV output (1-based)
+canvas_w = 1920           # MV canvas size in pixels
+canvas_h = 1080
+
+[[layouts.windows]]
+widget_id   = 1           # window slot (1-based)
+source_type = "input"     # input | screen-program | screen-preview | image | none
+source_id   = 1           # source number (1-based); omit for "none"
+x = 0                     # position and size in canvas pixels
+y = 0
+w = 320
+h = 270
+```
+
+---
+
+### Tool 3 — AQ Backup Verify
+**`src/aq_backup_verify/main.py`**
+
+Verifies AQ22 (backup) matches AQ21 (primary) across five categories: system
+info (firmware, device type), inputs, screens, outputs, and Master Memory lists.
+Each check reports pass/fail independently. Read-only — does not modify either unit.
+
+**Use for:** Confirming AQ22 is in sync with AQ21 before a show.
+**Does not touch:** Companion configs, output modes, or MV layouts.
+
+```bash
+python src/aq_backup_verify/main.py
+```
+
+---
+
+## Show Prep Workflow
+
+```
+1. AQ Backup Verify → confirm AQ22 firmware and memories match AQ21
+                      python src/aq_backup_verify/main.py
+
+2. MV Setup         → apply multiviewer layout from config file
+                      python src/mv_setup/main.py --config <file>.toml --layout <name>
+
+3. Companion Sync   → pull preset names into Companion buttons
+                      python src/companion_sync/main.py
+                      → import outputs/updated.companionconfig into Companion
+
+4. Test             → verify every button is correct
+                      pytest tests/ -v
+```
+
+---
+
+## Setup
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install pyyaml python-dotenv
+
+# IP addresses go in .env — never committed
+cp .env.example .env
+# Edit .env — set AQ_PRIMARY_HOST, AQ_BACKUP_HOST, AQ_PORT
+
+# Everything else (page layout, file paths, output settings) goes in config.toml
+cp config.example.toml config.toml
+# Edit config.toml as needed
+
+# MV layouts go in a separate file (one per show)
+cp mv_config.example.toml mv_config.toml
+# Or capture from a live device: python src/mv_setup/capture.py --out mv_config.toml
+```
+
+---
+
+## Project Structure
+
+```
+src/
+  companion_sync/      ← Tool 1: Companion preset sync
+    main.py
+    companion_updater.py
+  mv_setup/            ← Tool 2: Multiviewer layout configuration
+    main.py
+    capture.py
+    restore.py
+  aq_backup_verify/    ← Tool 3: Verify AQ22 matches AQ21
+    main.py
+  common/              ← Shared: LivePremier REST API client
+    aquilon_comms.py
+
+tests/
+  conftest.py
+  test_companion_updater.py   ← offline unit tests (no live AQ required)
+  test_companion_sync.py
+  test_aq_comms.py
+  test_aq_backup_verify.py
+
+example config files for ref/
+  current_config_19Mar_m5mpb.local_2026-03-19-2031_custom_config.companionconfig  — current show template
+  vars_m5mpb.local_2026-03-19-2229_custom_config.companionconfig                  — reference for action formats
+
+outputs/               — generated Companion configs (gitignored)
+logs/                  — log files (gitignored)
+config.example.toml    — reference config (copy → config.toml)
+mv_config.example.toml — reference MV layout config (copy → mv_config.toml)
+PRD.md                 — product requirements
+PLAN.md                — implementation plan and status
+```
+
+---
+
+## Status
+
+| Tool | Status |
+|------|--------|
+| Companion Sync (`src/companion_sync/`) | Code complete; offline unit tests passing; needs on-device validation |
+| MV Setup (`src/mv_setup/`) | Code complete; needs on-device validation |
+| AQ Backup Verify (`src/aq_backup_verify/`) | Code complete; needs on-device validation |
+| Offline unit tests (`tests/test_companion_updater.py`) | 66 tests, all passing |
+| Live test suite (`tests/`) | Written; requires live AQ to run |
+
+See `PLAN.md` for details.
