@@ -10,8 +10,8 @@ Slot IDs are read from the layout name prefix (e.g. "01_inputs" → slot 1).
 The name must begin with one or more digits followed by an underscore.
 
 Usage:
-    python src/mv_setup/restore.py --config coachella_mv_config.toml
-    python src/mv_setup/restore.py --config coachella_mv_config.toml --dry-run
+    python src/mv_setup/restore.py --config my_show_mv_config.toml
+    python src/mv_setup/restore.py --config my_show_mv_config.toml --dry-run
 """
 
 import argparse
@@ -120,7 +120,7 @@ def main() -> None:
         metavar="FILE",
         type=Path,
         required=True,
-        help="Path to mv_config TOML file (e.g. coachella_mv_config.toml)",
+        help="Path to mv_config TOML file (e.g. my_show_mv_config.toml)",
     )
     parser.add_argument(
         "--dry-run",

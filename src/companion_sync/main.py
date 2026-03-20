@@ -14,9 +14,11 @@ Usage:
     python src/companion_sync/main.py
 """
 
+import argparse
 import logging
 import sys
 import tomllib
+from datetime import datetime
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "common"))
@@ -55,17 +57,28 @@ logger = logging.getLogger(__name__)
 # Config
 # ---------------------------------------------------------------------------
 
-CONFIG_FILE = REPO_ROOT / "config.toml"
+DEFAULT_CONFIG_FILE = REPO_ROOT / "config.toml"
 
 
-def load_app_config() -> dict:
-    if not CONFIG_FILE.exists():
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="companion-pager: stamp AQ presets onto Companion pages")
+    parser.add_argument(
+        "--config", "-c",
+        type=Path,
+        default=DEFAULT_CONFIG_FILE,
+        help="Path to config TOML (default: config.toml)",
+    )
+    return parser.parse_args()
+
+
+def load_app_config(config_path: Path) -> dict:
+    if not config_path.exists():
         logger.error(
-            f"config.toml not found at {CONFIG_FILE}.\n"
+            f"Config not found at {config_path}.\n"
             "Copy config.example.toml → config.toml and fill in your settings."
         )
         sys.exit(1)
-    with open(CONFIG_FILE, "rb") as f:
+    with open(config_path, "rb") as f:
         return tomllib.load(f)
 
 
@@ -74,10 +87,12 @@ def load_app_config() -> dict:
 # ---------------------------------------------------------------------------
 
 def main() -> None:
+    args = parse_args()
+
     logger.info("===== companion-pager starting =====")
 
     load_env()
-    cfg = load_app_config()
+    cfg = load_app_config(args.config)
 
     # Aquilon (LivePremier) connection — host/port from .env
     aq_host = get_primary_host()
@@ -85,7 +100,9 @@ def main() -> None:
 
     # Companion config paths
     template_path = REPO_ROOT / cfg["companion"]["template_path"]
-    output_path = REPO_ROOT / cfg["companion"]["output_path"]
+    raw_output = REPO_ROOT / cfg["companion"]["output_path"]
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    output_path = raw_output.parent / f"{raw_output.stem}_{timestamp}{raw_output.suffix}"
 
     cols_per_row = cfg["companion"].get("cols_per_row", 8)
     target = cfg["companion"].get("target", "preview")
@@ -140,10 +157,6 @@ def main() -> None:
             bgcolor = page_cfg.get("color", 0)
             memory_ids = page_cfg.get("memory_ids", [])
 
-            if not memory_ids:
-                logger.info(f"Page {page_num} ({page_title!r}): no memory_ids configured, skipping.")
-                continue
-
             page_presets = [preset_map[mid] for mid in memory_ids if mid in preset_map]
             missing = [mid for mid in memory_ids if mid not in preset_map]
             if missing:
@@ -153,10 +166,11 @@ def main() -> None:
 
             update_page_title(config, page_num, page_title)
 
-            # Step 1: clear the page (preserving nav), regardless of what follows.
+            # Step 1: clear the page (preserving nav), unless clear=false in config.
+            clear_first = page_cfg.get("clear", True)
             apply_presets_to_page(
                 config, page_num=page_num, presets=[],
-                instance_ids=instance_ids, clear_first=True,
+                instance_ids=instance_ids, clear_first=clear_first,
             )
 
             # Step 2: place pinned buttons at exact positions.
@@ -195,6 +209,8 @@ def main() -> None:
                             )
                         else:
                             place_template_button(config, page_num, row, col, merged, instance_ids)
+                    elif "action" in pin:
+                        place_template_button(config, page_num, row, col, pin, instance_ids)
                     else:
                         mid = pin["memory_id"]
                         if mid not in preset_map:

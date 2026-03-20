@@ -272,8 +272,9 @@ def build_preset_button(
     down_actions = [
         {
             "id": _new_action_id(),
-            "action": LOAD_MEMORY_ACTION,
-            "instance": inst_id,
+            "type": "action",
+            "definitionId": LOAD_MEMORY_ACTION,
+            "connectionId": inst_id,
             "options": {
                 "memoryId": preset.memory_id,
                 "target": target,
@@ -443,8 +444,9 @@ def build_screen_take_button(
     down_actions = [
         {
             "id": _new_action_id(),
-            "action": SCREEN_TAKE_ACTION,
-            "instance": inst_id,
+            "type": "action",
+            "definitionId": SCREEN_TAKE_ACTION,
+            "connectionId": inst_id,
             "options": {"screenId": screen_id},
         }
         for inst_id in instance_ids
@@ -467,6 +469,66 @@ def build_screen_take_button(
         "steps": {
             "0": {
                 "action_sets": {"down": down_actions, "up": []},
+                "options": {"runWhileHeld": []},
+            }
+        },
+    }
+
+
+def build_page_jump_button(
+    page: int,
+    controller: str = "self",
+    label: str = "",
+    text_color: int = 16777215,
+    bgcolor: int = 0,
+    text_size: str = "auto",
+) -> dict:
+    """
+    Build a button that navigates to a specific Companion page.
+
+    Args:
+        page:        Target Companion page number.
+        controller:  Device serial (e.g. "streamdeck:CL37L2A00862"), "self" for the
+                     pressed device, or a Companion variable like "$(custom:green_surface)".
+        label:       Button text.
+        text_color:  Foreground color as a 24-bit int.
+        bgcolor:     Background color as a 24-bit int.
+        text_size:   Font size string.
+    """
+    controller_from_variable = controller.startswith("$(")
+    action = {
+        "id": _new_action_id(),
+        "definitionId": "set_page",
+        "connectionId": "internal",
+        "options": {
+            "controller_from_variable": controller_from_variable,
+            "controller": "self" if controller_from_variable else controller,
+            "controller_variable": controller if controller_from_variable else "self",
+            "page_from_variable": False,
+            "page": page,
+            "page_variable": "1",
+        },
+        "type": "action",
+        "children": {},
+    }
+    return {
+        "type": "button",
+        "style": {
+            "text": label,
+            "textExpression": False,
+            "size": text_size,
+            "png64": None,
+            "alignment": "center:center",
+            "pngalignment": "center:center",
+            "color": text_color,
+            "bgcolor": bgcolor,
+            "show_topbar": "default",
+        },
+        "options": {"rotaryActions": False, "stepAutoProgress": True},
+        "feedbacks": [],
+        "steps": {
+            "0": {
+                "action_sets": {"down": [action], "up": []},
                 "options": {"runWhileHeld": []},
             }
         },
@@ -540,8 +602,12 @@ def place_template_button(
     elif action == "label":
         show_topbar = template.get("show_topbar", False)
         btn = build_label_button(label, text_color, bgcolor, text_size, show_topbar)
+    elif action == "page-jump":
+        page = template.get("page", 1)
+        controller = template.get("controller", "self")
+        btn = build_page_jump_button(page, controller, label, text_color, bgcolor, text_size)
     else:
-        raise ValueError(f"Unknown template action: {action!r} (supported: 'screen-take', 'label')")
+        raise ValueError(f"Unknown template action: {action!r} (supported: 'screen-take', 'label', 'page-jump')")
 
     page_num = str(page_num)
     controls = config["pages"][page_num].setdefault("controls", {})

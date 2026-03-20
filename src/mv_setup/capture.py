@@ -7,7 +7,7 @@ with one [[layouts]] block per memory. The resulting file can be applied to
 any Aquilon using mv_setup.py.
 
 Usage:
-    python src/mv_setup/capture.py --out coachella_mv_config.toml
+    python src/mv_setup/capture.py --out my_show_mv_config.toml
 """
 
 import argparse
@@ -143,7 +143,7 @@ def main() -> None:
         metavar="FILE",
         type=Path,
         required=True,
-        help="Output TOML file path (e.g. coachella_mv_config.toml)",
+        help="Output TOML file path (e.g. my_show_mv_config.toml)",
     )
     args = parser.parse_args()
 

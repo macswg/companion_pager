@@ -5,6 +5,18 @@
 # IP addresses and ports live in .env (copy .env.example → .env).
 # This file holds everything else: page layout, file paths, output settings.
 
+# Color presets — copy these values into color/text_color fields below.
+# (TOML does not support variable references, so copy-paste as needed.)
+[colors]
+yellow_text      = 0xCCCC00
+bright_red_text  = 0xFF0000
+bright_red_bg    = 0x9D0101
+dark_red_bg      = 0x330000
+green_bg         = 0x003300
+purple_text      = 0xFF00FF
+white            = 0xFFFFFF
+black            = 0x000000
+
 [companion]
 # Path to the Companion config YAML used as the base template.
 # Must have the analogway-livepremier instances already configured.
@@ -24,17 +36,15 @@ target = "preview"
 # against the tablet view (127.0.0.1:8888/tablet) if sizing is off.
 smart_wrap = true
 
-# Color presets — copy these values into color/text_color fields below.
-# (TOML does not support variable references, so copy-paste as needed.)
-[colors]
-yellow_text      = 0xCCCC00
-bright_red_text  = 0xFF0000
-bright_red_bg    = 0x9D0101
-dark_red_bg      = 0x330000
-green_bg         = 0x003300
-purple_text      = 0xFF00FF
-white            = 0xFFFFFF
-black            = 0x000000
+# Color reference (use for color, text_color fields):
+#   0xCCCC00  yellow text
+#   0xFF0000  bright red text
+#   0x9D0101  bright red background
+#   0x330000  dark red background
+#   0x003300  green background
+#   0xFF00FF  purple text
+#   0xFFFFFF  white
+#   0x000000  black
 
 # Page mappings — one [[companion.pages]] block per Companion page to populate.
 # memory_ids: AQ Master Memory IDs to auto-flow left-to-right, top-to-bottom.
@@ -111,36 +121,215 @@ text_size  = "14"
 name       = "p49"
 action     = "preset"
 memory_id  = 49
+label      = "OFF SLOW"
+text_size  = "18"
 color      = 0x330000
+
+[[companion.button_templates]]
+name       = "p50"
+action     = "preset"
+memory_id  = 50
+label      = "OFF"
+text_size  = "24"
+color      = 0x330000
+
+[[companion.button_templates]]
+name       = "p28"
+action     = "preset"
+memory_id  = 28
+label      = "EMER"
+text_size  = "18"
+text_color = 0x990000
+color      = 0x999900
+
+[[companion.button_templates]]
+name       = "p32"
+action     = "preset"
+memory_id  = 32
+label      = "EMER BU"
+text_size  = "18"
+text_color = 0x990000
+color      = 0x999900
 
 [[companion.pages]]
 page_num = 1
-page_title = "Day 1"
-color = 0x003300
-memory_ids = []   # fill in with AQ memory IDs for show day 1
-# buttons = [
-#   { memory_id = 105, row = 0, col = 7 },
-#   { memory_id = 110, row = 1, col = 7, color = 0x003300, text_color = 0xFFFF00, text_size = "18" },
-# ]
-# All button fields except memory_id/row/col are optional and default to the page color / white / auto.
+page_title = "Friday Show (1)"
+color = 0x000000
+memory_ids = [100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110]
+buttons = [
+    { template = "p76", row = 2, col = 1 },
+    { template = "p69", row = 2, col = 2 },
+    { template = "p68", row = 2, col = 3 },
+    { template = "p51", row = 2, col = 5 },
+    { template = "p20", row = 3, col = 3 },
+    { template = "p49", row = 3, col = 4 },
+    { template = "take", row = 2, col = 6 },
+    { template = "must_off_interstitial", row = 3, col = 2 },
+]
 
 [[companion.pages]]
-page_num = 20
-page_title = "Day 2"
-color = 0x000033
-memory_ids = []   # fill in with AQ memory IDs for show day 2
+page_num = 2
+page_title = "Sat Show (2)"
+color = 0x000000
+memory_ids = [200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210]
+buttons = [
+    { template = "p76", row = 2, col = 1 },
+    { template = "p69", row = 2, col = 2 },
+    { template = "p68", row = 2, col = 3 },
+    { template = "p51", row = 2, col = 5 },
+    { template = "p20", row = 3, col = 3 },
+    { template = "p49", row = 3, col = 4 },
+    { template = "take", row = 2, col = 6 },
+    { template = "must_off_interstitial", row = 3, col = 2 },
+]
 
 [[companion.pages]]
-page_num = 40
-page_title = "Day 3"
-color = 0x330000
-memory_ids = []   # fill in with AQ memory IDs for show day 3
+page_num = 3
+page_title = "Sunday Show (3)"
+color = 0x000000
+memory_ids = [300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310]
+buttons = [
+    { template = "p76", row = 2, col = 1 },
+    { template = "p69", row = 2, col = 2 },
+    { template = "p68", row = 2, col = 3 },
+    { template = "p51", row = 2, col = 5 },
+    { template = "p20", row = 3, col = 3 },
+    { template = "p49", row = 3, col = 4 },
+    { template = "take", row = 2, col = 6 },
+    { template = "must_off_interstitial", row = 3, col = 2 },
+]
 
 [[companion.pages]]
-page_num = 60
-page_title = "Companion Controller"
-color = 0x1a1a00
+page_num   = 20
+page_title = "Setup Presets (20)"
+color      = 0x000000
+clear      = false
 memory_ids = []
+buttons = [
+    # Row 0 — test patterns / pixel map presets
+    { memory_id = 421, row = 0, col = 0 },
+    { memory_id = 38,  row = 0, col = 1 },
+    { memory_id = 21,  row = 0, col = 2 },
+    { memory_id = 422, row = 0, col = 3 },
+    { memory_id = 426, row = 0, col = 4 },
+    # Row 1 — off / grey presets
+    { memory_id = 425, row = 1, col = 0 },
+    { memory_id = 42,  row = 1, col = 1 },
+    { memory_id = 42,  row = 1, col = 2 },
+    { memory_id = 424, row = 1, col = 3 },
+    # Row 2 — TAKE
+    { template = "take", row = 2, col = 6 },
+    # Row 3 — label, LG Control nav, OFF
+    { action = "label",     label = "Setup Presets", color = 0x333300, text_color = 0x6E6E6E, show_topbar = false, row = 3, col = 0 },
+    { action = "page-jump", page = 55, label = "LG Control", color = 0x666600, text_color = 0xB6B6B6, controller = "streamdeck:CL37L2A00862", row = 3, col = 1 },
+    { template = "p50", row = 3, col = 5 },
+]
+
+[[companion.pages]]
+page_num = 21
+page_title = "Presets (21)"
+color = 0x000000
+memory_ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+buttons = [
+    { memory_id = 19, row = 3, col = 0 },
+    { memory_id = 20, row = 3, col = 1 },
+]
+
+[[companion.pages]]
+page_num = 22
+page_title = "Presets (22)"
+color = 0x000000
+memory_ids = [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38]
+buttons = [
+    { memory_id = 39, row = 3, col = 0 },
+    { memory_id = 40, row = 3, col = 1 },
+]
+
+[[companion.pages]]
+page_num = 23
+page_title = "Presets (23)"
+color = 0x000000
+memory_ids = [41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58]
+buttons = [
+    { memory_id = 59, row = 3, col = 0 },
+    { memory_id = 60, row = 3, col = 1 },
+]
+
+[[companion.pages]]
+page_num = 24
+page_title = "Presets (24)"
+color = 0x000000
+memory_ids = [61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78]
+buttons = [
+    { memory_id = 79, row = 3, col = 0 },
+    { memory_id = 80, row = 3, col = 1 },
+]
+
+[[companion.pages]]
+page_num = 25
+page_title = "Presets (25)"
+color = 0x000000
+memory_ids = [81, 82, 83, 84, 85, 86, 87, 88]
+buttons = [
+    { memory_id = 89, row = 3, col = 0 },
+    { memory_id = 90, row = 3, col = 1 },
+]
+
+[[companion.pages]]
+page_num = 26
+memory_ids = []
+
+[[companion.pages]]
+page_num = 27
+memory_ids = []
+
+[[companion.pages]]
+page_num = 28
+memory_ids = []
+
+[[companion.pages]]
+page_num = 29
+memory_ids = []
+
+[[companion.pages]]
+page_num   = 50
+page_title = "Page Control (50)"
+color      = 0x000000
+clear      = false
+memory_ids = []
+buttons = [
+    # Row 0 — top navigation bar
+    { action = "page-jump", page = 21,  label = "Show Core Presets",              color = 0x003300, text_size = "14", controller = "$(custom:green_surface)", row = 0, col = 0 },
+    { action = "page-jump", page = 40, label = "MV Router",                      color = 0x331900, row = 0, col = 1 },
+    { action = "page-jump", page = 41, label = "MV Out1 Presets",                color = 0x000033, row = 0, col = 2 },
+    { action = "page-jump", page = 13, label = "AQ Out Conf.",                   color = 0x003300, row = 0, col = 3 },
+    { action = "page-jump", page = 18, label = "LW x48 Salvos",                  color = 0x330033, row = 0, col = 4 },
+    { action = "page-jump", page = 33, label = "IMAG Presets",                   color = 0x003300, row = 0, col = 5 },
+    { action = "label",                label = "Conf. = $(LW16x16_LED:sourcename_O16)", color = 0x000000, text_size = "18", show_topbar = false, row = 0, col = 6 },
+    # Row 1 — secondary navigation
+    { action = "page-jump", page = 20, label = "Setup Presets",                  color = 0x333300, text_color = 0x6E6E6E, controller = "$(custom:green_surface)", row = 1, col = 0 },
+    { action = "page-jump", page = 43, label = "MV MACROS",                      color = 0x000033, text_size = "14", row = 1, col = 1 },
+    { action = "page-jump", page = 42, label = "MV Out2 Presets",                color = 0x000033, row = 1, col = 2 },
+    { action = "page-jump", page = 15, label = "LW x48 INFO",                    color = 0x330033, text_color = 0x6E6E6E, row = 1, col = 3 },
+    { action = "page-jump", page = 12, label = "LW x16 OUT Salvos",              color = 0x660066, row = 1, col = 4 },
+    { action = "page-jump", page = 35, label = "IMAG Routing",                   color = 0x331900, row = 1, col = 5 },
+    { template = "p28", row = 1, col = 6 },
+    { template = "p32", row = 1, col = 7 },
+    # Row 2 — clock + utility
+    { action = "label", label = "$(internal:time_h) :", color = 0x242424, show_topbar = false, row = 2, col = 0 },
+    { action = "label", label = "$(internal:time_m) :", color = 0x242424, show_topbar = false, row = 2, col = 1 },
+    { action = "label", label = "$(internal:time_s) ",  color = 0x242424, text_size = "30", show_topbar = false, row = 2, col = 2 },
+    { action = "page-jump", page = 45, label = "AUX mems",                       color = 0x000033, text_size = "14", row = 2, col = 3 },
+    { action = "page-jump", page = 30, label = "LW x48 Interstitial Salvos",     color = 0x330033, row = 2, col = 4 },
+    { template = "p51", text_size = "18", label = "OFF Fast", row = 2, col = 5 },
+    { template = "take", row = 2, col = 6 },
+    # Row 3 — show day + off buttons (Standby at 3/3 comes from template)
+    { action = "page-jump", page = 1, label = "SHOW Day #1", color = 0x003300, text_size = "18", controller = "$(custom:green_surface)", row = 3, col = 0 },
+    { action = "page-jump", page = 2, label = "SHOW Day #2", color = 0x003300, text_size = "18", controller = "$(custom:green_surface)", row = 3, col = 1 },
+    { action = "page-jump", page = 3, label = "SHOW Day #3", color = 0x003300, text_size = "18", controller = "$(custom:green_surface)", row = 3, col = 2 },
+    { template = "p49", row = 3, col = 4 },
+    { template = "p50", row = 3, col = 5 },
+]
 
 [[companion.pages]]
 page_num = 80

@@ -22,7 +22,10 @@ on the Aquilon so button labels and action indexes stay in sync.
 
 ```bash
 python src/companion_sync/main.py
-# → import outputs/updated.companionconfig into Companion
+# → import outputs/updated_<timestamp>.companionconfig into Companion
+
+# Use a different config file (default: config.toml)
+python src/companion_sync/main.py --config other_config.toml
 ```
 
 #### Companion config format
@@ -81,6 +84,24 @@ Supported template actions:
 - `"screen-take"` — fires `/api/tpp/v1/screens/{screenId}/take` on both AQ instances
 - `"label"` — no-action reminder/note button (`show_topbar = false` hides the topbar)
 - `"preset"` — fires `load-master-memory` for `memory_id` on both AQ instances; button label pulled from device name unless `label` is set explicitly
+- `"page-jump"` — navigates to a Companion page. `controller` can be `"self"` (default), a static device serial (e.g. `"streamdeck:CL37L2A00862"`), or a Companion variable (e.g. `"$(custom:green_surface)"`)
+
+**Inline action buttons** — buttons with an `action` field directly in the `buttons` list (no `template` name needed):
+```toml
+buttons = [
+    { action = "page-jump", page = 50, label = "Page Control", color = 0x003300, row = 0, col = 0 },
+    { action = "label", label = "$(internal:time_h) :", color = 0x242424, show_topbar = false, row = 2, col = 0 },
+]
+```
+
+**`clear = false`** — add to a page to skip the wipe step. Buttons defined in `buttons` are pinned on top of the template content, leaving everything else (e.g. complex nav or utility buttons from the template) intact:
+```toml
+[[companion.pages]]
+page_num   = 50
+clear      = false
+memory_ids = []
+buttons    = [ ... ]
+```
 
 **Smart text sizing** — set `smart_wrap = true` in `config.toml` to automatically
 step down font size on `"auto"` buttons so labels never break mid-word. Explicit
@@ -108,16 +129,16 @@ separate TOML file so multiple configs can coexist for different shows or days.
 
 ```bash
 # List available layouts in a config file
-python src/mv_setup/main.py --config coachella_mv_config.toml --list
+python src/mv_setup/main.py --config my_show_mv_config.toml --list
 
 # Apply a layout
-python src/mv_setup/main.py --config coachella_mv_config.toml --layout 10_mv_all_pgm_bot
+python src/mv_setup/main.py --config my_show_mv_config.toml --layout 10_mv_all_pgm_bot
 ```
 
 #### Capturing MV layouts from a live Aquilon
 
 ```bash
-python src/mv_setup/capture.py --out coachella_mv_config.toml
+python src/mv_setup/capture.py --out my_show_mv_config.toml
 ```
 
 This reads every programmed MV memory from the device and writes a TOML file
@@ -127,8 +148,8 @@ and used to restore layouts on any Aquilon.
 #### Restoring MV layouts to a new Aquilon
 
 ```bash
-python src/mv_setup/restore.py --config coachella_mv_config.toml
-python src/mv_setup/restore.py --config coachella_mv_config.toml --dry-run
+python src/mv_setup/restore.py --config my_show_mv_config.toml
+python src/mv_setup/restore.py --config my_show_mv_config.toml --dry-run
 ```
 
 For each `[[layouts]]` block the script:
@@ -236,18 +257,19 @@ src/
 
 tests/
   conftest.py
+  test_companion_updater.py   ← offline unit tests (no live AQ required)
   test_companion_sync.py
   test_aq_comms.py
   test_aq_backup_verify.py
 
 example config files for ref/
-  nuc-green_2026_draft.companionconfig  — 2025 show reference layout
+  current_config_19Mar_m5mpb.local_2026-03-19-2031_custom_config.companionconfig  — current show template
+  vars_m5mpb.local_2026-03-19-2229_custom_config.companionconfig                  — reference for action formats
 
 outputs/               — generated Companion configs (gitignored)
 logs/                  — log files (gitignored)
 config.example.toml    — reference config (copy → config.toml)
 mv_config.example.toml — reference MV layout config (copy → mv_config.toml)
-coachella_mv_config.toml — captured Coachella MV memories (36 layouts)
 PRD.md                 — product requirements
 PLAN.md                — implementation plan and status
 ```
@@ -258,9 +280,10 @@ PLAN.md                — implementation plan and status
 
 | Tool | Status |
 |------|--------|
-| Companion Sync (`src/companion_sync/`) | Code complete; needs on-device validation |
+| Companion Sync (`src/companion_sync/`) | Code complete; offline unit tests passing; needs on-device validation |
 | MV Setup (`src/mv_setup/`) | Code complete; needs on-device validation |
 | AQ Backup Verify (`src/aq_backup_verify/`) | Code complete; needs on-device validation |
-| Test suite (`tests/`) | Written; requires live AQ to run |
+| Offline unit tests (`tests/test_companion_updater.py`) | 66 tests, all passing |
+| Live test suite (`tests/`) | Written; requires live AQ to run |
 
 See `PLAN.md` for details.

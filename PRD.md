@@ -37,12 +37,15 @@ Companion buttons, organized by show day and category.
 
 | Page | Content |
 |------|---------|
-| 1 | Show Day 1 — artist presets (~8 artists, some with multiple presets) |
-| 20 | Show Day 2 — artist presets |
-| 40 | Show Day 3 — artist presets |
-| 60 | Companion Controller |
+| 1 | Friday Show (1) — show day presets |
+| 2 | Sat Show (2) — show day presets |
+| 3 | Sunday Show (3) — show day presets |
+| 18 | LW x48 Salvos — cleared each run |
+| 20 | Setup Presets (20) — test patterns, pixel map presets; `clear=false` |
+| 21–25 | Presets (21)–(25) — AQ presets 1–90 |
+| 26–29 | (reserved) — cleared each run |
+| 50 | Page Control (50) — navigation, clock, utility buttons; `clear=false` |
 | 80 | Emergency |
-| 90+ | Router control |
 
 ### Navigation Buttons
 Every page must have three reserved navigation buttons:
@@ -91,7 +94,13 @@ buttons = [
 ]
 ```
 
-Supported template actions: `"screen-take"` (fires on both AQ instances), `"label"` (no-action reminder).
+Supported template actions: `"screen-take"` (fires on both AQ instances), `"label"` (no-action reminder),
+`"page-jump"` (Companion `set_page`; supports static device serials and `$(variables)` for controller),
+`"preset"` (fires `load-master-memory` for a fixed `memory_id`).
+
+**Inline action buttons** — `action` field can be used directly in a page's `buttons` list without defining a named template.
+
+**`clear = false`** — per-page option that skips the wipe step, allowing complex buttons from the template config to pass through unmodified.
 
 ### Per-Button Overrides
 
@@ -175,7 +184,7 @@ config must be verified before it goes on-site.
 |-------|-------------|
 | **Correct memoryId** | Every button's action `options.memoryId` matches the AQ memory it represents |
 | **Label matches name** | Button `style.text` exactly matches the AQ memory name as returned by the API |
-| **Both instances wired** | Every preset button has two `down` actions — one for AQ21, one for AQ22 |
+| **Both instances wired** | Every preset button has two `down` actions — one for AQ21, one for AQ22 (uses `definitionId`/`connectionId` format) |
 | **Nav buttons present** | Every generated page has page up, page down, and page number buttons at correct positions |
 | **Nav never overwritten** | No preset button is stamped onto a nav button slot |
 
@@ -192,10 +201,11 @@ config must be verified before it goes on-site.
 
 ```
 tests/
-  test_companion_sync.py   — verifies generated Companion config correctness
-  test_aq_comms.py         — verifies AQ API responses parse correctly
-  test_aq_backup_verify.py — verifies AQ21 and AQ22 match across all checks
-  conftest.py              — shared fixtures (live AQ connection, sample configs)
+  test_companion_updater.py — offline unit tests (66 tests, no live AQ required)
+  test_companion_sync.py    — verifies generated Companion config correctness (live AQ)
+  test_aq_comms.py          — verifies AQ API responses parse correctly (live AQ)
+  test_aq_backup_verify.py  — verifies AQ21 and AQ22 match across all checks (live AQ)
+  conftest.py               — shared fixtures (live AQ connection, sample configs)
 ```
 
 ### Running tests

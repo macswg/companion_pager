@@ -24,7 +24,8 @@ companion_pager/
 ├── PRD.md / PLAN.md / README.md
 ├── pyproject.toml                   ← dependencies: pyyaml, python-dotenv
 ├── example config files for ref/
-│   └── nuc-green_2026_draft.companionconfig  ← 2025 show reference layout
+│   ├── current_config_19Mar_m5mpb.local_2026-03-19-2031_custom_config.companionconfig  ← current show template
+│   └── vars_m5mpb.local_2026-03-19-2229_custom_config.companionconfig                  ← reference for action formats
 ├── src/
 │   ├── companion_sync/              ← TOOL 1: Companion preset sync
 │   │   ├── main.py
@@ -44,16 +45,16 @@ companion_pager/
 
 ---
 
-## Reference: 2025 Show Config
+## Reference: Current Show Config
 
-Key facts from `nuc-green_2026_draft.companionconfig`:
+Key facts from `current_config_19Mar_m5mpb.local_2026-03-19-2031_custom_config.companionconfig`:
 
 | Detail | Value |
 |--------|-------|
 | Companion version | 6 |
 | Config format | YAML |
-| AQ21 instance ID | `nCJPZKPWsD8eaC_Hi0cue` |
-| AQ22 instance ID | `J2nMHiuaofvDZ7if9HfoC` |
+| AQ21 instance ID | `KOjlQky3o3GrhW5_r_7gS` |
+| AQ22 instance ID | `0XMkeXvgqzbBUFtf_X2qL` |
 | AQ21 IP | `192.168.105.21` |
 | AQ22 IP | `192.168.105.22` |
 | Companion module | `analogway-livepremier` |
@@ -68,12 +69,15 @@ Key facts from `nuc-green_2026_draft.companionconfig`:
 
 | Page | Content | Notes |
 |------|---------|-------|
-| 1 | Show Day 1 | ~8 artists, some with multiple presets |
-| 20 | Show Day 2 | same structure |
-| 40 | Show Day 3 | same structure |
-| 60 | Companion Controller | nav/utility buttons |
+| 1 | Friday Show (1) | show day presets, auto-flow + pinned template buttons |
+| 2 | Sat Show (2) | same structure |
+| 3 | Sunday Show (3) | same structure |
+| 18 | LW x48 Salvos | cleared each run; content from template |
+| 20 | Setup Presets (20) | test patterns + pixel map presets; `clear=false` |
+| 21–25 | Presets (21)–(25) | AQ presets 1–90, 20 per page (rows 0–2 auto-flow, row 3 cols 0–1 pinned) |
+| 26–29 | (reserved) | cleared each run |
+| 50 | Page Control (50) | nav bar, clock, show day jumps, TAKE, EMER, OFF; `clear=false` |
 | 80 | Emergency | emergency presets |
-| 90+ | Router Control | router pages |
 
 Every page must have **page up**, **page down**, and **page number** nav buttons.
 Confirmed grid positions (from reference config):
@@ -122,7 +126,15 @@ Three placement modes, all configurable in `config.toml`:
 
 **Template buttons** — reusable non-preset buttons defined in `[[companion.button_templates]]`
 and placed by name in any page's `buttons` list. Per-placement overrides are merged on top.
-Supported actions: `"screen-take"` (fires on both AQ instances), `"label"` (no-action reminder).
+Supported actions: `"screen-take"` (fires on both AQ instances), `"label"` (no-action reminder),
+`"page-jump"` (Companion internal `set_page`; `controller` accepts `"self"`, a static device serial, or a `$(variable)`),
+`"preset"` (fires `load-master-memory` for a fixed `memory_id`; label from device unless overridden).
+
+**Inline action buttons** — `action` field used directly in the `buttons` list without a named template.
+`page-jump` and `label` are the most common inline uses.
+
+**`clear = false`** — per-page flag that skips the wipe step so complex buttons in the template config
+pass through unmodified. Only buttons explicitly listed in `buttons` are touched.
 
 ### Phase 3 — Smart Text Sizing  ✅ COMPLETE
 
@@ -204,7 +216,7 @@ python src/mv_setup/restore.py --config mv_config.toml
 python src/mv_setup/restore.py --config mv_config.toml --dry-run
 ```
 
-A real captured config (`coachella_mv_config.toml`, 36 layouts) is included in the repo.
+A captured config (`my_show_mv_config.toml`) can be generated with `capture.py` and used to restore all MV memories.
 
 ### Phase 3 — Test on device  ⏳ PENDING
 
@@ -257,14 +269,15 @@ Zero margin for error on preset triggers. Every generated config must be verifie
 
 ```
 tests/
-  conftest.py              — live AQ fixture, sample config fixtures
-  test_companion_sync.py   — end-to-end: generate config → verify all checks
-  test_aq_comms.py         — verify AQ API responses parse correctly
-  test_aq_backup_verify.py — verify AQ21 and AQ22 match across all checks
+  conftest.py                  — live AQ fixture, sample config fixtures
+  test_companion_updater.py    — offline unit tests (66 tests, no live AQ required)
+  test_companion_sync.py       — end-to-end: generate config → verify all checks
+  test_aq_comms.py             — verify AQ API responses parse correctly
+  test_aq_backup_verify.py     — verify AQ21 and AQ22 match across all checks
 ```
 
-Tests run against a **live Aquilon** — no mocking. Requires the AQ to be
-reachable at the host configured in `.env`. Tests are automatically skipped
+`test_companion_updater.py` runs fully offline — no live AQ or `.env` required.
+All other tests run against a **live Aquilon**. Tests are automatically skipped
 if `.env` variables are missing.
 
 ```bash
@@ -290,7 +303,8 @@ cp mv_config.example.toml mv_config.toml
 
 # Tool 1 — Companion preset sync (re-run any time presets change)
 python src/companion_sync/main.py
-# → import outputs/updated.companionconfig into Companion
+python src/companion_sync/main.py --config other_config.toml  # alternate config
+# → import outputs/updated_<timestamp>.companionconfig into Companion
 
 # Tool 2 — MV layout
 python src/mv_setup/main.py --config mv_config.toml --layout <name>
@@ -317,12 +331,31 @@ python src/aq_backup_verify/main.py
 - Used for all SET writes (geometry, labels, save triggers)
 - `ws_send_batch([(path, value), ...])` — sends multiple SETs in one persistent session
 
-### Companion Action (confirmed)
+### Companion Action format (Companion v6)
 
+AQ preset / screen-take actions:
 ```yaml
-action: /api/tpp/v1/load-master-memory
-instance: <instance_id>
-options:
-  memoryId: <int>
-  target: preview
+- type: action
+  id: <22-char id>
+  definitionId: /api/tpp/v1/load-master-memory
+  connectionId: <instance_id>
+  options:
+    memoryId: <int>
+    target: preview
+```
+
+Internal page-jump action:
+```yaml
+- type: action
+  id: <22-char id>
+  definitionId: set_page
+  connectionId: internal
+  options:
+    controller_from_variable: false   # true when controller is a $(variable)
+    controller: self                  # or "streamdeck:CL37L2A00862"
+    controller_variable: self         # or "$(custom:green_surface)"
+    page_from_variable: false
+    page: <int>
+    page_variable: "1"
+  children: {}
 ```
