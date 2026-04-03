@@ -25,7 +25,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "common"))
 
 from aquilon_comms import AquilonComms
 from env import load_env, get_primary_host, get_port
-from companion_updater import (
+from .companion_updater import (
+    NAV_POSITIONS,
     apply_presets_to_page,
     get_instance_ids_by_type,
     load_config,
@@ -34,6 +35,7 @@ from companion_updater import (
     save_config,
     update_page_title,
 )
+from .verify import verify_pages
 
 # ---------------------------------------------------------------------------
 # Logging
@@ -68,7 +70,53 @@ def parse_args() -> argparse.Namespace:
         default=DEFAULT_CONFIG_FILE,
         help="Path to config TOML (default: config.toml)",
     )
+    parser.add_argument(
+        "--verify",
+        action="store_true",
+        help="After writing the output, verify it against live Aquilon presets.",
+    )
     return parser.parse_args()
+
+
+def validate_app_config(cfg: dict) -> list[str]:
+    """
+    Pre-flight checks on config.toml before connecting to the Aquilon.
+
+    Returns a list of error strings. Empty list means config is valid.
+    Checks:
+      - No button pinned at a reserved nav position
+      - No unknown template name referenced in a buttons list
+      - No duplicate memory_ids within a single page's memory_ids list
+    """
+    errors: list[str] = []
+    templates = {t["name"] for t in cfg.get("companion", {}).get("button_templates", [])}
+
+    for page_cfg in cfg.get("companion", {}).get("pages", []):
+        page_num = page_cfg["page_num"]
+
+        # Duplicate memory_ids within a page
+        memory_ids = page_cfg.get("memory_ids", [])
+        seen: set[int] = set()
+        for mid in memory_ids:
+            if mid in seen:
+                errors.append(f"Page {page_num}: duplicate memory_id {mid} in memory_ids list")
+            seen.add(mid)
+
+        # Pinned buttons: nav conflicts and unknown templates
+        for pin in page_cfg.get("buttons", []):
+            row, col = pin.get("row"), pin.get("col")
+            if row is None or col is None:
+                errors.append(f"Page {page_num}: button entry missing row or col: {pin}")
+                continue
+            if (row, col) in NAV_POSITIONS:
+                errors.append(
+                    f"Page {page_num}: button at ({row}, {col}) conflicts with reserved nav position"
+                )
+            tname = pin.get("template")
+            if tname and tname not in templates:
+                errors.append(f"Page {page_num}: button at ({row}, {col}) references unknown template {tname!r}")
+
+    return errors
 
 
 def load_app_config(config_path: Path) -> dict:
@@ -94,6 +142,14 @@ def main() -> None:
     load_env()
     cfg = load_app_config(args.config)
 
+    # --- Pre-flight validation ---
+    config_errors = validate_app_config(cfg)
+    if config_errors:
+        logger.error("config.toml validation failed:")
+        for err in config_errors:
+            logger.error(f"  {err}")
+        sys.exit(1)
+
     # Aquilon (LivePremier) connection — host/port from .env
     aq_host = get_primary_host()
     aq_port = get_port()
@@ -113,6 +169,13 @@ def main() -> None:
     # --- Step 1: Load template config ---
     logger.info(f"Loading template: {template_path}")
     config = load_config(template_path)
+
+    # Sync parenthesised page numbers in titles across every page in the config.
+    # e.g. "Friday Show (5)" on page 1 becomes "Friday Show (1)".
+    for page_num_str, page_data in config.get("pages", {}).items():
+        title = page_data.get("name", "")
+        if title:
+            update_page_title(config, page_num_str, title)
 
     # --- Step 2: Auto-discover Aquilon instances ---
     instance_ids = get_instance_ids_by_type(config, "analogway-livepremier")
@@ -257,6 +320,20 @@ def main() -> None:
     # --- Step 5: Save output ---
     save_config(config, output_path)
     logger.info(f"Done. Import {output_path} into Companion.")
+
+    # --- Step 6: Optional post-write verification ---
+    if args.verify:
+        logger.info("Running post-write verification ...")
+        preset_map = {p.memory_id: p.name for p in presets}
+        failures, checked = verify_pages(pages_config, config, preset_map)
+        if failures:
+            logger.error(f"Verification FAILED — {len(failures)} issue(s) across {checked} presets:")
+            for line in failures:
+                logger.error(line)
+            sys.exit(1)
+        else:
+            logger.info(f"Verification PASSED — all {checked} preset buttons match live Aquilon presets.")
+
     logger.info("===== companion-pager complete =====")
 
 

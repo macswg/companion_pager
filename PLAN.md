@@ -7,7 +7,7 @@ different stages of show prep.
 
 | Tool | Entry Point | Purpose | Stage |
 |------|-------------|---------|-------|
-| **Companion Sync** | `src/companion_sync/main.py` | AQ preset names → Companion buttons | After presets named |
+| **Companion Sync** | `companion-sync` (or `src/companion_sync/main.py`) | AQ preset names → Companion buttons | After presets named |
 | **MV Setup** | `src/mv_setup/main.py` | Configure multiviewer window layouts | Show build |
 | **AQ Backup Verify** | `src/aq_backup_verify/main.py` | Verify AQ22 firmware + memories match AQ21 | On demand |
 
@@ -24,10 +24,12 @@ companion_pager/
 ├── PRD.md / PLAN.md / README.md
 ├── pyproject.toml                   ← dependencies: pyyaml, python-dotenv
 ├── example config files for ref/
-│   ├── current_config_19Mar_m5mpb.local_2026-03-19-2031_custom_config.companionconfig  ← current show template
+│   ├── Coachella_config_30Mar.companionconfig                                           ← current show template
+│   ├── buttons_and_connections.companionconfig                                          ← reference for action/connection formats
 │   └── vars_m5mpb.local_2026-03-19-2229_custom_config.companionconfig                  ← reference for action formats
 ├── src/
 │   ├── companion_sync/              ← TOOL 1: Companion preset sync
+│   │   ├── __init__.py
 │   │   ├── main.py
 │   │   └── companion_updater.py
 │   ├── mv_setup/                    ← TOOL 2: Multiviewer layout configuration
@@ -47,7 +49,7 @@ companion_pager/
 
 ## Reference: Current Show Config
 
-Key facts from `current_config_19Mar_m5mpb.local_2026-03-19-2031_custom_config.companionconfig`:
+Key facts from `Coachella_config_30Mar.companionconfig`:
 
 | Detail | Value |
 |--------|-------|
@@ -157,11 +159,11 @@ their positions when placing presets.
 
 ### Phase 5 — End-to-End Test  ⏳ PENDING
 
-1. `pip install pyyaml python-dotenv`
+1. `pip install -e ".[dev]"` — installs dependencies + `companion-sync` CLI
 2. `cp config.example.toml config.toml` — fill in page mappings
 3. `cp .env.example .env` — fill in AQ IPs
-4. `python src/companion_sync/main.py`
-5. Import `outputs/updated.companionconfig` into Companion
+4. `companion-sync`
+5. Import `outputs/updated_<timestamp>.companionconfig` into Companion
 6. Press buttons, confirm correct presets fire on AQ21 + AQ22
 
 ---
@@ -293,8 +295,7 @@ pytest tests/test_companion_sync.py::TestPresetButtons -v  # single class
 # Setup (once)
 python -m venv .venv
 source .venv/bin/activate
-pip install pyyaml python-dotenv
-pip install -e ".[dev]"   # optional, adds pytest
+pip install -e ".[dev]"   # installs dependencies + companion-sync CLI + pytest
 
 cp .env.example .env
 cp config.example.toml config.toml
@@ -302,8 +303,8 @@ cp mv_config.example.toml mv_config.toml
 # Edit .env with AQ IPs, config.toml with page mappings
 
 # Tool 1 — Companion preset sync (re-run any time presets change)
-python src/companion_sync/main.py
-python src/companion_sync/main.py --config other_config.toml  # alternate config
+companion-sync
+companion-sync --config other_config.toml  # alternate config
 # → import outputs/updated_<timestamp>.companionconfig into Companion
 
 # Tool 2 — MV layout

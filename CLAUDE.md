@@ -14,7 +14,11 @@ cp .env.example .env && cp config.example.toml config.toml
 # Fill in AQ_PRIMARY_HOST, AQ_BACKUP_HOST, AQ_PORT in .env
 # Fill in memory_ids per page in config.toml
 
-# Tool 1 — Companion Sync
+# Tool 1 — Companion Sync (CLI entry point, requires pip install -e ".[dev]")
+companion-sync
+companion-sync --config other_config.toml
+
+# Tool 1 — alternatively, without install
 python src/companion_sync/main.py
 
 # Tool 2 — MV Setup
@@ -36,9 +40,7 @@ Three independent tools sharing `src/common/aquilon_comms.py`. Each tool runs at
 ### Tool 1 — Companion Sync (`src/companion_sync/`)
 Reads AQ Master Memory names/IDs → stamps them onto Bitfocus Companion YAML config pages.
 
-Flow: `config.toml` page mappings → `aquilon_comms.get_presets()` (REST) → `companion_updater.apply_presets_to_page()` → `outputs/updated.companionconfig`
-
-After writing the output, `main.py` runs a full verification pass and exits non-zero on failure.
+Flow: `config.toml` page mappings → `aquilon_comms.get_presets()` (REST) → `companion_updater.apply_presets_to_page()` → `outputs/updated_<timestamp>.companionconfig`
 
 Key constraint: nav button positions `(2,7)`, `(3,6)`, `(3,7)` are always skipped. Instance IDs for AQ21+AQ22 are auto-discovered from the template config (no hard-coding).
 
@@ -49,8 +51,8 @@ Key constraint: nav button positions `(2,7)`, `(3,6)`, `(3,7)` are always skippe
 
 Layout TOML format: `[[layouts]]` blocks with `name`, `mv_id`, `canvas_w/h`, and `[[layouts.windows]]` entries (`widget_id`, `source_type`, `source_id`, `x/y/w/h`).
 
-### Tool 3 — AQ Clone (`src/aq_backup_verify/main.py`)
-Stub — export/import API endpoints still TBD.
+### Tool 3 — AQ Backup Verify (`src/aq_backup_verify/main.py`)
+Verifies AQ22 (backup) matches AQ21 (primary) across five categories: system info (firmware, device type), inputs, screens, outputs, and Master Memory lists. Read-only — does not modify either unit. Exits non-zero if any check fails.
 
 ### Common (`src/common/`)
 - `aquilon_comms.py` — REST + AWJ WebSocket client. REST for reads and source assignment; WebSocket for geometry, labels, and save triggers. `ws_send_batch([(path, value), ...])` sends multiple AWJ SETs in one persistent session.
@@ -74,7 +76,7 @@ Both `config.toml` and `mv_config.toml` are gitignored — use `*.example.toml` 
 
 **AWJ WebSocket:** `ws://<host>/api/ws/v1/awj` — used for all SET writes. Dev simulator accepts connections but does NOT process AWJ SET writes.
 
-**Companion config format:** Companion v6 uses YAML (`.companionconfig`). Reference: `example config files for ref/nuc-green_2026_draft.companionconfig`.
+**Companion config format:** Companion v6 uses YAML (`.companionconfig`). Reference: `example config files for ref/Coachella_config_30Mar.companionconfig`.
 
 ## Testing
 

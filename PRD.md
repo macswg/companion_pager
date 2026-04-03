@@ -192,10 +192,10 @@ config must be verified before it goes on-site.
 
 - **Test suite:** `pytest` tests run against a live Aquilon (no mocking). Tests
   query the real device, generate a config, and assert all checks above pass.
-- **Built-in verification:** After generating the config, `main.py` automatically
-  runs a full verification pass on the output file and prints a pass/fail summary
-  to the terminal before exiting. If any check fails, the run exits with a
-  non-zero status and the output file should be considered invalid.
+- **Built-in verification:** `main.py` logs warnings for any `memory_ids` not found
+  on the device and exits with a non-zero status on connection failure. The
+  `pytest` test suite (`test_companion_sync.py`) performs the post-generation
+  verification pass against a live Aquilon.
 
 ### Test suite location: `tests/`
 

@@ -9,10 +9,17 @@ dependencies = [
     "python-dotenv>=1.0",
 ]
 
+[project.scripts]
+companion-sync = "companion_sync.main:main"
+companion-verify = "companion_sync.verify:main"
+
 [project.optional-dependencies]
 dev = [
     "pytest>=8.0",
 ]
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.ruff]
 line-length = 100

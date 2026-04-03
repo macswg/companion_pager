@@ -132,7 +132,7 @@ class TestPresetButtons:
         for row_k, row in controls.items():
             for col_k, btn in row.items():
                 actions = get_down_actions(btn)
-                if any(a.get("action") == "/api/tpp/v1/load-master-memory" for a in actions):
+                if any(a.get("definitionId") == "/api/tpp/v1/load-master-memory" for a in actions):
                     buttons.append((int(row_k), int(col_k), btn))
         return buttons
 
@@ -147,7 +147,7 @@ class TestPresetButtons:
             found_ids = set()
             for _, _, btn in self._collect_preset_buttons(controls):
                 for action in get_down_actions(btn):
-                    if action.get("action") == "/api/tpp/v1/load-master-memory":
+                    if action.get("definitionId") == "/api/tpp/v1/load-master-memory":
                         found_ids.add(action["options"]["memoryId"])
                         break
 
@@ -165,7 +165,7 @@ class TestPresetButtons:
             for row_k, row in controls.items():
                 for col_k, btn in row.items():
                     actions = get_down_actions(btn)
-                    load_actions = [a for a in actions if a.get("action") == "/api/tpp/v1/load-master-memory"]
+                    load_actions = [a for a in actions if a.get("definitionId") == "/api/tpp/v1/load-master-memory"]
                     if not load_actions:
                         continue
 
@@ -184,7 +184,7 @@ class TestPresetButtons:
             for row_k, row in controls.items():
                 for col_k, btn in row.items():
                     for action in get_down_actions(btn):
-                        if action.get("action") != "/api/tpp/v1/load-master-memory":
+                        if action.get("definitionId") != "/api/tpp/v1/load-master-memory":
                             continue
                         memory_id = action["options"]["memoryId"]
                         assert memory_id in preset_map, (
@@ -199,12 +199,12 @@ class TestPresetButtons:
                 for col_k, btn in row.items():
                     load_actions = [
                         a for a in get_down_actions(btn)
-                        if a.get("action") == "/api/tpp/v1/load-master-memory"
+                        if a.get("definitionId") == "/api/tpp/v1/load-master-memory"
                     ]
                     if not load_actions:
                         continue
 
-                    fired_instances = {a["instance"] for a in load_actions}
+                    fired_instances = {a["connectionId"] for a in load_actions}
                     for inst_id in instance_ids:
                         assert inst_id in fired_instances, (
                             f"Button [{row_k}/{col_k}] is missing action for instance {inst_id} "

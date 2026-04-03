@@ -20,6 +20,7 @@ all actions matching the target action name.
 import copy
 import logging
 import math
+import re
 import uuid
 from pathlib import Path
 
@@ -50,7 +51,7 @@ CHARS_PER_LINE: dict[str, int] = {
     "30": 5,
     "24": 5,
     "18": 7,
-    "14": 12,
+    "14": 13,
     "7":  17,
 }
 
@@ -213,12 +214,29 @@ def save_config(data: dict, path: str | Path) -> None:
 # Page helpers
 # ---------------------------------------------------------------------------
 
+def _sync_page_number_in_title(title: str, page_num: int) -> str:
+    """
+    Ensure the title contains a parenthesised page number that matches page_num.
+
+    If the title already has one (e.g. "Sat Salvos (11)"), replace it.
+    If it doesn't, append it (e.g. "Friday Show" → "Friday Show (1)").
+    """
+    if re.search(r"\(\d+\)", title):
+        return re.sub(r"\(\d+\)", f"({page_num})", title)
+    return f"{title} ({page_num})"
+
+
 def update_page_title(config: dict, page_num: str | int, title: str) -> None:
-    """Set the name of a Companion page."""
+    """Set the name of a Companion page, syncing any parenthesised page number in the title."""
+    page_num_int = int(page_num)
+    synced_title = _sync_page_number_in_title(title, page_num_int)
     page_num = str(page_num)
     try:
-        config["pages"][page_num]["name"] = title
-        logger.debug(f"Set page {page_num} title to {title!r}")
+        config["pages"][page_num]["name"] = synced_title
+        if synced_title != title:
+            logger.debug(f"Set page {page_num} title to {synced_title!r} (updated page number from {title!r})")
+        else:
+            logger.debug(f"Set page {page_num} title to {synced_title!r}")
     except KeyError as e:
         logger.warning(f"Could not set page title for page {page_num} — missing key: {e}")
 

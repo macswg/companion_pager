@@ -11,7 +11,7 @@ Each tool is independent. Use the right one for the right stage of setup.
 ## Tools
 
 ### Tool 1 — Companion Preset Sync
-**`src/companion_sync/main.py`**
+**`src/companion_sync/main.py`** — also available as `companion-sync` after `pip install -e ".[dev]"`
 
 Queries Master Memory names and IDs from the LivePremier and stamps them onto
 Stream Deck buttons in a Companion config. Run this after presets are finalized
@@ -21,11 +21,14 @@ on the Aquilon so button labels and action indexes stay in sync.
 **Does not touch:** The Aquilon device itself.
 
 ```bash
-python src/companion_sync/main.py
+companion-sync
 # → import outputs/updated_<timestamp>.companionconfig into Companion
 
 # Use a different config file (default: config.toml)
-python src/companion_sync/main.py --config other_config.toml
+companion-sync --config other_config.toml
+
+# Alternative (without pip install -e):
+python src/companion_sync/main.py
 ```
 
 #### Companion config format
@@ -208,8 +211,8 @@ python src/aq_backup_verify/main.py
                       python src/mv_setup/main.py --config <file>.toml --layout <name>
 
 3. Companion Sync   → pull preset names into Companion buttons
-                      python src/companion_sync/main.py
-                      → import outputs/updated.companionconfig into Companion
+                      companion-sync
+                      → import outputs/updated_<timestamp>.companionconfig into Companion
 
 4. Test             → verify every button is correct
                       pytest tests/ -v
@@ -222,7 +225,7 @@ python src/aq_backup_verify/main.py
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install pyyaml python-dotenv
+pip install -e ".[dev]"   # installs dependencies + companion-sync CLI entry point
 
 # IP addresses go in .env — never committed
 cp .env.example .env
@@ -244,6 +247,7 @@ cp mv_config.example.toml mv_config.toml
 ```
 src/
   companion_sync/      ← Tool 1: Companion preset sync
+    __init__.py
     main.py
     companion_updater.py
   mv_setup/            ← Tool 2: Multiviewer layout configuration
@@ -263,8 +267,9 @@ tests/
   test_aq_backup_verify.py
 
 example config files for ref/
-  current_config_19Mar_m5mpb.local_2026-03-19-2031_custom_config.companionconfig  — current show template
-  vars_m5mpb.local_2026-03-19-2229_custom_config.companionconfig                  — reference for action formats
+  Coachella_config_30Mar.companionconfig       — current show template
+  buttons_and_connections.companionconfig      — reference for action/connection formats
+  vars_m5mpb.local_2026-03-19-2229_custom_config.companionconfig  — reference for action formats
 
 outputs/               — generated Companion configs (gitignored)
 logs/                  — log files (gitignored)
